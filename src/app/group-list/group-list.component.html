@@ -1,0 +1,32 @@
+<div class="open-sidebar">
+    <div class="container-fluid">
+        <div class="row">
+            <app-sidebar></app-sidebar>
+            <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7" type="ball-spin-fade"
+                [fullScreen]="true">
+                <p style="color: white"> Loading... </p>
+            </ngx-spinner>
+            <div class="col-md-10 right_side">
+                <div class="row header">
+                    <div class="side_icon">
+                        <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                    </div>
+                    <div class="col-md-8 left_col">
+                        <div class="d-flex">
+
+                            <div>
+                                <h3>Group List</h3>
+                            </div>
+                            <div class="leads_sec">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 p-0">
+                        <app-header-profile></app-header-profile>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

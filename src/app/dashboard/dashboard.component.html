@@ -1,0 +1,138 @@
+<div class="open-sidebar">
+    <div class="container-fluid">
+        <div class="row">
+
+            <app-sidebar></app-sidebar>
+
+            <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
+                type="ball-scale-multiple" [fullScreen]="true">
+                <p style="color: white"> Loading... </p>
+            </ngx-spinner>
+
+            <div class="col-md-10 right_side">
+                <div class="row header">
+                    <div class="side_icon">
+                        <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                    </div>
+                    <div class="col-md-8 left_col">
+                        <div class="d-flex">
+                            <!-- <div class="side_icon">
+                                <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                            </div> -->
+                            <div>
+                                <h3>Dashboard</h3>
+                            </div>
+                            <div class="leads_sec">
+                                <span *ngIf="selectedGroup.group_id != '0'" title="{{selectedGroup.count}}"
+                                    class="group_leads_sec">{{selectedGroup.count | counterdisplayformate}} Group
+                                    Leads</span>
+                                <span title="{{totalLeadsTitle}}">{{totalLeads | counterdisplayformate}} Total
+                                    Leads</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 p-0">
+                        <app-header-profile></app-header-profile>
+                    </div>
+                </div>
+                <div class="row section">
+                    <div class="leads_generate">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h3>Lead Generation</h3>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="d-flex">
+                                    <p-dropdown styleClass="groups_dropdown select_groups form-select"
+                                        [options]="group_listing" optionLabel="group_name" optionValue="group_id"
+                                        (onChange)="onChangeGroup($event,'')"></p-dropdown>
+
+                                    <!-- <select class="form-select select_groups" [(ngModel)]="selectedGroup"
+                                        (change)="onChangeGroup($event,'')">
+                                        <option *ngFor="let group of group_listing;" value="{{group.group_id}}"
+                                            [selected]="selectedGroup == true">
+                                            {{group.group_name}}</option>
+                                    </select> -->
+
+                                    <select [(ngModel)]="filterDropdown" (change)="onChangeLeadFilter($event)"
+                                        class="form-select">
+                                        <option id="today" [selected]="filterDropdown == true" value="today">Today
+                                        </option>
+                                        <option id="thisMonth" [selected]="filterDropdown == true" value="this_month">
+                                            This month</option>
+                                        <option id="last30Days" [selected]="filterDropdown == true"
+                                            value="last_30_days">Last 30 Days</option>
+                                        <option id="last90Days" [selected]="filterDropdown == true"
+                                            value="last_90_days">Last 90 Days </option>
+                                        <option id="thisYear" [selected]="filterDropdown == true" value="this_year">This
+                                            Year </option>
+                                        <option id="allTime" [selected]="filterDropdown == true" value="all_time">All
+                                            Time</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center no_leads" *ngIf="!hasLeads && dataLoaded">
+                            <img src="assets/images/cloud-remove.png" />
+                            <h3>No Leads Have Been Generated Yet</h3>
+                            <p>Connect your groups through the chrome extension to see the lead generation chart. See
+                                more
+                                <a href="#">here.</a>
+                            </p>
+                        </div>
+                        <div class="col-md-12 text-center graph" *ngIf="hasLeads && dataLoaded">
+                            <p-chart type="line" #chart [data]="data" width="70vw" height="52vh" [responsive]="true">
+                            </p-chart>
+                            <!-- <img src="assets/images/graph.png" /> -->
+                        </div>
+                    </div>
+                    <div class="col-md-12 brand_Sec mt-4">
+                        <div class="row">
+                            <div class="col-md-8 about_left_sec p-0">
+                                <div class="about_sec">
+                                    <h2>Pitch yourself to brands</h2>
+                                    <div class="d-flex about_row_sec p-3">
+                                        <div class="p-2"><img src="assets/images/admin_bio.png" /></div>
+                                        <div class="p-2">
+                                            <h3>Complete your admin bio</h3>
+                                            <p>Use your admin bio to get brand endorsements and showcase your
+                                                achievements
+                                                as a
+                                                community leader.</p>
+                                        </div>
+                                        <div class="d-flex align-items-center"><button type="button"
+                                                class="btn btn-primary" routerLink="/adminBio">Complete Bio</button>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex about_row_sec p-3">
+                                        <div class="p-2"><img src="assets/images/group_profile.png" /></div>
+                                        <div class="p-2">
+                                            <h3>Manage your group’s profile page</h3>
+                                            <p>Use your group profile to showcase the top conversations happening in
+                                                your
+                                                group and
+                                                important statistics about your community to brands.</p>
+                                        </div>
+                                        <div class="d-flex align-items-center"><button type="button"
+                                                class="btn btn-primary" routerLink="/groupProfiles">Edit
+                                                Profile</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 about_right_sec text-center">
+                                <div class="schedule_call">
+                                    <img src="assets/images/call_sec.png" />
+                                    <h4>Schedule a 5 - 10 mins set up call via <span>Zoom</span>.</h4>
+                                    <a href="https://docs.groupleads.net/article/74-request-zoom-setup-call"
+                                        class="btn btn-primary" target="_blank">Schedule Call</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

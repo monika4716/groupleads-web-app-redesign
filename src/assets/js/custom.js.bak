@@ -1,0 +1,58 @@
+/* $('#open_task_detail_modal').on('click', function() {
+    $('#task_detail_modal').modal("show");
+});
+$('.delete_modal').on('click', function() {
+	console.log('jjk');
+    $('#delete_task_modal').modal("show");
+});
+$('.add_task_btn').on('click', function() {
+    $('#add_task_modal').modal("show");
+});
+$('#reschedule_open_task_detail_modal').on('click', function() {
+    $('#reschedule_task_modal').modal("show");
+});
+$('.new_member_sec').on('click', function() {
+    $('#add_new_member_modal').modal("show");
+}); */
+/* $('.pending_invites').on('click', function() {
+    $('#pending_invite_modal').modal("show");
+});
+$('.invite_sent_btn').on('click', function() {
+	$('#add_new_member_modal').modal("hide");
+    $('#invite_sent_modal').modal("show");
+}); */
+/* $('.board_view_btn').on('click', function() {
+	$('.list_view_sec').hide();
+	$('.board_view_sec').show();
+	$(".active").removeClass();
+});
+$('.list_view_btn').on('click', function() {
+	$('.board_view_sec').hide();
+    $('.list_view_sec').show();
+});
+$('.overdue_task .form-control').on('click', function() {
+	$('.search_icon').hide();
+    $('.cross_blue').show();
+}); */
+$(".header .fa").click(function(){
+	
+	$("body").toggleClass("open-sidebar");
+});
+$(".theme").click(function(){
+	
+	$("body").toggleClass("dark_mode");
+});
+$('.overdue_task .form-control').on('blur', function() {
+	$('.search_icon').show();
+    $('.cross_blue').hide();
+});
+
+$(".list_view_btn").on('click',function(){
+	$('.board_view_btn').removeClass('active');
+    $('.list_view_btn').addClass('active');
+});
+
+$(".board_view_btn").on('click',function(){
+	$('.board_view_btn').addClass('active');
+    $('.list_view_btn').removeClass('active');
+});

@@ -1,0 +1,129 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif !important;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+img {
+  max-width: 100%;
+}
+.row {
+  margin: 0 !important;
+}
+hr {
+  margin-top: 0;
+}
+a:hover {
+  text-decoration: none;
+}
+/*******************header-before-login**********************/
+.bg-top {
+  background-image: url("assets/images/bg.png");
+  background-size: cover;
+  color: #ffffff;
+}
+.bg-top h4 {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 45px;
+  line-height: 90px;
+}
+.bg-top p {
+  font-size: 20px;
+  line-height: 37px;
+  font-weight: normal;
+}
+/****************section****************/
+.login-screen img {
+  width: 350px !important;
+}
+.login-screen .form-control {
+  background: #fbfbfb;
+  border: 2px solid #eaeaea;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.01);
+  border-radius: 10px;
+  height: 60px;
+}
+.login-screen .form-control::placeholder {
+  font-size: 18px;
+  color: #666666;
+}
+.login-screen .btn {
+  background: #3c61ad;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 45px;
+  border: none;
+  color: #ffffff;
+  width: 100%;
+}
+.login-screen a {
+  font-size: 17px;
+  line-height: 37px;
+  color: #3c61ad;
+  text-decoration: none;
+  font-weight: bold;
+}
+.login-screen form {
+  min-height: 350px;
+}
+.login-screen h6 {
+  font-size: 17px;
+  line-height: 37px;
+  font-weight: normal;
+  color: #262626;
+}
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #3c61ad;
+  border: none;
+}
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: unset;
+}
+.btn-primary.focus,
+.btn-primary:focus {
+  box-shadow: unset;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+a.forget-password {
+  text-decoration: none !important;
+  background-color: transparent !important;
+}
+
+.footer p {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 37px;
+  color: #df2329;
+}
+.login-screen form {
+  min-height: 350px;
+}
+
+.nav-link:focus,
+.nav-link:hover {
+  color: #bbc1d3 !important;
+}
+
+.leads_generate .select_groups {
+  margin-right: 20px;
+}

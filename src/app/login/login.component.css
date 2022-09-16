@@ -1,0 +1,11 @@
+.incorrectPassword {
+  background-color: rgba(223, 76, 81, 0.54);
+  border-radius: 0.25rem;
+  text-align: center;
+  border: 1px #ff5050 solid;
+  font-size: 13px;
+  font-weight: 600;
+  height: auto;
+  padding: 12px 0;
+  width: 100%;
+}
