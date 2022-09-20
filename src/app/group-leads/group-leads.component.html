@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <app-sidebar></app-sidebar>
-            <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
+            <ngx-spinner name="sp5" bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
                 type="ball-scale-multiple" [fullScreen]="true">
                 <p style="color: white"> Loading... </p>
             </ngx-spinner>
@@ -15,7 +15,7 @@
                         <div class="d-flex">
 
                             <div>
-                                <h3>Group List</h3>
+                                <h3>Leads List</h3>
                             </div>
                             <div class="leads_sec">
 
@@ -26,10 +26,10 @@
                         <app-header-profile></app-header-profile>
                     </div>
                     <div class="row section group_list_section">
-                        <div class="leads_generate group_list no_list" *ngIf="Nogroup == false">
+                        <!-- <div class="leads_generate group_list no_list" *ngIf="Nogroupleads == true">
                             <div class="row">
                                 <div class="col-md-7 d-flex align-items-center">
-                                    <h3>Group List</h3>
+                                    <h3>Leads List</h3>
                                 </div>
                                 <div class="col-md-12 text-center no_leads">
                                     <img src="assets/images/note-remove.png" />
@@ -38,51 +38,9 @@
                                         chart. See more <a href="#">here.</a></p>
                                 </div>
                             </div>
-                        </div>
-                        <div class="leads_generate group_list list_table" *ngIf="Nogroup == true">
-                            <div class="row">
-                                <div class="col-md-7 d-flex align-items-center">
-                                    <h3>Group List</h3>
-                                </div>
-                                <div class="col-md-5 ">
-                                    <div class="d-flex justify-content-end">
-                                        <!--  <button type="button" class="btn btn-primary export_btn"><img src="assets/images/export.png" /> Export</button> -->
-                                        <button type="button" class="btn btn-outline-primary filter_btn"><img
-                                                src="assets/images/menu.png" /> Filter by date</button>
+                        </div> -->
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 group_list_table">
-                                <p-table [value]="groupsData" responsiveLayout="scroll" [value]="groupsData"
-                                    [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th *ngFor="let col of cols" [pSortableColumn]="col.field"
-                                                [ngSwitch]="col.field">
-                                                {{col.header}}
-                                                <p-sortIcon [field]="col.field"></p-sortIcon>
-                                            </th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-group let-rowData let-columns="columns">
-                                        <tr [pSelectableRow]="rowData" [pEditableRow]="rowData"
-                                            *ngIf="rowData.group_id != 0">
-                                            <td [routerLink]="['/groupLeads']"
-                                                [queryParams]="{group_id:rowData.group_id,fb_group_id:rowData.fb_group_id}"
-                                                style="cursor: pointer;color: #9B9898;">{{rowData.group_name}}</td>
-                                            <td style="cursor: text;color: #9B9898;">{{rowData.count}}</td>
-                                            <td style="cursor: text;color: #9B9898;">
-                                                {{rowData.lastUpdate ? (rowData.lastUpdate | date: 'MMMM dd,
-                                                yyyy'):"--"}}
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-
-                        </div>
-                        <!-- <div class="leads_generate group_list product_list">
+                        <div class="leads_generate group_list product_list">
                             <div class="row">
                                 <div class="col-md-7 d-flex align-items-center">
                                     <h3>Chatsilo Support Community</h3>
@@ -98,7 +56,59 @@
                                 </div>
                             </div>
                             <div class="col-md-12 group_list_table">
-                                <table class="table table-striped">
+                                <p-table #dt [exportFilename]='csvName' [columns]="cols" styleClass="ui-table-cars"
+                                    [value]="leads" [lazy]="true" (onLazyLoad)="lazyLoadLeads($event)"
+                                    [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords"
+                                    [scrollable]="true" [resizableColumns]="true" sortField="_id" [(first)]="first">
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of cols">
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="custom-width-3" *ngFor="let col of cols"
+                                                [pSortableColumn]="col.field" [ngSwitch]="col.field">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-group let-rowData let-columns="columns"
+                                        let-rowIndex="rowIndex">
+                                        <tr [pSelectableRow]="rowData" [pEditableRow]="rowData">
+                                            <td class="custom-width-3" style="color: #3C61AD;">{{rowData.profile_url}}
+                                            </td>
+                                            <td class="custom-width-3">{{rowData.full_name}}</td>
+                                            <td class="custom-width-3">{{rowData.first_name}}</td>
+                                            <td class="custom-width-3">{{rowData.last_name}}</td>
+                                            <td class="custom-width-3">{{rowData.joined_date}}</td>
+                                            <td class="custom-width-3">{{rowData.ques_one}}</td>
+                                            <td class="custom-width-3">{{rowData.ans_one}}</td>
+                                            <td class="custom-width-3">{{rowData.ques_two}}</td>
+                                            <td class="custom-width-3">{{rowData.ans_two}}</td>
+                                            <td class="custom-width-3">{{rowData.ques_three}}</td>
+                                            <td class="custom-width-3">{{rowData.ans_three}}</td>
+                                            <td class="custom-width-3">{{rowData.created_at | date: 'dd MMMM yyyy'}}
+                                            </td>
+                                            <td class="custom-width-3">
+                                                <a class="btn btn-xs" style="cursor: pointer;"><i
+                                                        (click)="deleteLeads(rowData._id,rowIndex)"
+                                                        class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="columns.length" class="text-center">
+                                                You need to generate leads via the extension before data can be added
+                                                here
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <!-- <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Profile URL</th>
@@ -154,9 +164,9 @@
 
 
                                     </tbody>
-                                </table>
+                                </table> -->
                             </div>
-                            <ul class="pagination">
+                            <!-- <ul class="pagination">
                                 <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
                                 </li>
                                 <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -164,8 +174,8 @@
                                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                                 <li class="page-item"><a class="page-link" href="#"><i
                                             class="fa fa-angle-right"></i></a></li>
-                            </ul>
-                        </div> -->
+                            </ul> -->
+                        </div>
                     </div>
 
 

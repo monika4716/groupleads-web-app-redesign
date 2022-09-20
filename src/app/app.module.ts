@@ -7,6 +7,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
+import { TableModule } from 'primeng/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +25,7 @@ import { AdminBioComponent } from './admin-bio/admin-bio.component';
 import { GroupProfilesComponent } from './group-profiles/group-profiles.component';
 import { AffiliatesComponent } from './affiliates/affiliates.component';
 import { GroupPluginComponent } from './group-plugin/group-plugin.component';
+import { GroupLeadsComponent } from './group-leads/group-leads.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,7 @@ import { GroupPluginComponent } from './group-plugin/group-plugin.component';
     GroupProfilesComponent,
     AffiliatesComponent,
     GroupPluginComponent,
+    GroupLeadsComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,7 @@ import { GroupPluginComponent } from './group-plugin/group-plugin.component';
     BrowserAnimationsModule,
     DropdownModule,
     ChartModule,
+    TableModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

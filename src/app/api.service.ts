@@ -58,4 +58,13 @@ export class ApiService {
       headers: headers,
     });
   }
+
+  getLeadsData(token: any, params: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.post(this.API_URL + 'app-get-leads-data', params, {
+      headers: headers,
+    });
+  }
 }

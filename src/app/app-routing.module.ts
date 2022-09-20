@@ -9,6 +9,7 @@ import { AdminBioComponent } from './admin-bio/admin-bio.component';
 import { GroupProfilesComponent } from './group-profiles/group-profiles.component';
 import { AffiliatesComponent } from './affiliates/affiliates.component';
 import { GroupPluginComponent } from './group-plugin/group-plugin.component';
+import { GroupLeadsComponent } from './group-leads/group-leads.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -37,13 +38,18 @@ const routes: Routes = [
   },
 
   {
-    path: 'affliates',
+    path: 'affiliate',
     component: AffiliatesComponent,
     canActivate: [RoutingGuard],
   },
   {
     path: 'groupPlugin',
     component: GroupPluginComponent,
+    canActivate: [RoutingGuard],
+  },
+  {
+    path: 'groupLeads',
+    component: GroupLeadsComponent,
     canActivate: [RoutingGuard],
   },
 ];
