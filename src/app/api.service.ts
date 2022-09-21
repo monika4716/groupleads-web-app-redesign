@@ -67,4 +67,23 @@ export class ApiService {
       headers: headers,
     });
   }
+
+  deleteLeads(id: any, token: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.post(this.API_URL + 'app-delete-lead', id, {
+      headers: headers,
+    });
+  }
+  getGridDataByFilter(token: any, params: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.post(
+      this.API_URL + 'app-get-group-data-by-filter',
+      params,
+      { headers: headers }
+    );
+  }
 }

@@ -18,6 +18,7 @@ export class GroupListComponent implements OnInit {
   id: any;
   fbGroupIdFilter: any;
   listingUpdated: boolean = false;
+  filterDropdown: any;
 
   constructor(
     private apiService: ApiService,
@@ -48,7 +49,7 @@ export class GroupListComponent implements OnInit {
         this.groupsTemp = tempGroups;
         this.groupsData = this.groupsTemp;
         console.log(this.groupsData);
-        if (!this.groupsTemp) {
+        if (this.groupsData.length > 0) {
           this.Nogroup = true;
         }
         this.spinner.hide();
@@ -69,9 +70,47 @@ export class GroupListComponent implements OnInit {
         console.log(this.groupsData);
         if (this.groupsData.length > 0) {
           this.Nogroup = true;
+          // setTimeout(() => {
+          //   $('table').addClass('table table-striped');
+          // }, 200);
         }
         this.spinner.hide();
       }
     });
+  }
+
+  onChange(e: any, name: any) {
+    $('li').removeClass('link');
+    if (e.target.attributes.data_filter.value) {
+      this.filterDropdown = e.target.attributes.data_filter.value;
+      // this.filterDropdownLabel = e.target.text;
+      if (this.filterDropdown == 'today') {
+        $('li#today').addClass('link');
+      } else if (this.filterDropdown == 'this_month') {
+        $('li#thisMonth').addClass('link');
+      } else if (this.filterDropdown == 'last_30_days') {
+        $('li#last30Days').addClass('link');
+      } else if (this.filterDropdown == 'last_90_days') {
+        $('li#last90Days').addClass('link');
+      } else if (this.filterDropdown == 'this_year') {
+        $('li#thisYear').addClass('link');
+      } else if (this.filterDropdown == 'all_time') {
+        $('li#allTime').addClass('link');
+      }
+      this.filterGridData(this.filterDropdown);
+    }
+    return false;
+  }
+
+  filterGridData(filterType: any) {
+    console.log(filterType);
+    this.spinner.show();
+    var tokenTemp = localStorage.getItem('token');
+    this.apiService
+      .getGridDataByFilter(tokenTemp, { filter: filterType })
+      .subscribe((response: any) => {
+        this.groupsData = response.groupcountlist;
+        this.spinner.hide();
+      });
   }
 }

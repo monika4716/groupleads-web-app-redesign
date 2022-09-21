@@ -230,7 +230,7 @@ p {
 .leads_generate {
   background: #ffffff;
   border-radius: 8px;
-  padding: 20px 30px;
+  padding: 20px 30px !important;
 }
 .leads_generate h3 {
   font-style: normal;
@@ -437,20 +437,20 @@ p {
   border-bottom: none;
 }
 .group_list_table tr th {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 30px;
-  color: #222222;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 30px !important;
+  color: #222222 !important;
   padding: 15px 20px !important;
 }
 .group_list_table tr td {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 30px;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 30px !important;
   padding: 15px 20px !important;
-  color: #757575;
+  color: #757575 !important;
 }
 .group_list_table .table > :not(:first-child) {
   border-top: none;
@@ -473,7 +473,7 @@ p {
   background: #f5f5f5;
 }
 .group_list_table .table.table-striped {
-  margin-top: 25px;
+  /* margin-top: 25px; */
 }
 .pagination .page-link {
   position: relative;

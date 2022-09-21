@@ -33,9 +33,10 @@
                                 </div>
                                 <div class="col-md-12 text-center no_leads">
                                     <img src="assets/images/note-remove.png" />
-                                    <h3>No Leads Have Been Generated Yet</h3>
+                                    <h3>No Group Have Been Created Yet</h3>
                                     <p>Connect your groups through the chrome extension to see the lead generation
-                                        chart. See more <a href="#">here.</a></p>
+                                        chart. See more <a href="javascript:void(0)" routerLink="/adminBio">here.</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -46,9 +47,30 @@
                                 </div>
                                 <div class="col-md-5 ">
                                     <div class="d-flex justify-content-end">
-                                        <!--  <button type="button" class="btn btn-primary export_btn"><img src="assets/images/export.png" /> Export</button> -->
-                                        <button type="button" class="btn btn-outline-primary filter_btn"><img
-                                                src="assets/images/menu.png" /> Filter by date</button>
+                                        <div class="dropdown filter_btn">
+                                            <button
+                                                style="background-color: white;border: none; color:#3c61ad;padding: 0px;"
+                                                class="btn btn-primary" type="button" data-bs-toggle="dropdown"
+                                                id="dropdownMenuButton1">
+                                                <img style="width:auto" src="assets/images/menu.png" class="mr-2" />
+                                                <span class="caret" style="font-size: 15px;"> Filter by date</span>
+                                            </button>
+                                            <ul (click)="onChange($event,'')" class="dropdown-menu custom-dropdown"
+                                                style="cursor: pointer;">
+                                                <li id="today"><a class="dropdown-item" data_filter="today">Today</a>
+                                                </li>
+                                                <li id="thisMonth"><a class="dropdown-item"
+                                                        data_filter="this_month">This month</a></li>
+                                                <li id="last30Days"><a class="dropdown-item"
+                                                        data_filter="last_30_days">Last 30 Days</a></li>
+                                                <li id="last90Days"><a class="dropdown-item"
+                                                        data_filter="last_90_days">Last 90 Days</a></li>
+                                                <li id="thisYear"><a class="dropdown-item" data_filter="this_year">This
+                                                        Year</a></li>
+                                                <li id="allTime"><a class="dropdown-item" data_filter="all_time">All
+                                                        Time</a></li>
+                                            </ul>
+                                        </div>
 
                                     </div>
                                 </div>
