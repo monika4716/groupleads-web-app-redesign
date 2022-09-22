@@ -73,11 +73,11 @@
                                 </div>
                             </div>
                             <div class="col-md-12 group_list_table">
-                                <p-table #dt [exportFilename]='csvName' [columns]="cols" styleClass="ui-table-cars"
-                                    [value]="leads" [lazy]="true" (onLazyLoad)="lazyLoadLeads($event)"
-                                    [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords"
-                                    [scrollable]="true" [resizableColumns]="true" sortField="_id" [(first)]="first"
-                                    [sortOrder]="-1">
+                                <p-table #dt [exportFilename]='csvName' [columns]="cols"
+                                    styleClass="ui-table-cars p-datatable-striped" [value]="leads" [lazy]="true"
+                                    (onLazyLoad)="lazyLoadLeads($event)" [paginator]="true" [rows]="rowsPerPage"
+                                    [totalRecords]="totalRecords" [scrollable]="true" [resizableColumns]="true"
+                                    sortField="_id" [(first)]="first" [sortOrder]="-1">
 
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>

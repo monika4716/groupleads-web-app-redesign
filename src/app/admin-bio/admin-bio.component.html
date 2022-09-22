@@ -1,1 +1,420 @@
-<p>admin-bio works!</p>
+<div class="open-sidebar">
+    <div class="container-fluid">
+        <div class="row">
+            <app-sidebar></app-sidebar>
+            <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
+                type="ball-scale-multiple" [fullScreen]="true">
+                <p style="color: white"> Loading... </p>
+            </ngx-spinner>
+            <div class="col-md-10 right_side">
+                <div class="row header">
+                    <div class="side_icon">
+                        <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                    </div>
+                    <div class="col-md-8 left_col">
+                        <div class="d-flex">
+
+                            <div>
+                                <h3>Admin Bio</h3>
+                            </div>
+                            <div class="leads_sec">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 p-0">
+                        <app-header-profile></app-header-profile>
+                    </div>
+                </div>
+                <div class="row section admin_bio_page group_list_section">
+                    <div class="row bio_tab">
+                        <div class="card admin_section">
+                            <div class="card-body">
+                                <div class="row user_section">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-2 p-0 ">
+                                                <img src="{{imageUrl}}" />
+                                            </div>
+                                            <div
+                                                class="col-md-10 d-flex align-items-center justify-content-center profile_right_sec">
+                                                <div class="col-md-12">
+                                                    <h2 class="name">{{fullName}}</h2>
+                                                    <h5 class="place"><img class="country-image"
+                                                            src="{{countryImage}}" />{{countryName}}</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-md-6 text-end user_right_section d-flex align-items-center justify-content-end">
+                                        <button type="button" class="btn btn-outline-primary preview_btn bio_btn"><img
+                                                src="assets/images/eye.png" />Preview Bio</button>
+                                        <button type="button" class="btn btn-primary share_btn bio_btn"><img
+                                                src="assets/images/share.png" />Share Bio</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3 mt-3">
+                                            <label for="fname" class="form-label">First Name<span
+                                                    class="required">*</span></label>
+                                            <input type="text" class="form-control firstName" id="firstName" name="name"
+                                                value="{{firstName}}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3 mt-3">
+                                            <label for="lname" class="form-label">Last Name<span
+                                                    class="required">*</span></label>
+                                            <input type="text" class="form-control lastName" id="lastName" name="name"
+                                                value="{{lastName}}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="location" class="form-label">Location</label>
+                                    <p-dropdown styleClass="form-control country-dropdown" formControlName="location"
+                                        [(ngModel)]="selectedCountry" placeholder="Select Country"
+                                        [options]="countryList" optionLabel="name" optionValue="code"
+                                        (onChange)="selectCountryOnChange($event)">
+                                    </p-dropdown>
+
+                                </div>
+                                <div>
+                                    <label for="about" class="form-label">About Me</label>
+                                    <textarea class="form-control" rows="5" id="about" formControlName="about"
+                                        name="about" [(ngModel)]="aboutMe" [value]="aboutMe"
+                                        placeholder="Write a brief description about yourself with regards to your group...">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card user_name_section">
+                            <div class="card-body">
+                                <h3>Set Username</h3>
+                                <p>Choose a unique username for your admin bio.</p>
+                                <div>
+                                    <input type="text" class="form-control"
+                                        placeholder="https://groupleds.net/profile/danedwards">
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card achievement_section">
+                            <div class="card-body">
+                                <h3>My Achievements</h3>
+                                <p>Share your achievements that might stand out to brands (3 achievements max)</p>
+                                <div class="" formArrayName="achievements">
+                                    <div *ngFor="let achieve of achievements().controls;   let i=index"
+                                        [formGroupName]="i" class="mt-2">
+                                        <div class="input-group achievement_field">
+                                            <input type="text" class="form-control" formControlName="achieve"
+                                                placeholder="Enter an achievement">
+                                            <span class="input-group-text" (click)="removeAchievement(i)"><img
+                                                    src="assets/images/Cancel.png" /></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 p-2 acviveBtn" *ngIf="this.isButtonVisible">
+                                        <button type="button" class="btn btn-outline-primary mt-2"
+                                            (click)="addAchievement()"><img src="assets/images/add.png" class="mr-2">
+                                            Add
+                                            Achievement</button>
+                                    </div>
+                                </div>
+                                <!-- <div class="input-group achievement_field">
+                                    <input type="text" class="form-control" placeholder="Enter an achievement">
+                                    <span class="input-group-text"><img src="assets/images/Cancel.png" /></span>
+                                </div>
+                                <div class="col-md-12 p-0">
+                                    <button type="button" class="btn btn-outline-primary mt-2"><img
+                                            src="assets/images/add.png" class="mr-2" /> Add Achievement</button>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="card groups_section">
+                            <div class="card-body">
+                                <h3>Your Groups</h3>
+                                <p>Select the group(s) that you currently own or admin</p>
+                                <div *ngFor="let group of linkedGroups;"
+                                    class="col-md-12 product d-flex align-items-center justify-content-center mb-2">
+                                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" /></div>
+                                    <div class="col-md-10 product_sec">
+                                        <h4 [attr.group-id]="group.id">{{group.group_name}}</h4>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" /></div>
+                                    <div class="col-md-10 product_sec">
+                                        <h4>Chatsilo Support Community</h4>
+                                        <ul>
+                                            <li><img src="assets/images/public.png" />Public</li>
+                                            <li><img src="assets/images/members.png" />364 members</li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        class="col-md-1 d-flex align-items-center justify-content-center group_right_sec">
+                                        <img src="assets/images/refresh.png" />
+                                    </div>
+                                </div> -->
+                                <!-- <button type="button" class="btn btn-outline-primary mt-4" data-bs-toggle="modal"
+                                    data-bs-target="#select_groupModal"><img src="assets/images/add.png" class="mr-2" />
+                                    Select Groups</button> -->
+                            </div>
+                        </div>
+                        <div class="card social_profile_section">
+                            <div class="card-body">
+                                <h3>Social Profiles</h3>
+                                <p>Add social profiles to help brands connect with you.</p>
+                                <!-- <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                                    <div class="col-md-1 product_img group_left_sec"><img
+                                            src="assets/images/Twitter.png" /></div>
+                                    <div class="col-md-10 product_sec">
+                                        <h4>Twitter</h4>
+                                        <ul>
+                                            <li><a href="#">https://twitter.com/danedwards/</a></li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        class="col-md-1 d-flex align-items-center justify-content-center group_right_sec">
+                                        <img src="assets/images/Cancel.png" />
+                                    </div>
+                                </div> -->
+                                <!-- <button type="button" class="btn btn-outline-primary mt-4" data-bs-toggle="modal"
+                                    data-bs-target="#add_social_profileModal"><img src="assets/images/add.png"
+                                        class="mr-2" /> Add Social Profile</button> -->
+                                <div class="col-md-12 mb-2 product d-flex align-items-center justify-content-center"
+                                    *ngFor="let social of socialLinks;">
+                                    <div class="col-md-1 product_img"><img src="assets/images/{{social.name}}.png" />
+                                    </div>
+                                    <div class="col-md-10 product_sec">
+                                        <h4>{{social.name}}</h4>
+                                        <ul>
+                                            <li><a href="#">{{social.link}}</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-center justify-content-center"><img
+                                            src="assets/images/Cancel.png" (click)="deleteSocialLink(social.name)" />
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary mt-4" data-toggle="modal"
+                                    data-target="#add_social_profileModal" data-backdrop="static"><img
+                                        src="assets/images/add.png" class="mr-2" />
+                                    Add
+                                    Social Profile</button>
+
+                            </div>
+                        </div>
+                        <div class="card message_section">
+                            <div class="card-body">
+                                <h3>Message Button</h3>
+                                <p>Enable message button in order for brands to contact you.</p>
+                                <div class="col-md-12 message_bio mb-4 mt-3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Show message button in my bio</h5>
+                                        </div>
+                                        <div class="col-md-6 d-flex justify-content-end p-0">
+                                            <!-- <!-- <div class="custom-control custom-switch toggle_Btn">
+													<input type="checkbox" class="custom-control-input" id="switch1">
+													<label class="custom-control-label" for="switch1"></label>
+												</div> -->
+                                            <!-- <div class="custom-switch toggle_Btn form-check form-switch">
+								  <input class="custom-control-input" type="checkbox" id="flexSwitchCheckDefault" name="darkmode" value="yes" checked>
+								  <label class="form-check-label custom-control-label" for="flexSwitchCheckDefault"></label>
+								</div> -->
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="mySwitch"
+                                                    name="darkmode" value="yes" checked>
+                                                <label class="form-check-label" for="mySwitch"></label>
+                                            </div>
+                                            <!-- <div class="form-check form-switch">
+												  <input class="form-check-input" type="checkbox" id="mySwitch" name="darkmode" value="yes" checked>
+												  <label class="form-check-label" for="mySwitch"></label>
+												</div>  -->
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="email" class="form-label">Email to recieve messages<span
+                                            class="required">*</span></label>
+                                    <input type="email" class="form-control" id="email"
+                                        placeholder="danedwards123@gmail.com" name="email">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card admin_url_sec">
+                            <div class="card-body">
+                                <h3>Admin Bio URL</h3>
+                                <p>Share your Admin Bio to brands using this URL</p>
+                                <!-- <div class="input-group">
+                                    <input type="text" class="form-control"
+                                        placeholder="https://groupleds.net/profile/danedwards">
+                                    <span class="input-group-text">Copy</span>
+                                </div> -->
+                                <div class="input-group">
+                                    <input type="text" [disabled]="showAddProfileBtn" class="form-control"
+                                        placeholder="{{origin}}/profile/{{slug}}">
+                                    <span type="button" class="input-group-text"
+                                        (click)="copyAdminProfile(slug)">{{text}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 publish_bio p-0">
+                    <div class="card ">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-10 bio_left d-flex align-items-center justify-content-center">
+                                    <h4><img src="assets/images/1.png" /> Changes you make would be auto-saved as a
+                                        draft. Publish to make them live. </h4>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center justify-content-center"><button
+                                        type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#publish_bioModal">Publish Bio</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!------------------publish bio modal--------------->
+    <div class="modal group_modal" id="publish_bioModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <h4 class="modal-title">Add Social Profile</h4> -->
+                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body publish_modal text-center">
+                    <div class="col-md-12">
+                        <img src="assets/images/success.png" class="success" />
+                        <h4 class="modal-title">Bio Published Successfully</h4>
+                        <p>Share to start getting noticed</p>
+                        <div class="input-group">
+                            <input type="text" class="form-control"
+                                placeholder="https://groupleds.net/profile/danedwards">
+                            <span class="input-group-text">Copy</span>
+                        </div>
+                        <h6><span class="border_left"></span>Share with<span class="border_right"></span></h6>
+                        <ul class="social_icons">
+                            <a href="#"><img src="assets/images/facebook.png" /></a>
+                            <a href="#"><img src="assets/images/Instagram.png" /></a>
+                            <a href="#"><img src="assets/images/Twitter.png" /></a>
+                            <a href="#"><img src="assets/images/Linkedin.png" class="linkedin" /></a>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!------------------select group modal-------------->
+    <div class="modal group_modal" id="select_groupModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Group(s)</h4>
+                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                        <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" />
+                        </div>
+                        <div class="col-md-10 product_sec">
+                            <h4>Chatsilo Support Community</h4>
+                            <ul>
+                                <li><img src="assets/images/public.png" />Public</li>
+                                <li><img src="assets/images/members.png" />364 members</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center justify-content-end">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="customRadio" name="example1"
+                                    value="customEx">
+                                <label class="custom-control-label" for="customRadio"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 product d-flex align-items-center justify-content-center mt-4">
+                        <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" />
+                        </div>
+                        <div class="col-md-10 product_sec">
+                            <h4>Chatsilo Support Community</h4>
+                            <ul>
+                                <li><img src="assets/images/public.png" />Public</li>
+                                <li><img src="assets/images/members.png" />364 members</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center justify-content-end">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="customRadio1" name="example1"
+                                    value="customEx">
+                                <label class="custom-control-label" for="customRadio1"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="button" class="btn btn-primary btn-block select_group_btn">Select
+                            Group(s)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-----------------social profile modal--------------->
+    <div class="modal group_modal" id="add_social_profileModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Social Profile</h4>
+                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body social_profiles">
+                    <div class="col-md-12">
+                        <h3><img src="assets/images/facebook.png" /><span>Facebook</span></h3>
+                        <h3 data-bs-toggle="modal" data-bs-target="#social_linkModal" class="instagram_link"><img
+                                src="assets/images/Instagram.png" /><span>Instagram</span></h3>
+                        <h3><img src="assets/images/Twitter.png" /><span>Twitter</span></h3>
+                        <h3><img src="assets/images/Linkedin.png" /><span>LinkedIn</span></h3>
+                        <h3><img src="assets/images/Youtube.png" /><span>Youtube</span></h3>
+                        <h3><img src="assets/images/Website.png" /><span>Website/Blog</span></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-----------------social link modal------------->
+    <div class="modal group_modal" id="social_linkModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Social Profile</h4>
+                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body social_profile_body">
+                    <h4><img src="assets/images/instagram.png" class="social_link_img" />Instagram</h4>
+                    <div class="form-group mt-4">
+                        <label for="handle" class="form-label">Your Instagram handle</label>
+                        <input type="text" class="form-control" placeholder="@ danedwards" id="insta_hendle">
+                    </div>
+                    <div class="col-md-12 d-grid mt-4 p-0">
+                        <button type="button" class="btn btn-primary btn-block add_profile_btn">Add Profile</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

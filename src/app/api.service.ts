@@ -86,4 +86,27 @@ export class ApiService {
       { headers: headers }
     );
   }
+
+  getAdminBio(token: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.get(this.API_URL + 'get-admin-bio', {
+      headers: headers,
+    });
+  }
+
+  saveAdminBio(token: any, params: any) {
+    console.log(token);
+    console.log(params);
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.post(this.API_URL + 'save-admin-bio', params, {
+      headers: headers,
+    });
+  }
+  getAdminBioPreivew(id: any) {
+    return this.httpClient.get(this.API_URL + 'get-admin-preview/' + id);
+  }
 }

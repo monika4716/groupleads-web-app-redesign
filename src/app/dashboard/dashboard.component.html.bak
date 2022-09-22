@@ -43,11 +43,16 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="d-flex">
-                                    <select (change)="onChangeGroup($event)" class="form-control appearance" name="user" [(ngModel)]='selectedGroupId'>
-                                        <option *ngFor="let group of group_listing" [value]="group.group_id">
-                                            {{group.group_name}}
-                                        </option>
-                                    </select>
+                                    <p-dropdown styleClass="groups_dropdown select_groups form-select"
+                                        [options]="group_listing" optionLabel="group_name" optionValue="group_id"
+                                        (onChange)="onChangeGroup($event,'')"></p-dropdown>
+
+                                    <!-- <select class="form-select select_groups" [(ngModel)]="selectedGroup"
+                                        (change)="onChangeGroup($event,'')">
+                                        <option *ngFor="let group of group_listing;" value="{{group.group_id}}"
+                                            [selected]="selectedGroup == true">
+                                            {{group.group_name}}</option>
+                                    </select> -->
 
                                     <select [(ngModel)]="filterDropdown" (change)="onChangeLeadFilter($event)"
                                         class="form-select">

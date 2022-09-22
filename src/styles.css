@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-body {
+/* body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif !important;
@@ -24,7 +24,7 @@ hr {
 }
 a:hover {
   text-decoration: none;
-}
+} */
 /*******************header-before-login**********************/
 .bg-top {
   background-image: url("assets/images/bg.png");
@@ -171,4 +171,21 @@ a.forget-password {
 
 .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
   background: #f5f5f5 !important;
+}
+.p-datatable-thead {
+  background: #f5f5f5 !important;
+}
+
+.p-datatable-resizable .p-datatable-tbody > tr > td:nth-child(1) {
+  overflow: hidden !important;
+  width: 1400px !important;
+  text-overflow: ellipsis !important;
+  word-break: break-word !important;
+  white-space: inherit !important;
+}
+.appearance {
+  appearance: auto !important;
+}
+.country-image {
+  width: 30px !important;
 }
