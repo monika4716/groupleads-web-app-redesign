@@ -10,6 +10,7 @@ import { GroupProfilesComponent } from './group-profiles/group-profiles.componen
 import { AffiliatesComponent } from './affiliates/affiliates.component';
 import { GroupPluginComponent } from './group-plugin/group-plugin.component';
 import { GroupLeadsComponent } from './group-leads/group-leads.component';
+import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -29,6 +30,11 @@ const routes: Routes = [
     path: 'adminBio',
     component: AdminBioComponent,
     canActivate: [RoutingGuard],
+  },
+
+  {
+    path: 'profile/:slug',
+    component: AdminBioPreviewComponent,
   },
 
   {

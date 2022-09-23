@@ -8,7 +8,8 @@ import { DropdownModule } from 'primeng/dropdown';
 
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
-// import { SafePipe } from "../pipes/safe.pipe";
+import * as $ from 'jquery';
+import { SafePipe } from '../pipe/safe.pipe';
 import {
   DomSanitizer,
   SafeHtml,
@@ -27,10 +28,11 @@ import {
   selector: 'app-admin-bio',
   templateUrl: './admin-bio.component.html',
   styleUrls: ['./admin-bio.component.css'],
-  // providers: [SafePipe],
+  providers: [SafePipe],
 })
 export class AdminBioComponent implements OnInit {
   displayBasic: boolean = false;
+  displayCopy: boolean = false;
   token: any;
   name: any;
   userDetails: any;
@@ -44,7 +46,7 @@ export class AdminBioComponent implements OnInit {
   slug: any;
   email: any = '';
   profileImage: any;
-  //selectedFile: File = null;
+  selectedFile: any = null;
   linkedGroups: any;
   socialLinks: any = [];
   aboutMe: any = '';
@@ -56,7 +58,7 @@ export class AdminBioComponent implements OnInit {
   isPublishBioModal: any = false;
   isiconVisible: any = true;
   adminBioForm: FormGroup;
-  socialName: any;
+  socialName: any = 'Facebook';
   socialHeading: any;
   textType: any = 'text';
   socialPlaceholder: any;
@@ -68,11 +70,15 @@ export class AdminBioComponent implements OnInit {
   origin: any;
   displayIframe: any = false;
   //iframeUrl: SafeResourceUrl;
+  iframeUrl: any;
   displayForm: any = true;
   imageUrl: any = 'assets/images/user_profile.png';
   imageData: any = '';
   location: any = '';
   displaycloseButton: any = false;
+  eyeImage: any = 'assets/images/eye_grey.png';
+  userName: any = '';
+  messageButton: any = 0;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -89,6 +95,7 @@ export class AdminBioComponent implements OnInit {
     this.adminBioForm = this.fb.group({
       email: ['', Validators.required],
       about: ['', Validators.required],
+      userName: ['', Validators.required],
       location: ['', Validators.required],
       achievements: this.fb.array([]),
       image: [''],
@@ -112,6 +119,8 @@ export class AdminBioComponent implements OnInit {
   }
   /* GET AND SET ADMIN BIO PROFILE*/
   getAdminBioDetails() {
+    this.token = localStorage.getItem('token');
+    console.log(this.token);
     this.apiService.getAdminBio(this.token).subscribe((response: any) => {
       console.log(response);
       if (response.status == 200) {
@@ -126,11 +135,18 @@ export class AdminBioComponent implements OnInit {
     this.userDetails = response.user_details;
 
     this.adminBio = response.admin_bio;
+    console.log(this.adminBio);
     if (this.adminBio != null && this.adminBio.about_me != null) {
       this.aboutMe = this.adminBio.about_me;
     }
+    if (this.adminBio != null && this.adminBio.about_me != null) {
+      this.userName = this.adminBio.user_name;
+    }
+    this.eyeImage = 'assets/images/eye.png';
 
-    console.log(this.adminBio);
+    $('.preview_btn').prop('disabled', false);
+    $('.share_btn').prop('disabled', false);
+
     // set admin location
     if (this.adminBio != null && this.adminBio.location != null) {
       this.location = this.adminBio.location;
@@ -170,19 +186,21 @@ export class AdminBioComponent implements OnInit {
         ' ' +
         this.capitalizeFirstLetter(this.lastName);
 
-      this.slug = this.firstName + this.lastName + '-' + this.userDetails.id;
+      //this.slug = this.firstName + this.lastName + '-' + this.userDetails.id;
     } else {
       this.firstName = this.capitalizeFirstLetter(this.userDetails.name);
       this.fullName = this.capitalizeFirstLetter(this.firstName);
-      this.slug = this.firstName + '-' + this.userDetails.id;
+      //this.slug = this.firstName + '-' + this.userDetails.id;
     }
   }
 
   /*COUNTRY SELECTION*/
   selectCountryOnChange(event: any) {
-    this.countryCode = event.value.code;
-    this.countryName = event.value.name;
-    this.countryImage = event.value.image;
+    console.log(event);
+    this.countryCode = event.value;
+    //this.countryCode = event.value.code;
+    // this.countryName = event.value.name;
+    // this.countryImage = event.value.image;
 
     console.log(this.countryCode);
   }
@@ -190,12 +208,14 @@ export class AdminBioComponent implements OnInit {
   imageUploader(event: any) {
     console.log(event);
     var reader = new FileReader();
+    console.log(reader);
     reader.readAsDataURL(event.files[0]);
     reader.onload = (_event) => {
       this.imageUrl = reader.result;
     };
 
     this.imageData = event.files[0];
+    console.log(this.imageData);
   }
 
   public get htmlProperty(): SafeHtml {
@@ -277,10 +297,13 @@ export class AdminBioComponent implements OnInit {
 
     this.socialName = socialName;
     let socialProfileModal = document.getElementById('add_social_profileModal');
-    // let element: HTMLElement = socialProfileModal.getElementsByClassName(
-    //   'cancel_btn'
-    // )[0] as HTMLElement;
-    // element.click();
+    console.log(socialProfileModal);
+    if (socialProfileModal != null) {
+      let element: HTMLElement = socialProfileModal.getElementsByClassName(
+        'cancel_btn'
+      )[0] as HTMLElement;
+      element.click();
+    }
   }
 
   /*
@@ -362,11 +385,13 @@ export class AdminBioComponent implements OnInit {
 
     setTimeout(() => {
       console.log('in');
-      // let socialLinkModal = document.getElementById('social_linkModal');
-      // let element: HTMLElement = socialLinkModal.getElementsByClassName(
-      //   'cancel_btn'
-      // )[0] as HTMLElement;
-      // element.click();
+      let socialLinkModal = document.getElementById('social_linkModal');
+      if (socialLinkModal != null) {
+        let element: HTMLElement = socialLinkModal.getElementsByClassName(
+          'cancel_btn'
+        )[0] as HTMLElement;
+        element.click();
+      }
     }, 500);
   }
   /* TO DELET SOCIAL LINK 
@@ -429,6 +454,7 @@ export class AdminBioComponent implements OnInit {
     console.log(this.adminBioForm.value);
     let about = this.adminBioForm.value.about;
     let email = this.adminBioForm.value.email;
+    let userName = this.adminBioForm.value.userName;
 
     if (this.adminBioForm.value.location != undefined) {
       this.location = this.adminBioForm.value.location.code;
@@ -447,16 +473,23 @@ export class AdminBioComponent implements OnInit {
     let user_id = this.userDetails.id;
     let socialProfile = JSON.stringify(this.socialLinks);
 
+    console.log(email);
+    console.log(this.messageButton);
+    console.log(userName);
+    console.log(this.imageData);
     let parm = new FormData();
     parm.set('about', about);
     parm.set('email', email);
     parm.set('location', this.location);
     parm.set('achievements', achievements);
     parm.set('user_id', user_id);
-    parm.set('slug', this.slug);
+    //parm.set('slug', this.slug);
     parm.set('socialProfile', socialProfile);
     parm.set('image', this.imageData);
-    this.saveAdminBioProfile(parm);
+    parm.set('messageButton', this.messageButton);
+    parm.set('userName', userName);
+
+    //this.saveAdminBioProfile(parm);
   }
   /* 
   TO CALL API TO SAVE ADMIN PROFILE.
@@ -510,17 +543,18 @@ export class AdminBioComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    //this.selectedFile = <File>event.target.files[0];
+    this.selectedFile = <File>event.target.files[0];
   }
 
-  // openPreview() {
-  //   let url = this.origin + '/profile/' + this.slug + '?displayClose=true';
-  //   this.iframeUrl = url;
-  //   this.displayForm = false;
-  //   this.displaycloseButton = true;
-  //   this.displayIframe = true;
-  //   this.getIframPreview();
-  // }
+  openPreview() {
+    let url = this.origin + '/profile/' + this.slug + '?displayClose=true';
+    console.log(url);
+    this.iframeUrl = url;
+    this.displayForm = false;
+    this.displaycloseButton = true;
+    this.displayIframe = true;
+    this.getIframPreview();
+  }
 
   getIframPreview() {
     let setDefaultSetting = setInterval(() => {
@@ -531,5 +565,23 @@ export class AdminBioComponent implements OnInit {
         this.displayIframe = false;
       }
     }, 100);
+  }
+
+  getUserName(event: any) {
+    console.log(event.target.value);
+    if (event.target.value.trim() != '') {
+      $('.publish-bio-btn').prop('disabled', false);
+      this.userName = event.target.value.trim();
+    } else {
+      $('.publish-bio-btn').prop('disabled', true);
+    }
+  }
+  onCheckboxChange(e: any) {
+    if (e.target.checked) {
+      this.messageButton = 1;
+    } else {
+      this.messageButton = 0;
+    }
+    console.log(this.messageButton);
   }
 }

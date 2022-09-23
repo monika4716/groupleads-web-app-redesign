@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,6 +27,9 @@ import { GroupProfilesComponent } from './group-profiles/group-profiles.componen
 import { AffiliatesComponent } from './affiliates/affiliates.component';
 import { GroupPluginComponent } from './group-plugin/group-plugin.component';
 import { GroupLeadsComponent } from './group-leads/group-leads.component';
+import { DialogModule } from 'primeng/dialog';
+import { SafePipe } from './pipe/safe.pipe';
+import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +48,8 @@ import { GroupLeadsComponent } from './group-leads/group-leads.component';
     AffiliatesComponent,
     GroupPluginComponent,
     GroupLeadsComponent,
+    SafePipe,
+    AdminBioPreviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +62,8 @@ import { GroupLeadsComponent } from './group-leads/group-leads.component';
     DropdownModule,
     ChartModule,
     TableModule,
+    FileUploadModule,
+    DialogModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

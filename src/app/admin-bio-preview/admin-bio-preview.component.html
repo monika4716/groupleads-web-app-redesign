@@ -1,0 +1,118 @@
+<div class="section admin_bio_page profile_page">
+
+    <div class="container-fluid admin_bio_list">
+
+        <div class="row pt-3">
+            <div class="col-md-6">
+                <img src="assets/images/logo.png" />
+            </div>
+            <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
+                <button type="button" *ngIf="displayCloseBtn" (click)="closePreview()"
+                    class="btn btn-outline-primary preview_btn bio_btn " id="closePreview">Close Preview</button>
+                <!-- <button type="button" class="btn btn-primary share_btn bio_btn" >Publish Bio</button> -->
+            </div>
+        </div>
+    </div>
+    <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7" type="ball-spin-fade"
+        [fullScreen]="true">
+        <p style="color: white"> Loading... </p>
+    </ngx-spinner>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 bio_tab">
+                <div class="card ">
+                    <div class="card-body admin_profile">
+                        <div class="row user_section">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-2 p-0 ">
+                                        <img src="assets/images/user_profile.png" />
+                                    </div>
+                                    <div class="col-md-10 d-flex align-items-center justify-content-center">
+                                        <div class="col-md-12">
+                                            <h2 class="name">{{fullName}}</h2>
+                                            <h5 class="place"><img class="country-flag"
+                                                    src="{{countryImage}}" />{{countryName}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="col-md-6 text-end user_right_section d-flex align-items-center justify-content-end">
+                                <!-- <button type="button" class="btn btn-primary share_btn bio_btn mr-3"><img
+                                        src="assets/images/message.png" class="mr-2" />Message Daniel</button> -->
+                                <button type="button" class="btn btn-outline-primary preview_btn bio_btn"><img
+                                        src="assets/images/share_blue.png" class="mr-2" />Share Bio</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>About Me</h3>
+                                <p>{{about}}</p>
+                            </div>
+                        </div>
+
+                        <div class="card" *ngIf="achievements.length > 0">
+                            <div class="card-body">
+                                <h3>My Achievements</h3>
+                                <div class="col-md-12 product " *ngFor="let achieve of achievements index as i;">
+                                    <div class="row d-flex align-items-center justify-content-center">
+                                        <div class="col-md-1 product_img p-0">
+                                            <span class="badge badge-primary">{{i+1}}</span>
+                                        </div>
+                                        <div class="col-md-10 pl-0">
+                                            <p>{{achieve.achieve}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 pl-0 right_sec">
+                        <div class="card custom-scroll" style="height: 400px;" *ngIf="linkedGroups.length > 0">
+                            <div class="card-body">
+                                <div class="col-md-12 p-0">
+                                    <h3>Groups <span class="badge badge-primary">{{linkedGroupLength}}</span></h3>
+                                </div>
+                                <div class="col-md-12" *ngFor="let group of linkedGroups;">
+                                    <div class="row product d-flex align-items-center justify-content-center">
+                                        <div class="col-md-2 product_img p-0"><img src="assets/images/product.png" />
+                                        </div>
+                                        <div class="col-md-9 product_sec pr-0">
+                                            <h4 [attr.group-id]="group.id" class="preview-group">{{group.group_name}}
+                                            </h4>
+                                            <ul>
+                                                <!-- <li><img src="assets/images/public.png" />Public</li>
+                                                <li><img src="assets/images/members.png" />364 members</li> -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bio_tab" *ngIf="socialLinks.length > 0">
+                            <div class="card-body">
+                                <h3>Social Profiles</h3>
+                                <div class="col-md-12 product d-flex align-items-center justify-content-center"
+                                    *ngFor="let social of socialLinks;">
+                                    <a href="{{social.link}}" target="_blank">
+                                        <h3><img src="assets/images/{{social.name}}.png" class="mr-3" />{{social.name}}
+                                        </h3>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
