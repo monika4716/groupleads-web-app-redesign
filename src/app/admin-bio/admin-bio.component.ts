@@ -31,13 +31,17 @@ import {
   providers: [SafePipe],
 })
 export class AdminBioComponent implements OnInit {
+  isChecked: boolean = false;
   displayBasic: boolean = false;
   displayCopy: boolean = false;
+  disabledPublishButton: boolean = true;
+  checkUniqueUserName: boolean = false;
   token: any;
   name: any;
   userDetails: any;
   adminBio: any;
   selectedCountry: any;
+  selectedCountryCode: any;
   countryName: any = null;
   countryImage: any = null;
   fullName: any;
@@ -78,6 +82,7 @@ export class AdminBioComponent implements OnInit {
   displaycloseButton: any = false;
   eyeImage: any = 'assets/images/eye_grey.png';
   userName: any = '';
+  perviousUser: any = '';
   messageButton: any = 0;
   constructor(
     private router: Router,
@@ -93,12 +98,12 @@ export class AdminBioComponent implements OnInit {
     this.token = localStorage.getItem('token');
 
     this.adminBioForm = this.fb.group({
-      email: ['', Validators.required],
-      about: ['', Validators.required],
-      userName: ['', Validators.required],
-      location: ['', Validators.required],
+      email: [''],
+      about: [''],
+      userName: [''],
+      location: [''],
+      isMessageButton: [''],
       achievements: this.fb.array([]),
-      image: [''],
     });
   }
 
@@ -120,7 +125,7 @@ export class AdminBioComponent implements OnInit {
   /* GET AND SET ADMIN BIO PROFILE*/
   getAdminBioDetails() {
     this.token = localStorage.getItem('token');
-    console.log(this.token);
+    //console.log(this.token);
     this.apiService.getAdminBio(this.token).subscribe((response: any) => {
       console.log(response);
       if (response.status == 200) {
@@ -132,15 +137,23 @@ export class AdminBioComponent implements OnInit {
   }
 
   setAdminBioValue(response: any) {
+    this.disabledPublishButton = false;
     this.userDetails = response.user_details;
 
     this.adminBio = response.admin_bio;
-    console.log(this.adminBio);
+    //console.log(this.adminBio);
     if (this.adminBio != null && this.adminBio.about_me != null) {
       this.aboutMe = this.adminBio.about_me;
     }
-    if (this.adminBio != null && this.adminBio.about_me != null) {
+    if (this.adminBio != null && this.adminBio.user_name != null) {
+      this.disabledPublishButton = false;
+      this.displayCopy = true;
       this.userName = this.adminBio.user_name;
+      this.perviousUser = this.adminBio.user_name;
+    }
+    this.messageButton = this.adminBio.is_message_button;
+    if (this.adminBio != null && this.adminBio.is_message_button == 1) {
+      this.isChecked = true;
     }
     this.eyeImage = 'assets/images/eye.png';
 
@@ -162,7 +175,7 @@ export class AdminBioComponent implements OnInit {
     if (this.adminBio != null && this.adminBio.achievements != null) {
       let achievements = JSON.parse(this.adminBio.achievements);
       const arr = this.adminBioForm.controls['achievements'] as FormArray;
-      console.log(arr);
+      //console.log(arr);
       while (0 !== arr.length) {
         arr.removeAt(0);
       }
@@ -208,7 +221,7 @@ export class AdminBioComponent implements OnInit {
   imageUploader(event: any) {
     console.log(event);
     var reader = new FileReader();
-    console.log(reader);
+    //console.log(reader);
     reader.readAsDataURL(event.files[0]);
     reader.onload = (_event) => {
       this.imageUrl = reader.result;
@@ -451,13 +464,13 @@ export class AdminBioComponent implements OnInit {
   }
   /*SUBMIT COMPLETE ADMIN BIO FROM */
   onSubmit() {
-    console.log(this.adminBioForm.value);
+    console.log(this.adminBioForm);
     let about = this.adminBioForm.value.about;
     let email = this.adminBioForm.value.email;
     let userName = this.adminBioForm.value.userName;
 
     if (this.adminBioForm.value.location != undefined) {
-      this.location = this.adminBioForm.value.location.code;
+      this.location = this.adminBioForm.value.location;
     }
     let achieveEmptyIndex = this.adminBioForm.value.achievements.findIndex(
       (value: any) => {
@@ -473,35 +486,48 @@ export class AdminBioComponent implements OnInit {
     let user_id = this.userDetails.id;
     let socialProfile = JSON.stringify(this.socialLinks);
 
+    // isMessageButton enable or disable
+    this.messageButton = 0;
+    if (this.adminBioForm.value.isMessageButton == true) {
+      this.messageButton = 1;
+    }
+
+    console.log(about);
     console.log(email);
+    console.log(this.location);
+    console.log(achievements);
+    console.log(user_id);
+    console.log(socialProfile);
     console.log(this.messageButton);
     console.log(userName);
     console.log(this.imageData);
+
     let parm = new FormData();
     parm.set('about', about);
     parm.set('email', email);
     parm.set('location', this.location);
     parm.set('achievements', achievements);
     parm.set('user_id', user_id);
-    //parm.set('slug', this.slug);
     parm.set('socialProfile', socialProfile);
-    parm.set('image', this.imageData);
     parm.set('messageButton', this.messageButton);
     parm.set('userName', userName);
+    parm.set('image', this.imageData);
 
-    //this.saveAdminBioProfile(parm);
+    this.saveAdminBioProfile(parm);
   }
   /* 
   TO CALL API TO SAVE ADMIN PROFILE.
   @Parameter{parm}
 */
   saveAdminBioProfile(parm: any) {
+    this.disabledPublishButton = true;
     this.apiService
       .saveAdminBio(this.token, parm)
       .subscribe((response: any) => {
         console.log(response);
 
         if (response.status == 200) {
+          //show copy profile link popup
           this.displayBasic = true;
           this.setAdminBioValue(response);
         }
@@ -518,11 +544,11 @@ export class AdminBioComponent implements OnInit {
       this.isButtonVisible = false;
     }
     this.achiveCount = achievements.length;
-    console.log(this.achiveCount);
+    //console.log(this.achiveCount);
 
     const control = <FormArray>this.adminBioForm.controls['achievements'];
 
-    console.log(control);
+    // console.log(control);
     achievements.forEach((x: any) => {
       control.push(
         this.fb.group({
@@ -540,22 +566,25 @@ export class AdminBioComponent implements OnInit {
     this.selectedCountry = this.countryList[index];
     this.countryImage = this.selectedCountry.image;
     this.countryName = this.selectedCountry.name;
+    this.selectedCountryCode = location;
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = <File>event.target.files[0];
-  }
+  // onFileSelected(event: any) {
+  //   this.selectedFile = <File>event.target.files[0];
+  // }
 
+  /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
-    let url = this.origin + '/profile/' + this.slug + '?displayClose=true';
+    let url = this.origin + '/profile/' + this.userName + '?displayClose=true';
     console.log(url);
+
     this.iframeUrl = url;
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
     this.getIframPreview();
   }
-
+  /* GET IFRAME PREVIEW */
   getIframPreview() {
     let setDefaultSetting = setInterval(() => {
       let iframe = document.getElementById('openIframe');
@@ -567,21 +596,41 @@ export class AdminBioComponent implements OnInit {
     }, 100);
   }
 
+  /* GET UNIQUE USER NAME FOR ADMIN-BIO SLUG*/
   getUserName(event: any) {
-    console.log(event.target.value);
-    if (event.target.value.trim() != '') {
-      $('.publish-bio-btn').prop('disabled', false);
-      this.userName = event.target.value.trim();
-    } else {
-      $('.publish-bio-btn').prop('disabled', true);
+    this.userName = event.target.value.trim();
+    if (this.perviousUser != this.userName) {
+      if (this.userName != '') {
+        this.disabledPublishButton = false;
+        this.checkValidUserName();
+      } else {
+        this.disabledPublishButton = true;
+      }
     }
   }
+
+  /* MESSAGE BUTTON SHOW OR HIDE*/
   onCheckboxChange(e: any) {
+    console.log(e.target.checked);
     if (e.target.checked) {
+      this.isChecked = true;
       this.messageButton = 1;
     } else {
+      this.isChecked = false;
       this.messageButton = 0;
     }
     console.log(this.messageButton);
+  }
+
+  checkValidUserName() {
+    this.apiService
+      .checkuniqueUserName(this.userName)
+      .subscribe((response: any) => {
+        this.checkUniqueUserName = response.isTaken;
+        console.log(this.checkUniqueUserName);
+        if (this.checkUniqueUserName) {
+          this.disabledPublishButton = true;
+        }
+      });
   }
 }

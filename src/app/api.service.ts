@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+// import { AbstractControl } from '@angular/forms';
+// import { map } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -108,5 +111,11 @@ export class ApiService {
   }
   getAdminBioPreivew(id: any) {
     return this.httpClient.get(this.API_URL + 'get-admin-preview/' + id);
+  }
+
+  checkuniqueUserName(userName: string) {
+    return this.httpClient.get(
+      this.API_URL + 'check-unique-username/' + userName
+    );
   }
 }

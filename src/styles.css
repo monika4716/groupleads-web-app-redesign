@@ -309,3 +309,10 @@ input#lastName {
 .publish-bio-btn.btn:disabled {
   background: gray !important;
 }
+#profile-image {
+  cursor: pointer;
+  min-width: 68px;
+}
+.error {
+  color: red !important;
+}

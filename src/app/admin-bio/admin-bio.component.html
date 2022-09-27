@@ -35,10 +35,9 @@
                                     <div class="row user_section">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <div class="col-md-2 p-0 ">
-
-                                                    <img src="{{imageUrl}}" data-bs-target="#image_UploadModel"
-                                                        data-bs-toggle="modal" data-bs-backdrop="static" />
+                                                <div class="col-md-2 p-0 " data-bs-target="#image_UploadModel"
+                                                    data-bs-toggle="modal" data-bs-backdrop="static" id="profile-image">
+                                                    <img src="{{imageUrl}}" />
                                                 </div>
                                                 <div
                                                     class="col-md-10 d-flex align-items-center justify-content-center profile_right_sec">
@@ -82,7 +81,7 @@
                                     <div class="mb-3 form-group">
                                         <label for="location" class="form-label">Location</label>
                                         <p-dropdown styleClass="form-control country-dropdown"
-                                            formControlName="location" [(ngModel)]="selectedCountry"
+                                            formControlName="location" [(ngModel)]="selectedCountryCode"
                                             placeholder="Select Country" [options]="countryList" optionLabel="name"
                                             optionValue="code" (onChange)="selectCountryOnChange($event)">
                                         </p-dropdown>
@@ -99,14 +98,14 @@
                             </div>
                             <div class="card user_name_section">
                                 <div class="card-body">
-                                    <h3>Set Username</h3>
+                                    <h3>Set Username <span class="required">*</span></h3>
                                     <p>Choose a unique username for your admin bio.</p>
                                     <div>
                                         <input type="text" formControlName="userName" name="userName"
-                                            [ngModel]="userName" (keyup)="getUserName($event)" class="form-control"
+                                            [ngModel]="userName" (blur)="getUserName($event)" class="form-control"
                                             placeholder="Enter Username">
+                                        <span *ngIf="checkUniqueUserName" class="error">User Name Already Taken</span>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="card achievement_section">
@@ -188,12 +187,13 @@
                                             </div>
                                             <div class="col-md-6 d-flex justify-content-end p-0">
                                                 <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="mySwitch"
-                                                        name="darkmode" value="yes" (change)="onCheckboxChange($event)">
+                                                    <input class="form-check-input" [(ngModel)]="isChecked"
+                                                        type="checkbox" id="mySwitch" name="isMessageButton"
+                                                        formControlName="isMessageButton" value="yes"
+                                                        (change)="onCheckboxChange($event)">
                                                     <label class="form-check-label" for="mySwitch"></label>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                     <div>
@@ -227,8 +227,8 @@
                                             draft. Publish to make them live. </h4>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center justify-content-center">
-                                        <button type="submit" disabled class="btn btn-primary publish-bio-btn"
-                                            data-bs-toggle="modal">Publish
+                                        <button type="submit" [disabled]="disabledPublishButton"
+                                            class="btn btn-primary publish-bio-btn">Publish
                                             Bio</button>
                                     </div>
                                 </div>

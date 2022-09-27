@@ -392,14 +392,14 @@ p {
   color: #3c61ad;
 }
 .group_list .filter_btn:hover {
-  border: 2px solid #3c61ad;
-  border-radius: 4px;
-  padding: 12px 18px;
-  color: #3c61ad;
-  background: transparent;
+  border: 2px solid #3c61ad !important;
+  border-radius: 4px !important;
+  padding: 12px 18px !important;
+  color: #3c61ad !important;
+  background: transparent !important;
 }
 .group_list .filter_btn img {
-  margin-right: 5px;
+  margin-right: 5px !important;
 }
 .group_list .export_btn {
   margin-right: 10px;
@@ -613,7 +613,7 @@ p {
   color: #3C61AD;
 } */
 .bio_tab .btn-outline-primary:hover {
-  background: transparent;
+  background: transparent !important;
 }
 .bio_tab .card-body .product,
 .group_modal .product {
@@ -728,26 +728,26 @@ p {
   color: #222222;
 }
 .bio_tab .user_section {
-  border-bottom: 1px solid #cccccc;
-  padding-bottom: 25px;
-  margin-bottom: 13px;
+  border-bottom: 1px solid #cccccc !important;
+  padding-bottom: 25px !important;
+  margin-bottom: 13px !important;
 }
 .bio_tab .btn {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
-  padding: 13px 36px;
-  border: 2px solid #3c61ad;
-  border-radius: 4px;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  padding: 13px 36px !important;
+  border: 2px solid #3c61ad !important;
+  border-radius: 4px !important;
   color: #3c61ad;
 }
 .preview_btn.bio_btn {
-  margin-right: 11px;
+  margin-right: 11px !important;
 }
 .share_btn:hover {
-  background: #3c61ad;
-  border-radius: 4px;
+  background: #3c61ad !important;
+  border-radius: 4px !important;
   color: #ffffff !important;
 }
 #about {
@@ -764,25 +764,25 @@ p {
   border-radius: 8px;
 }
 .publish_bio .bio_left h4 {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
-  color: #ff7a59;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
+  color: #ff7a59 !important;
 }
 .admin_url_sec {
   margin-bottom: 100px !important;
 }
 .publish_bio .btn {
-  background: #3c61ad;
-  border-radius: 4px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  border: none;
-  line-height: 20px;
-  padding: 8px 20px;
-  color: #ffffff;
+  background: #3c61ad !important;
+  border-radius: 4px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  border: none !important;
+  line-height: 20px !important;
+  padding: 8px 20px !important;
+  color: #ffffff !important;
 }
 .share_btn {
   background: #3c61ad !important;
@@ -843,18 +843,18 @@ li.p-ripple.p-element.p-dropdown-item {
   padding-top: 10px;
 }
 .group_modal .modal-title {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 25px;
-  line-height: 48px;
-  color: #000000;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 25px !important;
+  line-height: 48px !important;
+  color: #000000 !important;
 }
 .group_modal .cancel_btn {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
 }
 .group_modal .modal-body {
-  padding-top: 0;
+  padding-top: 0 !important;
 }
 .select_group_btn,
 .add_profile_btn.btn-check:active + .btn-primary,
@@ -866,27 +866,27 @@ li.p-ripple.p-element.p-dropdown-item {
 .add_profile_btn.btn-primary:active,
 .select_group_btn.show,
 .add_profile_btn > .btn-primary.dropdown-toggle {
-  background: #3c61ad;
-  border-radius: 8px;
-  border: none;
-  color: #ffffff;
+  background: #3c61ad !important;
+  border-radius: 8px !important;
+  border: none !important;
+  color: #ffffff !important;
 }
 .select_group_btn.btn-primary:hover,
 .add_profile_btn.btn-primary:hover {
-  color: #fff;
-  background: #3c61ad;
-  border: none;
+  color: #fff !important;
+  background: #3c61ad !important;
+  border: none !important;
 }
 .social_profiles h3 {
   margin-bottom: 20px !important;
-  cursor: pointer;
+  cursor: pointer !important;
 }
 .social_profiles h3 img {
-  max-width: 20px;
-  margin-right: 20px;
+  max-width: 20px !important;
+  margin-right: 20px !important;
 }
 .social_link_img {
-  margin-right: 10px;
+  margin-right: 10px !important;
 }
 .social_profiles h3 span {
   font-style: normal;
@@ -897,24 +897,24 @@ li.p-ripple.p-element.p-dropdown-item {
 }
 .select_group_btn,
 .add_profile_btn {
-  background: #3c61ad;
-  border-radius: 8px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  border: none;
-  padding: 15px;
-  text-align: center;
-  color: #ffffff;
+  background: #3c61ad !important;
+  border-radius: 8px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+  line-height: 24px !important;
+  border: none !important;
+  padding: 15px !important;
+  text-align: center !important;
+  color: #ffffff !important;
 }
 .modal-body p {
-  font-style: normal;
-  font-weight: 500;
+  font-style: normal !important;
+  font-weight: 500 !important;
   margin-bottom: 10px !important;
-  font-size: 16px;
-  line-height: 24px;
-  color: #757575;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  color: #757575 !important;
 }
 .modal-body .success {
   width: 90px;

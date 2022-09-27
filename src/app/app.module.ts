@@ -9,6 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -64,6 +65,7 @@ import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.
     TableModule,
     FileUploadModule,
     DialogModule,
+    CheckboxModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

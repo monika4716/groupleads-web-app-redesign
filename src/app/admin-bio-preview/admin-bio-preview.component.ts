@@ -34,7 +34,8 @@ export class AdminBioPreviewComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.show();
     this.adminSlug = this.activatedRoute.snapshot.paramMap.get('slug');
-    this.userId = this.adminSlug.split('-')[1];
+    console.log(this.adminSlug);
+    // this.userId = this.adminSlug.split('-')[1];
     this.getAdminBioPreview();
 
     this.displayCloseBtn =
@@ -45,7 +46,7 @@ export class AdminBioPreviewComponent implements OnInit {
   }
   getAdminBioPreview() {
     this.apiService
-      .getAdminBioPreivew(this.userId)
+      .getAdminBioPreivew(this.adminSlug)
       .subscribe((response: any) => {
         console.log(response);
         this.spinner.hide();
