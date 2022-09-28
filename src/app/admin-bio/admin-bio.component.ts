@@ -5,7 +5,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { countriesObject } from '../../assets/json/countries';
 import { DropdownModule } from 'primeng/dropdown';
-
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 import * as $ from 'jquery';
@@ -23,6 +22,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-bio',
@@ -73,7 +73,6 @@ export class AdminBioComponent implements OnInit {
   public countryList: any = countriesObject;
   origin: any;
   displayIframe: any = false;
-  //iframeUrl: SafeResourceUrl;
   iframeUrl: any;
   displayForm: any = true;
   imageUrl: any = 'assets/images/user_profile.png';
@@ -84,6 +83,7 @@ export class AdminBioComponent implements OnInit {
   userName: any = '';
   perviousUser: any = '';
   messageButton: any = 0;
+  isTaken: any = false;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -98,9 +98,19 @@ export class AdminBioComponent implements OnInit {
     this.token = localStorage.getItem('token');
 
     this.adminBioForm = this.fb.group({
-      email: [''],
+      email: ['', [Validators.required, Validators.email]],
       about: [''],
-      userName: [''],
+      userName: [
+        '',
+        {
+          validators: [Validators.required, Validators.minLength(5)],
+          asyncValidators: [
+            this.apiService.userExistsValidator(this.token, this.userName),
+          ],
+          updateOn: 'blur',
+        },
+      ],
+
       location: [''],
       isMessageButton: [''],
       achievements: this.fb.array([]),
@@ -110,6 +120,10 @@ export class AdminBioComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.show();
     this.getAdminBioDetails();
+  }
+
+  get f() {
+    return this.adminBioForm.controls;
   }
 
   /* LOGOUT*/
@@ -137,56 +151,61 @@ export class AdminBioComponent implements OnInit {
   }
 
   setAdminBioValue(response: any) {
-    this.disabledPublishButton = false;
+    this.disabledPublishButton = true;
     this.userDetails = response.user_details;
 
     this.adminBio = response.admin_bio;
-    //console.log(this.adminBio);
-    if (this.adminBio != null && this.adminBio.about_me != null) {
-      this.aboutMe = this.adminBio.about_me;
-    }
-    if (this.adminBio != null && this.adminBio.user_name != null) {
-      this.disabledPublishButton = false;
-      this.displayCopy = true;
-      this.userName = this.adminBio.user_name;
-      this.perviousUser = this.adminBio.user_name;
-    }
-    this.messageButton = this.adminBio.is_message_button;
-    if (this.adminBio != null && this.adminBio.is_message_button == 1) {
-      this.isChecked = true;
-    }
-    this.eyeImage = 'assets/images/eye.png';
-
-    $('.preview_btn').prop('disabled', false);
-    $('.share_btn').prop('disabled', false);
-
-    // set admin location
-    if (this.adminBio != null && this.adminBio.location != null) {
-      this.location = this.adminBio.location;
-      this.setLocationValue(this.location);
-    }
-    // set admin email
-    if (this.adminBio != null && this.adminBio.email_receive_message != null) {
-      this.email = this.adminBio.email_receive_message;
-    }
-
-    // set admin achievement value
-
-    if (this.adminBio != null && this.adminBio.achievements != null) {
-      let achievements = JSON.parse(this.adminBio.achievements);
-      const arr = this.adminBioForm.controls['achievements'] as FormArray;
-      //console.log(arr);
-      while (0 !== arr.length) {
-        arr.removeAt(0);
+    if (this.adminBio != null) {
+      //console.log(this.adminBio);
+      if (this.adminBio.about_me != null) {
+        this.aboutMe = this.adminBio.about_me;
       }
-      this.setAchievementValueDynamic(achievements);
-    }
-    if (this.adminBio != null && this.adminBio.social_profile != '') {
-      this.socialLinks = JSON.parse(this.adminBio.social_profile);
-    }
 
-    if (this.adminBio != null && this.adminBio.image != '') {
-      this.imageUrl = this.adminBio.image;
+      if (this.adminBio.user_name != null) {
+        this.disabledPublishButton = false;
+        this.displayCopy = true;
+        this.userName = this.adminBio.user_name;
+        this.perviousUser = this.adminBio.user_name;
+      }
+
+      this.messageButton = this.adminBio.is_message_button;
+      if (this.adminBio.is_message_button == 1) {
+        this.isChecked = true;
+      }
+      this.eyeImage = 'assets/images/eye.png';
+      $('.preview_btn').prop('disabled', false);
+      $('.share_btn').prop('disabled', false);
+
+      // set admin location
+      if (this.adminBio.location != null) {
+        this.location = this.adminBio.location;
+        this.setLocationValue(this.location);
+      }
+
+      // set admin email
+      if (this.adminBio.email_receive_message != null) {
+        this.email = this.adminBio.email_receive_message;
+      }
+
+      // set admin achievement value
+
+      if (this.adminBio.achievements != null) {
+        let achievements = JSON.parse(this.adminBio.achievements);
+        const arr = this.adminBioForm.controls['achievements'] as FormArray;
+        //console.log(arr);
+        while (0 !== arr.length) {
+          arr.removeAt(0);
+        }
+        this.setAchievementValueDynamic(achievements);
+      }
+
+      if (this.adminBio.social_profile != '') {
+        this.socialLinks = JSON.parse(this.adminBio.social_profile);
+      }
+
+      if (this.adminBio.image != '') {
+        this.imageUrl = this.adminBio.image;
+      }
     }
     if (this.userDetails.name.indexOf(' ') > -1) {
       let nameArray = this.userDetails.name.split(' ');
@@ -577,12 +596,14 @@ export class AdminBioComponent implements OnInit {
   openPreview() {
     let url = this.origin + '/profile/' + this.userName + '?displayClose=true';
     console.log(url);
-
-    this.iframeUrl = url;
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
+
+    this.iframeUrl = url;
     this.getIframPreview();
+    $('.preview_btn').prop('disabled', false);
+    $('.share_btn').prop('disabled', false);
   }
   /* GET IFRAME PREVIEW */
   getIframPreview() {
@@ -602,8 +623,9 @@ export class AdminBioComponent implements OnInit {
     if (this.perviousUser != this.userName) {
       if (this.userName != '') {
         this.disabledPublishButton = false;
-        this.checkValidUserName();
+        //this.checkValidUserName();
       } else {
+        console.log('else');
         this.disabledPublishButton = true;
       }
     }
@@ -620,17 +642,5 @@ export class AdminBioComponent implements OnInit {
       this.messageButton = 0;
     }
     console.log(this.messageButton);
-  }
-
-  checkValidUserName() {
-    this.apiService
-      .checkuniqueUserName(this.userName)
-      .subscribe((response: any) => {
-        this.checkUniqueUserName = response.isTaken;
-        console.log(this.checkUniqueUserName);
-        if (this.checkUniqueUserName) {
-          this.disabledPublishButton = true;
-        }
-      });
   }
 }

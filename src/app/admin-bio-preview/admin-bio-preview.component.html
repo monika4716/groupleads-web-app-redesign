@@ -40,11 +40,12 @@
                             </div>
                             <div
                                 class="col-md-6 text-end user_right_section d-flex align-items-center justify-content-end">
-                                <!-- <button type="button" class="btn btn-primary share_btn bio_btn mr-3"><img
-                                        src="assets/images/message.png" class="mr-2" />Message Daniel</button> -->
-                                <button type="button" class="btn btn-outline-primary preview_btn bio_btn"><img
+                                <button *ngIf="isMessageButton" type="button" attr.email="{{email}}"
+                                    class="btn btn-primary share_btn bio_btn mr-3"><img src="assets/images/message.png"
+                                        class=" mr-2" />Message Daniel</button>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#publish_bioPreviewModal"
+                                    class="btn btn-outline-primary preview_btn bio_btn"><img
                                         src="assets/images/share_blue.png" class="mr-2" />Share Bio</button>
-
                             </div>
                         </div>
                     </div>
@@ -85,8 +86,12 @@
                                         <div class="col-md-2 product_img p-0"><img src="assets/images/product.png" />
                                         </div>
                                         <div class="col-md-9 product_sec pr-0">
-                                            <h4 [attr.group-id]="group.id" class="preview-group">{{group.group_name}}
-                                            </h4>
+                                            <a href="https://www.facebook.com/groups/{{group.numeric_group_id}}"
+                                                target="_blank">
+                                                <h4 [attr.group-id]="group.id" class="preview-group">
+                                                    {{group.group_name}}
+                                                </h4>
+                                            </a>
                                             <ul>
                                                 <!-- <li><img src="assets/images/public.png" />Public</li>
                                                 <li><img src="assets/images/members.png" />364 members</li> -->
@@ -112,6 +117,40 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal group_modal" id="publish_bioPreviewModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                        src="assets/images/Cancel.png" /></button>
+            </div>
+            <div class="modal-body publish_modal text-center">
+                <div class="col-md-12">
+
+                    <h4 class="modal-title">Share This Bio</h4>
+                    <h6><span class="border_left"></span>Share with social media<span class="border_right"></span>
+                    </h6>
+
+                    <ul class="social_icons">
+                        <a href="#"><img src="assets/images/Facebook.png" /></a>
+                        <a href="#"><img src="assets/images/Instagram.png" /></a>
+                        <a href="#"><img src="assets/images/Twitter.png" /></a>
+                        <a href="#"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                    </ul>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{origin}}/profile/{{userName}}">
+                        <span type="button" class="input-group-text"
+                            (click)="copyAdminProfileModel(userName)">{{model_text}}</span>
+                    </div>
+
+
+                </div>
             </div>
         </div>
     </div>

@@ -102,9 +102,19 @@
                                     <p>Choose a unique username for your admin bio.</p>
                                     <div>
                                         <input type="text" formControlName="userName" name="userName"
-                                            [ngModel]="userName" (blur)="getUserName($event)" class="form-control"
-                                            placeholder="Enter Username">
-                                        <span *ngIf="checkUniqueUserName" class="error">User Name Already Taken</span>
+                                            [ngModel]="userName" class="form-control" placeholder="Enter Username">
+
+                                        <div *ngIf="f['userName'].touched && f['userName'].invalid"
+                                            class="alert alert-danger">
+                                            <div *ngIf="f['userName'].errors && f['userName'].errors['required']">
+                                                Username is
+                                                required.</div>
+                                            <div *ngIf="f['userName'].errors && f['userName'].errors['minlength']">
+                                                Username must be at least 5 characters.</div>
+
+                                            <div *ngIf="f['userName'].errors && f['userName'].errors['userExists']">
+                                                Username {{userName}} already taken.</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -199,8 +209,15 @@
                                     <div>
                                         <label for="email" class="form-label">Email to recieve messages<span
                                                 class="required">*</span></label>
-                                        <input type="email" class="form-control" [value]="email" id="email"
-                                            placeholder="Enter email" formControlName="email" [(ngModel)]="email">
+                                        <input formControlName="email" id="email" type="text" class="form-control"
+                                            [(ngModel)]="email">
+                                        <div *ngIf="f['email'].touched && f['email'].invalid"
+                                            class="alert alert-danger">
+                                            <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is
+                                                required.</div>
+                                            <div *ngIf="f['email'].errors && f['email'].errors['email']">Please, enter
+                                                valid email address.</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -227,9 +244,11 @@
                                             draft. Publish to make them live. </h4>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center justify-content-center">
-                                        <button type="submit" [disabled]="disabledPublishButton"
+                                        <button type="submit" [disabled]="adminBioForm.invalid"
                                             class="btn btn-primary publish-bio-btn">Publish
                                             Bio</button>
+
+                                        <!-- [disabled]="disabledPublishButton" -->
                                     </div>
                                 </div>
                             </div>
@@ -314,8 +333,7 @@
                         </ul>
 
                         <div class="input-group">
-                            <input type="text" class="form-control"
-                                placeholder="https://groupleds.net/profile/danedwards">
+                            <input type="text" class="form-control" placeholder="{{origin}}/profile/{{userName}}">
                             <span type="button" class="input-group-text"
                                 (click)="copyAdminProfileModel(userName)">{{model_text}}</span>
                         </div>

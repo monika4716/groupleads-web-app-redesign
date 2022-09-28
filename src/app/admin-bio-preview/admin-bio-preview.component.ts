@@ -23,7 +23,12 @@ export class AdminBioPreviewComponent implements OnInit {
   countryImage: any;
   countryName: any;
   fullName: any;
+  origin: any;
+  isMessageButton: any = false;
   displayCloseBtn: any = false;
+  model_text: any = 'Copy';
+  email: any = '';
+  userName: any = '';
   public countryList: any = countriesObject;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -32,10 +37,9 @@ export class AdminBioPreviewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.origin = location.origin;
     this.spinner.show();
     this.adminSlug = this.activatedRoute.snapshot.paramMap.get('slug');
-    console.log(this.adminSlug);
-    // this.userId = this.adminSlug.split('-')[1];
     this.getAdminBioPreview();
 
     this.displayCloseBtn =
@@ -69,6 +73,14 @@ export class AdminBioPreviewComponent implements OnInit {
           if (this.adminBio != null && this.adminBio.location != '') {
             this.setLocationValue(this.adminBio.location);
           }
+          if (this.adminBio != null && this.adminBio.is_message_button == 1) {
+            this.isMessageButton = true;
+            this.email = this.adminBio.email_receive_message;
+          }
+          if (this.adminBio != null && this.adminBio.user_name != '') {
+            this.userName = this.adminBio.user_name;
+          }
+
           if (this.userDetails.name.indexOf(' ') > -1) {
             let nameArray = this.userDetails.name.split(' ');
             let firstName = this.capitalizeFirstLetter(nameArray[0]);
@@ -112,7 +124,31 @@ export class AdminBioPreviewComponent implements OnInit {
     console.log('here');
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
+      console.log(iframe.parentNode);
       iframe.parentNode.removeChild(iframe);
     }
+  }
+
+  /* TO COPY ADMIN BIO PROFILE LINK FROM PUBLISH MODEL
+  @Parameter{slug}
+*/
+  copyAdminProfileModel(slug: any) {
+    let profileSlug = this.origin + '/profile/' + slug;
+    this.model_text = 'Copied';
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(profileSlug).then(
+        () => {
+          //alert("Copied to Clipboard");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log('Browser do not support Clipboard API');
+    }
+    setTimeout(() => {
+      this.model_text = 'Copy';
+    }, 2000);
   }
 }

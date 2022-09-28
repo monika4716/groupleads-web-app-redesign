@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-// import { AbstractControl } from '@angular/forms';
-// import { map } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -113,9 +113,22 @@ export class ApiService {
     return this.httpClient.get(this.API_URL + 'get-admin-preview/' + id);
   }
 
-  checkuniqueUserName(userName: string) {
+  checkUsernameNotTaken(token: any, username: string) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
     return this.httpClient.get(
-      this.API_URL + 'check-unique-username/' + userName
+      this.API_URL + 'check-unique-username/' + username,
+      {
+        headers: headers,
+      }
     );
+  }
+  userExistsValidator(token: any, user: any): AsyncValidatorFn {
+    return (control: AbstractControl) => {
+      return this.checkUsernameNotTaken(token, control.value).pipe(
+        map((res) => (res ? { userExists: true } : null))
+      );
+    };
   }
 }
