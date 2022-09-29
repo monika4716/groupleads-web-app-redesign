@@ -34,6 +34,8 @@ export class AdminBioComponent implements OnInit {
   isChecked: boolean = false;
   displayBasic: boolean = false;
   displayCopy: boolean = false;
+  showPreviewBtn: boolean = true;
+  showShareBioBtn: boolean = true;
   disabledPublishButton: boolean = true;
   checkUniqueUserName: boolean = false;
   token: any;
@@ -84,6 +86,10 @@ export class AdminBioComponent implements OnInit {
   perviousUser: any = '';
   messageButton: any = 0;
   isTaken: any = false;
+  facebookShare: any = '';
+  instagramShare: any = '';
+  twitterShare: any = '';
+  linkedInShare: any = '';
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -166,6 +172,16 @@ export class AdminBioComponent implements OnInit {
         this.displayCopy = true;
         this.userName = this.adminBio.user_name;
         this.perviousUser = this.adminBio.user_name;
+        let url = this.origin + '/profile/' + this.adminBio.user_name;
+        this.facebookShare =
+          'https://www.facebook.com/sharer/sharer.php?u=' +
+          encodeURIComponent(url);
+        this.instagramShare = '';
+        this.twitterShare =
+          'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url);
+        this.linkedInShare =
+          'https://www.linkedin.com/sharing/share-offsite/?url=' +
+          encodeURIComponent(url);
       }
 
       this.messageButton = this.adminBio.is_message_button;
@@ -173,9 +189,8 @@ export class AdminBioComponent implements OnInit {
         this.isChecked = true;
       }
       this.eyeImage = 'assets/images/eye.png';
-      $('.preview_btn').prop('disabled', false);
-      $('.share_btn').prop('disabled', false);
-
+      this.showPreviewBtn = false;
+      this.showShareBioBtn = false;
       // set admin location
       if (this.adminBio.location != null) {
         this.location = this.adminBio.location;

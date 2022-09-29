@@ -51,10 +51,10 @@
                                         </div>
                                         <div
                                             class="col-md-6 text-end user_right_section d-flex align-items-center justify-content-end">
-                                            <button type="button" disabled (click)="openPreview()"
+                                            <button type="button" [disabled]="showPreviewBtn" (click)="openPreview()"
                                                 class="btn btn-outline-primary preview_btn bio_btn"><img
                                                     src="{{eyeImage}}" />Preview Bio</button>
-                                            <button type="button" disabled data-bs-toggle="modal"
+                                            <button type="button" [disabled]="showShareBioBtn" data-bs-toggle="modal"
                                                 data-bs-target="#publish_bioModal"
                                                 class="btn btn-primary share_btn bio_btn"><img
                                                     src="assets/images/share.png" />Share Bio</button>
@@ -299,10 +299,10 @@
                 <h6><span class="border_left"></span>Share with<span class="border_right"></span>
                 </h6>
                 <ul class="social_icons">
-                    <a href="#"><img src="assets/images/Facebook.png" /></a>
-                    <a href="#"><img src="assets/images/Instagram.png" /></a>
-                    <a href="#"><img src="assets/images/Twitter.png" /></a>
-                    <a href="#"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                    <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                    <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                    <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                    <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
                 </ul>
 
             </div>
@@ -326,10 +326,10 @@
                         </h6>
 
                         <ul class="social_icons">
-                            <a href="#"><img src="assets/images/Facebook.png" /></a>
-                            <a href="#"><img src="assets/images/Instagram.png" /></a>
-                            <a href="#"><img src="assets/images/Twitter.png" /></a>
-                            <a href="#"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                            <a href="{{facebookShare}}" target="_blank"><img src="assets/images/Facebook.png" /></a>
+                            <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                            <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                            <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
                         </ul>
 
                         <div class="input-group">

@@ -29,6 +29,11 @@ export class AdminBioPreviewComponent implements OnInit {
   model_text: any = 'Copy';
   email: any = '';
   userName: any = '';
+  facebookShare: any = '';
+  instagramShare: any = '';
+  twitterShare: any = '';
+  linkedInShare: any = '';
+  image: any = 'assets/images/default.jpg';
   public countryList: any = countriesObject;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -79,6 +84,25 @@ export class AdminBioPreviewComponent implements OnInit {
           }
           if (this.adminBio != null && this.adminBio.user_name != '') {
             this.userName = this.adminBio.user_name;
+
+            let url = this.origin + '/profile/' + this.adminBio.user_name;
+            this.facebookShare =
+              'https://www.facebook.com/sharer/sharer.php?u=' +
+              encodeURIComponent(url);
+            this.instagramShare = '';
+            this.twitterShare =
+              'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url);
+            this.linkedInShare =
+              'https://www.linkedin.com/sharing/share-offsite/?url=' +
+              encodeURIComponent(url);
+          }
+
+          if (
+            this.adminBio != null &&
+            this.adminBio.image != '' &&
+            this.adminBio.image != null
+          ) {
+            this.image = this.adminBio.image;
           }
 
           if (this.userDetails.name.indexOf(' ') > -1) {
