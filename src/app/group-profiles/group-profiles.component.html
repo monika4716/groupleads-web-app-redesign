@@ -1,1 +1,171 @@
-<p>group-profiles works!</p>
+<div class="open-sidebar">
+    <div class="container-fluid">
+        <div class="row">
+            <app-sidebar></app-sidebar>
+            <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
+                type="ball-scale-multiple" [fullScreen]="true">
+                <p style="color: white"> Loading... </p>
+            </ngx-spinner>
+            <div class="col-md-10 right_side">
+                <div class="row header">
+                    <div class="side_icon">
+                        <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                    </div>
+                    <div class="col-md-8 left_col">
+                        <div class="d-flex">
+                            <div>
+                                <h3>Group Profiles</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 p-0">
+                        <app-header-profile></app-header-profile>
+                    </div>
+                </div>
+                <div class="row section group_list_section">
+                    <div class="row bio_tab">
+                        <div class="card groups_section">
+                            <div class="card-body">
+                                <h3 class="text-center mb-4">Select a group to manage or create a group profile</h3>
+                                <!-- <p>Select the group(s) that you currently own or admin</p> -->
+                                <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" /></div>
+                                    <div class="col-md-8 product_sec">
+                                        <h4>Chatsilo Support Community</h4>
+                                        <ul>
+                                            <li><img src="assets/images/public.png" />Public</li>
+                                            <li><img src="assets/images/members.png" />364 members</li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
+                                        <button type="button"
+                                            class="btn btn-primary share_btn mr-3 create_profile_btn">Create
+                                            Profile</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" /></div>
+                                    <div class="col-md-8 product_sec">
+                                        <h4>Chatsilo Support Community</h4>
+                                        <ul>
+                                            <li><img src="assets/images/public.png" />Public</li>
+                                            <li><img src="assets/images/members.png" />364 members</li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
+                                        <button type="button"
+                                            class="btn btn-primary share_btn mr-3 create_profile_btn">Manage
+                                            Profile</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" /></div>
+                                    <div class="col-md-8 product_sec">
+                                        <h4>Chatsilo Support Community</h4>
+                                        <ul>
+                                            <li><img src="assets/images/public.png" />Public</li>
+                                            <li><img src="assets/images/members.png" />364 members</li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
+                                        <button type="button"
+                                            class="btn btn-primary share_btn mr-3 create_profile_btn">Manage
+                                            Profile</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------publish bio modal--------------->
+<div class="modal group_modal" id="publish_bioModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h4 class="modal-title">Add Social Profile</h4> -->
+                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                        src="assets/images/Cancel.png" /></button>
+            </div>
+            <div class="modal-body publish_modal text-center">
+                <div class="col-md-12">
+                    <img src="assets/images/success.png" class="success" />
+                    <h4 class="modal-title">Bio Published Successfully</h4>
+                    <p>Share to start getting noticed</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="https://groupleds.net/profile/danedwards">
+                        <span class="input-group-text">Copy</span>
+                    </div>
+                    <h6><span class="border_left"></span>Share with<span class="border_right"></span></h6>
+                    <ul class="social_icons">
+                        <a href=""><img src="assets/images/facebook.png" /></a>
+                        <a href="#"><img src="assets/images/Instagram.png" /></a>
+                        <a href="#"><img src="assets/images/Twitter.png" /></a>
+                        <a href="#"><img src="assets/images/Linkedin.png" class="linkedin" /></a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------select group modal-------------->
+<div class="modal group_modal" id="select_groupModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Select Group(s)</h4>
+                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                        src="assets/images/Cancel.png" /></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" />
+                    </div>
+                    <div class="col-md-10 product_sec">
+                        <h4>Chatsilo Support Community</h4>
+                        <ul>
+                            <li><img src="assets/images/public.png" />Public</li>
+                            <li><img src="assets/images/members.png" />364 members</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-center justify-content-end">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
+                                value="customEx">
+                            <label class="custom-control-label" for="customRadio"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 product d-flex align-items-center justify-content-center mt-4">
+                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" />
+                    </div>
+                    <div class="col-md-10 product_sec">
+                        <h4>Chatsilo Support Community</h4>
+                        <ul>
+                            <li><img src="assets/images/public.png" />Public</li>
+                            <li><img src="assets/images/members.png" />364 members</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-center justify-content-end">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="customRadio1" name="example1"
+                                value="customEx">
+                            <label class="custom-control-label" for="customRadio1"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 d-grid mt-4">
+                    <button type="button" class="btn btn-primary btn-block select_group_btn">Select Group(s)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

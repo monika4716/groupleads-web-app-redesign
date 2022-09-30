@@ -131,4 +131,16 @@ export class ApiService {
       );
     };
   }
+
+  //Group profile api
+
+  getGroupDetails(token: any) {
+    console.log(token);
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.get(this.API_URL + 'get-group-profile', {
+      headers: headers,
+    });
+  }
 }

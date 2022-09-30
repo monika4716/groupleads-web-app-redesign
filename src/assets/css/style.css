@@ -1022,3 +1022,216 @@ li.p-ripple.p-element.p-dropdown-item {
 .create_profile_btn {
   padding: 15px 28px !important;
 }
+
+/*****************group plugin*************/
+.group_plugin h4 {
+  font-size: 20px !important;
+  color: #000000 !important;
+}
+.group_plugin h5 a {
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 17px !important;
+  line-height: 39px !important;
+  color: #757575 !important;
+  text-decoration: none !important;
+}
+.group_plugin .plugin_name {
+  width: 70% !important;
+}
+.group_plugin .plugin_action {
+  width: 30% !important;
+  justify-content: end !important;
+  display: flex !important;
+}
+.plugin_action .actions {
+  margin-right: 20px !important;
+}
+.plugin_action a {
+  text-decoration: none !important;
+}
+.plugin_action img {
+  margin-right: 5px !important;
+}
+.edit_link.actions {
+  color: #3c61ad !important;
+}
+.delete_link.actions {
+  color: #df2329 !important;
+}
+.plugin_action .actions {
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+  line-height: 24px !important;
+}
+.btn.btn-outline-primary.preview_btn.bio_btn {
+  background: transparent !important;
+  border: 2px solid #3c61ad !important;
+  border-radius: 4px !important;
+  color: #3c61ad !important;
+}
+.enable_plugin {
+  margin-top: 20px !important;
+}
+.group_list_section .add_btn {
+  background: #3c61ad !important;
+  border-radius: 4px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+  border: none !important;
+  line-height: 20px;
+  padding: 13px 20px;
+  color: #ffffff;
+}
+.plugin_snippet h4 {
+  color: #000000 !important;
+  font-size: 20px !important;
+}
+.plugin_snippet h6 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #757575;
+  margin-top: 6px;
+}
+.plugin_snippet .btn {
+  margin-top: 13px;
+}
+.card-body .btn {
+  background: #3c61ad !important;
+  border-radius: 4px !important;
+  color: white !important;
+  border: none !important;
+}
+.general_settings .btn {
+  padding: 13px 22px !important;
+}
+.general_settings h4 {
+  font-size: 24px !important;
+  margin-bottom: 3px;
+}
+.settings_sec {
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 15px;
+}
+.general_settings .nav.nav-tabs {
+  border-bottom: none !important;
+  margin-bottom: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #f8f8fa !important;
+  border: 1px solid #e8e9eb !important;
+  width: 33% !important;
+  margin: 0 auto !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  padding: 11px 0px !important;
+  margin-top: 30px !important;
+}
+.general_settings .nav-item {
+  margin-right: 0 !important;
+}
+.general_settings .tab-content {
+  padding-bottom: 15px !important;
+}
+.general_settings .nav-tabs .nav-item.show .nav-link,
+.general_settings .nav-tabs .nav-link.active {
+  color: #495057 !important;
+  background-color: #fff !important;
+  border: none !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  letter-spacing: -0.24px !important;
+  color: #3c61ad !important;
+}
+.general_settings .nav-link {
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  letter-spacing: -0.24px !important;
+  color: #959595 !important;
+}
+.general_settings .form_div {
+  margin-top: 30px !important;
+}
+.general_settings .nav-tabs .nav-link {
+  margin-bottom: 0px !important;
+  background: 0 0 !important;
+  margin-right: 0 !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  border: none !important;
+  border-top-left-radius: unset !important;
+  border-top-right-radius: unset !important;
+}
+.general_settings .nav-tabs .nav-link:focus,
+.general_settings .nav-tabs .nav-link:hover {
+  border: none !important;
+  isolation: isolate !important;
+}
+/*************** toogle switch ******************************/
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 17px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #98a19f;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 27px;
+  width: 27px;
+  left: 0px;
+  bottom: -5px;
+  background-color: #3fdbb1;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #c6f9eb;
+}
+
+input:focus + .slider {
+  box-shadow: 2 2 4px #c6f9eb;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(34px);
+  -ms-transform: translateX(34px);
+  transform: translateX(34px);
+}
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/************** End of switch ***************/

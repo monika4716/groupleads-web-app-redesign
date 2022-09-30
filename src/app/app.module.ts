@@ -31,6 +31,7 @@ import { GroupLeadsComponent } from './group-leads/group-leads.component';
 import { DialogModule } from 'primeng/dialog';
 import { SafePipe } from './pipe/safe.pipe';
 import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.component';
+import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-create.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.
     GroupLeadsComponent,
     SafePipe,
     AdminBioPreviewComponent,
+    GroupPluginCreateComponent,
   ],
   imports: [
     BrowserModule,

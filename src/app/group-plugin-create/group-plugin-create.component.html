@@ -1,0 +1,377 @@
+<div class="open-sidebar">
+    <div class="container-fluid">
+        <div class="row">
+            <app-sidebar></app-sidebar>
+            <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
+                type="ball-scale-multiple" [fullScreen]="true">
+                <p style="color: white"> Loading... </p>
+            </ngx-spinner>
+            <div class="col-md-10 right_side">
+                <div class="row header">
+                    <div class="side_icon">
+                        <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                    </div>
+                    <div class="col-md-8 left_col">
+                        <div class="d-flex">
+                            <div>
+                                <h3>Group Plugin</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 p-0">
+                        <app-header-profile></app-header-profile>
+                    </div>
+                </div>
+                <div class="row section group_list_section">
+                    <div class="row bio_tab">
+                        <div class="card groups_section">
+                            <div class="card-body plugin_snippet">
+                                <div class="col-md-12">
+                                    <h4>Copy Plugin Snippet</h4>
+                                    <h6>Copy and paste this snippet in the Wordpress Plugin for easy integration.</h6>
+                                    <button [disabled]="isSnippetDisable" type="button" class="btn btn-primary"> <img
+                                            src="assets/images/document-copy.png"> Copy Snippet</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card groups_section">
+
+                            <div class="card-body general_settings">
+                                <div class="col-md-12 settings_sec">
+                                    <div class="row ">
+                                        <div class="col-md-9">
+                                            <h4>General Settings</h4>
+                                            <p>Learn how to set up the group plugin <a
+                                                    href="https://grouppromoter.com/docs/">here.</a></p>
+                                        </div>
+                                        <div class="col-md-3">
+
+                                            <button type="submit" class="btn btn-primary"><img
+                                                    src="assets/images/setting_white.png"> Save Settings</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#WORDPRESS">WORDPRESS</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#HTML">HTML SITE</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+
+                                    <div class="tab-pane active" id="WORDPRESS">
+                                        <form [formGroup]="pluginWordpressForm" (ngSubmit)="onSubmitWordpressFrom()">
+                                            <input type="hidden" name="plugin_type" formControlName="plugin_type">
+                                            <div class="d-flex justify-content-between mb-3 flex-box">
+                                                <h5>Enable Group Plugin</h5>
+                                                <div class="toggle_switch">
+                                                    <label class="switch">
+                                                        <input type="checkbox" checked>
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="fname" class="form-label">Website Name<span
+                                                        class="required">*</span></label>
+                                                <input type="text" formControlName="website_name" class="form-control"
+                                                    id="website_name" placeholder="Enter website name"
+                                                    name="website_name">
+                                                <p>Please enter the name of your website</p>
+
+                                                <div *ngIf="wf['website_name'].touched && wf['website_name'].invalid"
+                                                    class="alert alert-danger">
+                                                    <div
+                                                        *ngIf="wf['website_name'].errors && wf['website_name'].errors['required']">
+                                                        Website name is
+                                                        required.
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="website_url" class="form-label">Website URL<span
+                                                        class="required">*</span></label>
+                                                <input type="text" class="form-control" formControlName="website_url"
+                                                    id="website_url" placeholder="Enter website URL" name="website_url">
+                                                <p>Please enter your website’s URL.</p>
+                                                <div *ngIf="wf['website_url'].touched && wf['website_url'].invalid"
+                                                    class="alert alert-danger">
+                                                    <div
+                                                        *ngIf="wf['website_url'].errors && wf['website_url'].errors['required']">
+                                                        Website url is
+                                                        required.</div>
+                                                    <div
+                                                        *ngIf="wf['website_url'].errors && wf['website_url'].errors['pattern']">
+                                                        Please enter valid url.
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="app_id" class="form-label">Facebook App ID<span
+                                                        class="required">*</span></label>
+                                                <input type="text" class="form-control" formControlName="app_id"
+                                                    id="app_id" placeholder="Enter app ID" name="app_id">
+                                                <p>Please enter your facebook app ID. It’s compulsory. You can create
+                                                    one
+                                                    from <a href="https://developers.facebook.com/apps">here.</a></p>
+                                                <div *ngIf="wf['app_id'].touched && wf['app_id'].invalid"
+                                                    class="alert alert-danger">
+                                                    <div *ngIf="wf['app_id'].errors && wf['app_id'].errors['required']">
+                                                        App Id is
+                                                        required.</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="facebook_url" class="form-label">Facebook Group URL<span
+                                                        class="required">*</span></label>
+                                                <input type="text" class="form-control" formControlName="facebook_url"
+                                                    id="facebook_url" placeholder="Enter group url" name="facebook_url">
+                                                <p>Please enter your facebook group URL. It must start with https://</p>
+                                                <div *ngIf="wf['facebook_url'].touched && wf['facebook_url'].invalid"
+                                                    class="alert alert-danger">
+                                                    <div
+                                                        *ngIf="wf['facebook_url'].errors && wf['facebook_url'].errors['required']">
+                                                        App Id is
+                                                        required.</div>
+                                                    <div
+                                                        *ngIf="wf['facebook_url'].errors && wf['facebook_url'].errors['pattern']">
+                                                        Please enter valid url.</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row toggle_switch form_div">
+                                                <div class="col-md-10">
+                                                    <h5>Include Social Context</h5>
+                                                </div>
+                                                <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                    <div class="form-check form-switch toggle_btn">
+                                                        <label class="switch">
+                                                            <input type="checkbox" formControlName="social_context"
+                                                                checked>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <p>Please tick this to include or display number of friends who are
+                                                        already members of the group.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row toggle_switch form_div">
+                                                <div class="col-md-10">
+                                                    <h5>Include Meta Data</h5>
+                                                </div>
+                                                <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                    <div class="form-check form-switch toggle_btn">
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked
+                                                                formControlName="meta_context">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <p>Please tick this to show the group description and other meta
+                                                        data.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row toggle_switch form_div">
+                                                <div class="col-md-10">
+                                                    <h5>Switch Theme Color To Dark</h5>
+                                                </div>
+                                                <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                    <div class="form-check form-switch toggle_btn">
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked
+                                                                formControlName="theme_color">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <p>Please tick this to darken the widget colour.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div form_div">
+                                                <div class="mb-3 mt-3">
+                                                    <label for="plugin_width" class="form-label">Width of banner in
+                                                        pixels<span class="required">*</span></label>
+                                                    <input type="text" class="form-control" id="plugin_width"
+                                                        placeholder="Enter Width" name="plugin_width"
+                                                        formControlName="plugin_width">
+                                                    <p>Set the plugin width in pixels. Minimum is 180, default is 280,
+                                                        maximum is 500.
+                                                    </p>
+                                                    <div *ngIf="wf['plugin_width'].touched && wf['plugin_width'].invalid"
+                                                        class="alert alert-danger">
+                                                        <div
+                                                            *ngIf="wf['plugin_width'].errors && wf['plugin_width'].errors['required']">
+                                                            Banner width is required.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div form_div">
+                                                <div class="mb-3 mt-3">
+                                                    <label for="fname" class="form-label">Post Type Display<span
+                                                            class="required">*</span></label>
+                                                    <select class="form-select" id="sel1" name="display_type">
+                                                        <option>Posts</option>
+                                                        <option>Pages</option>
+                                                    </select>
+                                                    <p>Please choose a criteria to display plugin either in posts or
+                                                        pages.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div form_div">
+                                                <div class="mb-3 mt-3">
+                                                    <label for="fname" class="form-label">Display Position<span
+                                                            class="required">*</span></label>
+                                                    <select class="form-select" id="sel1" name="sellist1">
+                                                        <option>Below Content</option>
+                                                        <option>Above Content</option>
+                                                        <option>Below & Above Content</option>
+                                                    </select>
+                                                    <p>Please choose a criteria to display the banner below content,
+                                                        above
+                                                        content or in both.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary"
+                                                    [disabled]="pluginWordpressForm.invalid"><img
+                                                        src="assets/images/setting_white.png"> Save Settings</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+
+                                    <div class="tab-pane fade" id="HTML">
+                                        <form [formGroup]="pluginHtmlForm" (ngSubmit)="onSubmitHtmlFrom()">
+                                            <div class="d-flex justify-content-between mb-3 flex-box">
+                                                <h5>Enable Group Plugin</h5>
+                                                <div class="toggle_switch">
+                                                    <label class="switch">
+                                                        <input type="checkbox" checked>
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="fname" class="form-label">Website Name<span
+                                                        class="required">*</span></label>
+                                                <input type="text" class="form-control" id="email"
+                                                    placeholder="Enter website name" name="name">
+                                                <p>Please enter the name of your website</p>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="fname" class="form-label">Website URL<span
+                                                        class="required">*</span></label>
+                                                <input type="text" class="form-control" id="email"
+                                                    placeholder="Enter website URL" name="name">
+                                                <p>Please enter your website’s URL.</p>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="fname" class="form-label">Facebook App ID<span
+                                                        class="required">*</span></label>
+                                                <input type="text" class="form-control" id="email"
+                                                    placeholder="Enter app ID" name="name">
+                                                <p>Please enter your facebook app ID. It’s compulsory. You can create
+                                                    one
+                                                    from <a href="#">here.</a></p>
+                                            </div>
+                                            <div class="col-md-12 form_div">
+                                                <label for="fname" class="form-label">Facebook Group URL<span
+                                                        class="required">*</span></label>
+                                                <input type="text" class="form-control" id="email"
+                                                    placeholder="Enter group url" name="name">
+                                                <p>Please enter your facebook group URL. It must start with https://</p>
+                                            </div>
+                                            <div class="row toggle_switch form_div">
+                                                <div class="col-md-10">
+                                                    <h5>Include Social Context</h5>
+                                                </div>
+                                                <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                    <div class="form-check form-switch toggle_btn">
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <p>Please tick this to include or display number of friends who are
+                                                        already members of the group.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row toggle_switch form_div">
+                                                <div class="col-md-10">
+                                                    <h5>Include Meta Data</h5>
+                                                </div>
+                                                <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                    <div class="form-check form-switch toggle_btn">
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <p>Please tick this to show the group description and other meta
+                                                        data.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row toggle_switch form_div">
+                                                <div class="col-md-10">
+                                                    <h5>Switch Theme Color To Dark</h5>
+                                                </div>
+                                                <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                    <div class="form-check form-switch toggle_btn">
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked>
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <p>Please tick this to darken the widget colour.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form_div form_div">
+                                                <div class="mb-3 mt-3">
+                                                    <label for="fname" class="form-label">Width of banner in pixels<span
+                                                            class="required">*</span></label>
+                                                    <input type="text" class="form-control" id="email"
+                                                        placeholder="Enter Width" name="name">
+                                                    <p>Set the plugin width in pixels. Minimum is 180, default is 280,
+                                                        maximum is 500.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary"><img
+                                                        src="assets/images/setting_white.png"> Save Settings</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- </form> -->
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
