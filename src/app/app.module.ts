@@ -10,6 +10,8 @@ import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CheckboxModule } from 'primeng/checkbox';
+import { StepsModule } from 'primeng/steps';
+import { CardModule } from 'primeng/card';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +34,7 @@ import { DialogModule } from 'primeng/dialog';
 import { SafePipe } from './pipe/safe.pipe';
 import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.component';
 import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-create.component';
+import { GroupProfileCreateComponent } from './group-profile-create/group-profile-create.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,7 @@ import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-c
     SafePipe,
     AdminBioPreviewComponent,
     GroupPluginCreateComponent,
+    GroupProfileCreateComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +72,8 @@ import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-c
     FileUploadModule,
     DialogModule,
     CheckboxModule,
+    StepsModule,
+    CardModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

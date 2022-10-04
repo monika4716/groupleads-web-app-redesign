@@ -12,6 +12,7 @@ import { GroupPluginComponent } from './group-plugin/group-plugin.component';
 import { GroupLeadsComponent } from './group-leads/group-leads.component';
 import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.component';
 import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-create.component';
+import { GroupProfileCreateComponent } from './group-profile-create/group-profile-create.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -62,6 +63,12 @@ const routes: Routes = [
   {
     path: 'plugin/create',
     component: GroupPluginCreateComponent,
+    canActivate: [RoutingGuard],
+  },
+
+  {
+    path: 'groupProfile',
+    component: GroupProfileCreateComponent,
     canActivate: [RoutingGuard],
   },
 ];

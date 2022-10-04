@@ -28,23 +28,36 @@
                             <div class="card-body">
                                 <h3 class="text-center mb-4">Select a group to manage or create a group profile</h3>
                                 <!-- <p>Select the group(s) that you currently own or admin</p> -->
-                                <div class="col-md-12 product d-flex align-items-center justify-content-center">
-                                    <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" /></div>
-                                    <div class="col-md-8 product_sec">
-                                        <h4>Chatsilo Support Community</h4>
-                                        <ul>
-                                            <li><img src="assets/images/public.png" />Public</li>
-                                            <li><img src="assets/images/members.png" />364 members</li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
-                                        <button type="button"
-                                            class="btn btn-primary share_btn mr-3 create_profile_btn">Create
-                                            Profile</button>
+                                <div class="custom-scroll group-profiles">
+                                    <div *ngFor="let group of groupProfiles"
+                                        class="col-md-12 product d-flex align-items-center justify-content-center">
+                                        <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" />
+                                        </div>
+                                        <div class="col-md-8 product_sec" [attr.group-id]="group.id">
+                                            <h4>{{group.group_name}}</h4>
+                                            <ul>
+                                                <li><img src="assets/images/public.png" />Public</li>
+                                                <li><img src="assets/images/members.png" />364 members</li>
+                                            </ul>
+                                        </div>
+                                        <div
+                                            class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
+                                            <a *ngIf="group.group_profile_id == null else elseBlock"
+                                                [attr.group-id]="group.id" [routerLink]="['/groupProfile']"
+                                                [queryParams]="{group_id:group.id,fb_group_id:group.fb_group_id}"
+                                                type="button"
+                                                class="btn btn-primary share_btn mr-3 create_profile_btn">Create
+                                                Profile</a>
+                                            <ng-template #elseBlock><button [attr.group-id]="group.id" type="button"
+                                                    [routerLink]="['/groupProfile']"
+                                                    [queryParams]="{group_id:group.id,fb_group_id:group.fb_group_id}"
+                                                    class="btn btn-primary share_btn mr-3 create_profile_btn">Manage
+                                                    Profile</button></ng-template>
+
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 product d-flex align-items-center justify-content-center">
+                                <!-- <div class="col-md-12 product d-flex align-items-center justify-content-center">
                                     <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" /></div>
                                     <div class="col-md-8 product_sec">
                                         <h4>Chatsilo Support Community</h4>
@@ -75,7 +88,7 @@
                                             class="btn btn-primary share_btn mr-3 create_profile_btn">Manage
                                             Profile</button>
                                     </div>
-                                </div>
+                                </div> -->
 
                             </div>
                         </div>

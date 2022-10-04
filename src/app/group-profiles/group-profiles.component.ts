@@ -11,6 +11,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class GroupProfilesComponent implements OnInit {
   token: any;
+  groupProfiles: any = [];
+  id: any;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -20,8 +22,25 @@ export class GroupProfilesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.spinner.show();
-    this.getGroupDetails();
+    this.apiService.getGroupProfile().subscribe((response) => {
+      if (
+        Object.keys(response).length === 0 &&
+        response.constructor === Object
+      ) {
+        if (localStorage.getItem('token') != null) {
+          this.spinner.show();
+          this.getGroupDetails();
+        }
+      } else {
+        console.log(response.hasOwnProperty('groupProfile'));
+        if (response.hasOwnProperty('groupProfile')) {
+          this.groupProfiles = response.groupProfile;
+          console.log(this.groupProfiles);
+        }
+      }
+    });
+    // this.spinner.show();
+    // this.getGroupDetails();
   }
 
   getGroupDetails() {
@@ -30,9 +49,11 @@ export class GroupProfilesComponent implements OnInit {
     this.apiService.getGroupDetails(this.token).subscribe((response: any) => {
       console.log(response);
       if (response.status == 200) {
-        // this.linkedGroups = response.Linked_groups;
+        this.groupProfiles = response.groupProfile;
+        this.apiService.updateGroupProfile(response);
+
         // this.setAdminBioValue(response);
-        // this.spinner.hide();
+        this.spinner.hide();
       }
     });
   }

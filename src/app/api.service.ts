@@ -10,8 +10,10 @@ import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 export class ApiService {
   API_URL = 'https://api.groupleads.net/api/';
   groupOverview: BehaviorSubject<any>;
+  groupProfiles: BehaviorSubject<any>;
   constructor(private httpClient: HttpClient) {
     this.groupOverview = new BehaviorSubject({});
+    this.groupProfiles = new BehaviorSubject({});
   }
 
   loginUser(data: any) {
@@ -134,6 +136,20 @@ export class ApiService {
 
   //Group profile api
 
+  getGroupProfile(): Observable<any> {
+    console.log(this.groupProfiles);
+    return this.groupProfiles.asObservable();
+  }
+
+  updateGroupProfile(message: any) {
+    this.groupProfiles.next(message);
+  }
+
+  getGroupProfileValue() {
+    console.log(this.groupProfiles.value);
+    return this.groupProfiles.value;
+  }
+
   getGroupDetails(token: any) {
     console.log(token);
     let headers: HttpHeaders = new HttpHeaders();
@@ -142,5 +158,19 @@ export class ApiService {
     return this.httpClient.get(this.API_URL + 'get-group-profile', {
       headers: headers,
     });
+  }
+  getParticularGroupProfile(id: any, token: any, fb_group_id: any) {
+    console.log(token);
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.get(
+      this.API_URL +
+        'app-get-group-profile?group_id=' +
+        id +
+        '&fb_group_id=' +
+        fb_group_id,
+      { headers: headers }
+    );
   }
 }
