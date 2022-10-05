@@ -3,7 +3,11 @@ import { ApiService } from '../api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MenuItem, MegaMenuItem } from 'primeng/api';
+// import { MenuItem, MegaMenuItem } from 'primeng/api';
+
+import {StepsModule} from 'primeng/steps';
+import {MenuItem} from 'primeng/api';
+
 
 @Component({
   selector: 'app-group-profile-create',
@@ -17,10 +21,12 @@ export class GroupProfileCreateComponent implements OnInit {
   fbGroupId: any;
   groupProfile: any = [];
   groupDetails: any;
-  items: any;
   groupOverview: any;
   submitted: boolean = false;
   groupFlag: boolean = false;
+  items: MenuItem[] = [];
+
+  activeStepIndex: number = 0;
 
   constructor(
     private router: Router,
@@ -31,11 +37,32 @@ export class GroupProfileCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.items = [
-      { label: 'Group Overview', routerLink: 'overview' },
-      { label: 'Popular Topics', routerLink: 'topics' },
-      { label: 'Top Conversations', routerLink: 'conversations' },
-      { label: 'Preview & Publish', routerLink: 'publish' },
+    
+
+    this.items = [{
+          label: 'Group Overview',
+          command: (event: any) => {
+              // this.activeStepIndex = 0;
+          }
+      },
+      {
+          label: 'Popular Topics',
+          command: (event: any) => {
+              // this.activeStepIndex = 1;
+          }
+      },
+      {
+          label: 'Top Conversations',
+          command: (event: any) => {
+              // this.activeStepIndex = 2;
+          }
+      },
+      {
+          label: 'Preview & Publish',
+          command: (event: any) => {
+              // this.activeStepIndex = 3;
+          }
+      }
     ];
 
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -83,23 +110,33 @@ export class GroupProfileCreateComponent implements OnInit {
       });
   }
 
-  nextPage() {
-    console.log(this.groupOverview.description);
-    console.log(this.groupOverview.category);
-    console.log(this.groupOverview.location);
-    console.log(this.groupOverview.groupUrl);
-    if (
-      this.groupOverview.description &&
-      this.groupOverview.category &&
-      this.groupOverview.location &&
-      this.groupOverview.groupUrl
-    ) {
-      // this.ticketService.ticketInformation.personalInformation = this.personalInformation;
-      this.router.navigate(['steps/topics']);
+  validateStep1() {
+    //logic perform
 
-      return;
-    }
+    this.activeStepIndex = 1;
 
-    this.submitted = true;
   }
+  validateStep2() {
+
+    this.activeStepIndex = 2;
+
+  }
+  validateStep3() {
+
+    this.activeStepIndex = 3;
+
+  }
+  validateStep4() {
+
+    alert("Form submitted")
+    // this.activeStepIndex = 1;
+
+  }
+
+
+  backToStepIndex(stepIndex:any){
+    this.activeStepIndex = stepIndex;
+  }
+
+
 }
