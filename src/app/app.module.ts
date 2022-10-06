@@ -12,6 +12,8 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { CardModule } from 'primeng/card';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ChipsModule } from 'primeng/chips';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -74,6 +76,8 @@ import { GroupProfileCreateComponent } from './group-profile-create/group-profil
     CheckboxModule,
     StepsModule,
     CardModule,
+    InputTextareaModule,
+    ChipsModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

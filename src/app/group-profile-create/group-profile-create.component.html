@@ -43,38 +43,232 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="steps-model">
+                            <p-steps [model]="items" [(activeIndex)]="activeStepIndex"></p-steps>
+                        </div>
+                        <div class="stepWrapper " *ngIf="activeStepIndex == 0">
+                            <form [formGroup]="overViewForm" (ngSubmit)="validateStep1()">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div>
+                                            <label for="description" class="form-label">Group Description <span
+                                                    class="required">*</span></label><br>
+                                            <!-- <textarea class="form-control" rows="5" id="description" name="text"
+                                                placeholder="Write a brief description about yourself with regards to your group..."
+                                                class="form-control"></textarea> -->
+                                            <textarea [rows]="5" formControlName="description" required pInputTextarea
+                                                [autoResize]="true"></textarea>
 
-                        <p-steps [model]="items" [(activeIndex)]="activeStepIndex" ></p-steps>
+                                            <div *ngIf="o['description'].touched && o['description'].invalid"
+                                                class="alert alert-danger">
+                                                <div
+                                                    *ngIf="o['description'].errors && o['description'].errors['required']">
+                                                    Description is
+                                                    required.</div>
+                                            </div>
 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3 mt-3 form-group">
+                                                    <label for="location" class="form-label">Group Category <span
+                                                            class="required">*</span> </label>
+                                                    <select class="form-select" [(ngModel)]='selectedCategory'
+                                                        (onChange)="onChangeCategory($event)" required
+                                                        formControlName="category">
+                                                        <option *ngFor="let category of groupCategories"
+                                                            [value]="category.id">
+                                                            {{category.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3 mt-3 form-group">
+                                                    <label for="location" class="form-label">Group Location <span
+                                                            class="required">*</span> </label>
+                                                    <select class="form-select" required [(ngModel)]='selectedLocation'
+                                                        (onChange)="onChangeLocation($event)"
+                                                        formControlName="location">
+                                                        <option *ngFor="let location of groupLocations"
+                                                            value="location.id">
+                                                            {{location.name}}</option>
+                                                        <!-- <option>Travel</option>
+                                                        <option>Photography</option> -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Set Groupname</h3>
+                                        <p>Choose a unique name for your group profile view.<span
+                                                class="required">*</span>
+                                        </p>
+                                        <div>
+                                            <input type="text" class="form-control" formControlName="uniqueName"
+                                                required="required" placeholder="danedwards">
 
-                        <div class="stepWrapper" *ngIf="activeStepIndex == 0">
-                            <p>Step 1 Content</p>
+                                            <div *ngIf="o['uniqueName'].touched && o['uniqueName'].invalid"
+                                                class="alert alert-danger">
+                                                <div
+                                                    *ngIf="o['uniqueName'].errors && o['uniqueName'].errors['required']">
+                                                    Unique name is
+                                                    required.</div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                            <button (click)="validateStep1()">Next</button>
+                                </div>
+                                <div class="col-md-12 d-flex justify-content-end p-0">
+                                    <button type="submit" [disabled]="overViewForm.invalid"
+                                        class="btn btn-primary add_btn">Next</button>
+                                    <!-- <button type="button" class="btn btn-primary add_btn"
+                                        (click)="validateStep1()">Next</button> -->
+                                </div>
+                            </form>
                         </div>
 
                         <div class="stepWrapper" *ngIf="activeStepIndex == 1">
-                            <p>Step 2 Content</p>
 
-                            <button (click)="backToStepIndex(0)">Previous</button> 
-                            <button (click)="validateStep2()">Next</button>
+                            <div id="Popular_Topics" class="tab-pane fade active show">
+                                <form [formGroup]="popularTopicForm" (ngSubmit)="validateStep2()">
+                                    <div class="card popular_topic">
+                                        <div class="card-body text-center">
+                                            <img src="assets/images/message-add.png">
+                                            <h4>What topics are most discussed in your Group?</h4>
+                                            <p>You can add up to 5 topics here to let brands know what kind of
+                                                converstions
+                                                are happening in your group.</p>
+                                            <div>
+                                                <p-chips [(ngModel)]="topic" class="topics" formControlName="topic"
+                                                    separator=",">
+                                                </p-chips>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" (click)="backToStepIndex(0)"
+                                                    class="btn btn-primary  back_btn"> <img
+                                                        src="assets/images/arrow_left.png"> Back</button>
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <button type="submit" [disabled]="popularTopicForm.invalid"
+                                                    class="btn btn-primary add_btn">Next <img
+                                                        src="assets/images/arrow_right.png"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
 
                         <div class="stepWrapper" *ngIf="activeStepIndex == 2">
-                            <p>Step 3 Content</p>
+                            <div id="Top_Conversations" class="tab-pane fade active show">
+                                <form [formGroup]="topConversationForm" (ngSubmit)="validateStep3()"
+                                    enctype="multipart/form-data">
+                                    <div class="card popular_topic">
+                                        <div class="card-body text-center">
+                                            <img src="assets/images/gallery-add.png">
+                                            <h4>Show engaging conversations happening in your group </h4>
+                                            <p>Upload screenshots of engaging conversations happening in your group
+                                                below.
+                                                Help brands see what you do.</p>
+                                            <div id="upload-image">
+                                                <img *ngFor="let url of urls" [src]="url"
+                                                    class="rounded mb-3 mt-4"><br><br>
+                                            </div>
+                                            <img src="assets/images/upload_ss.png" (click)="selectImage.click()">
+                                            <input #imageInput type="file" accept="image/*" multiple
+                                                (change)="uploadImages(imageInput)" style="display: none" #selectImage>
 
-                            <button (click)="backToStepIndex(1)">Previous</button> 
-                            <button (click)="validateStep3()">Next</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" (click)="backToStepIndex(1)"
+                                                    class="btn btn-primary  back_btn"> <img
+                                                        src="assets/images/arrow_left.png"> Back</button>
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <button type="submit" class="btn btn-primary add_btn">Next <img
+                                                        src="assets/images/arrow_right.png"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
                         </div>
 
                         <div class="stepWrapper" *ngIf="activeStepIndex == 3">
-                            <p>Step 4 Content</p>
+                            <div id="Preview" class="tab-pane fade active show">
+                                <form [formGroup]="publishForm" (ngSubmit)="validateStep4()">
+                                    <div class="card popular_topic">
+                                        <div class="card-body text-center">
+                                            <h4>Ready to publish your group’s profile? </h4>
+                                            <p>Your group’s profile is saved but not published. Publish now to share
+                                                with
+                                                brands and start getting reviews.</p>
+                                            <div class="publish">
+                                                <div class="row">
+                                                    <div class="col-md-4"></div>
+                                                    <div class="col-md-4 p-0">
+                                                        <div class="card groups_section">
+                                                            <div class="card-body create_profile_section">
+                                                                <div class="col-md-12">
+                                                                    <h4>{{groupDetails.group_name}}</h4>
+                                                                    <!-- <ul
+                                                                        class="d-flex align-items-center justify-content-center">
+                                                                        <li><img src="assets/images/public.png">Public
+                                                                        </li>
+                                                                        <li><img src="assets/images/members.png">364
+                                                                            members
+                                                                        </li>
+                                                                    </ul> -->
+                                                                    <button type="button" [disabled]="previewFlag"
+                                                                        class="btn btn-outline-primary preview_btn bio_btn"><img
+                                                                            src="assets/images/eye.png">Preview
+                                                                        Bio</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-primary share_btn bio_btn"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#profile_publish_Modal"><img
+                                                                            src="assets/images/right.png">Publish
+                                                                        Bio</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                            <button (click)="backToStepIndex(2)">Previous</button> 
-                            <button (click)="validateStep4()">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" (click)="backToStepIndex(2)"
+                                                    class="btn btn-primary back_btn"> <img
+                                                        src="assets/images/arrow_left.png"> Back</button>
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <button type="button" class="btn btn-primary add_btn">Submit <img
+                                                        src="assets/images/arrow_right.png"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- <button (click)="validateStep4()">Submit</button> -->
                         </div>
 
-                        
+
                     </div>
                 </div>
 

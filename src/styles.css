@@ -316,3 +316,43 @@ input#lastName {
 .error {
   color: red !important;
 }
+/* group profile create */
+.steps-model {
+  margin-bottom: 35px !important;
+}
+
+textarea {
+  background: #f5f5f5 !important;
+  width: 100% !important;
+  border: unset !important;
+}
+
+.p-inputtext:enabled:focus {
+  box-shadow: unset !important;
+}
+.form-select:focus {
+  box-shadow: unset !important;
+}
+.topics .p-chips {
+  display: block !important;
+}
+
+.topics input[type="text"] {
+  padding: 6px !important;
+}
+.topics ul:focus {
+  box-shadow: unset !important;
+}
+
+.topics ul {
+  background: #f5f5f5 !important;
+}
+.topics ul.p-inputtext.p-chips-multiple-container:not(.p-disabled).p-focus {
+  border-color: #f5f5f5 !important;
+  box-shadow: unset !important;
+}
+
+#upload-image img {
+  max-width: 84% !important;
+  object-fit: cover !important;
+}
