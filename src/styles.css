@@ -356,3 +356,16 @@ textarea {
   max-width: 84% !important;
   object-fit: cover !important;
 }
+
+button[disabled] {
+  cursor: no-drop !important;
+}
+#upload-image {
+  position: relative !important;
+}
+#upload-image span {
+  position: absolute !important;
+  right: 78px !important;
+  top: 20px !important;
+  border: 2px solid #3c61ad !important;
+}

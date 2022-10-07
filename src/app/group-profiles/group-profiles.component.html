@@ -44,13 +44,13 @@
                                             class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
                                             <a *ngIf="group.group_profile_id == null else elseBlock"
                                                 [attr.group-id]="group.id" [routerLink]="['/groupProfile']"
-                                                [queryParams]="{group_id:group.id,fb_group_id:group.fb_group_id}"
+                                                [queryParams]="{group_id:group.id,id:group.group_profile_id}"
                                                 type="button"
                                                 class="btn btn-primary share_btn mr-3 create_profile_btn">Create
                                                 Profile</a>
                                             <ng-template #elseBlock><button [attr.group-id]="group.id" type="button"
                                                     [routerLink]="['/groupProfile']"
-                                                    [queryParams]="{group_id:group.id,fb_group_id:group.fb_group_id}"
+                                                    [queryParams]="{group_id:group.id,id:group.group_profile_id}"
                                                     class="btn btn-primary share_btn mr-3 create_profile_btn">Manage
                                                     Profile</button></ng-template>
 

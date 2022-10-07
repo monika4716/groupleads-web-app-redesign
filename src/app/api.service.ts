@@ -159,7 +159,7 @@ export class ApiService {
       headers: headers,
     });
   }
-  getParticularGroupProfile(id: any, token: any, fb_group_id: any) {
+  getParticularGroupProfile(id: any, token: any, groupProfileId: any) {
     console.log(token);
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Accept', 'application/json');
@@ -168,9 +168,20 @@ export class ApiService {
       this.API_URL +
         'app-get-group-profile?group_id=' +
         id +
-        '&fb_group_id=' +
-        fb_group_id,
+        '&id=' +
+        groupProfileId,
       { headers: headers }
     );
+  }
+
+  saveGroupProfile(token: any, parm: any) {
+    console.log(token);
+    console.log(parm);
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.post(this.API_URL + 'save-group-profile', parm, {
+      headers: headers,
+    });
   }
 }

@@ -177,13 +177,19 @@
                                             <p>Upload screenshots of engaging conversations happening in your group
                                                 below.
                                                 Help brands see what you do.</p>
-                                            <div id="upload-image">
-                                                <img *ngFor="let url of urls" [src]="url"
+                                            <div id="upload-image" *ngFor="let url of urls; let index = index">
+                                                <img [src]="url" class="rounded mb-3 mt-4"><span mat-icon-button
+                                                    (click)="removeSelectedFile(index)"><img
+                                                        src="assets/images/Cancel.png"></span>
+                                            </div><br><br>
+
+                                            <!-- <div id="upload-image">
+                                                <img *ngFor="let url of urls; let index = index " [src]="url"
                                                     class="rounded mb-3 mt-4"><br><br>
-                                            </div>
+                                            </div> -->
                                             <img src="assets/images/upload_ss.png" (click)="selectImage.click()">
                                             <input #imageInput type="file" accept="image/*" multiple
-                                                (change)="uploadImages(imageInput)" style="display: none" #selectImage>
+                                                (change)="uploadImages($event)" style="display: none" #selectImage>
 
                                         </div>
                                     </div>
@@ -207,22 +213,22 @@
 
                         <div class="stepWrapper" *ngIf="activeStepIndex == 3">
                             <div id="Preview" class="tab-pane fade active show">
-                                <form [formGroup]="publishForm" (ngSubmit)="validateStep4()">
-                                    <div class="card popular_topic">
-                                        <div class="card-body text-center">
-                                            <h4>Ready to publish your group’s profile? </h4>
-                                            <p>Your group’s profile is saved but not published. Publish now to share
-                                                with
-                                                brands and start getting reviews.</p>
-                                            <div class="publish">
-                                                <div class="row">
-                                                    <div class="col-md-4"></div>
-                                                    <div class="col-md-4 p-0">
-                                                        <div class="card groups_section">
-                                                            <div class="card-body create_profile_section">
-                                                                <div class="col-md-12">
-                                                                    <h4>{{groupDetails.group_name}}</h4>
-                                                                    <!-- <ul
+                                <!-- <form [formGroup]="publishForm" (ngSubmit)="validateStep4()"> -->
+                                <div class="card popular_topic">
+                                    <div class="card-body text-center">
+                                        <h4>Ready to publish your group’s profile? </h4>
+                                        <p>Your group’s profile is saved but not published. Publish now to share
+                                            with
+                                            brands and start getting reviews.</p>
+                                        <div class="publish">
+                                            <div class="row">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-4 p-0">
+                                                    <div class="card groups_section">
+                                                        <div class="card-body create_profile_section">
+                                                            <div class="col-md-12">
+                                                                <h4>{{groupDetails.group_name}}</h4>
+                                                                <!-- <ul
                                                                         class="d-flex align-items-center justify-content-center">
                                                                         <li><img src="assets/images/public.png">Public
                                                                         </li>
@@ -230,39 +236,39 @@
                                                                             members
                                                                         </li>
                                                                     </ul> -->
-                                                                    <button type="button" [disabled]="previewFlag"
-                                                                        class="btn btn-outline-primary preview_btn bio_btn"><img
-                                                                            src="assets/images/eye.png">Preview
-                                                                        Bio</button>
-                                                                    <button type="button"
-                                                                        class="btn btn-primary share_btn bio_btn"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#profile_publish_Modal"><img
-                                                                            src="assets/images/right.png">Publish
-                                                                        Bio</button>
-                                                                </div>
+                                                                <button type="button" [disabled]="previewFlag"
+                                                                    class="btn btn-outline-primary preview_btn bio_btn"><img
+                                                                        src="assets/images/eye.png">Preview
+                                                                    Bio</button>
+                                                                <button type="button"
+                                                                    class="btn btn-primary share_btn bio_btn"
+                                                                    (click)="validateStep4()"><img
+                                                                        src="assets/images/right.png">Publish
+                                                                    Bio</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <button type="button" (click)="backToStepIndex(2)"
-                                                    class="btn btn-primary back_btn"> <img
-                                                        src="assets/images/arrow_left.png"> Back</button>
-                                            </div>
-                                            <div class="col-md-6 text-end">
-                                                <button type="button" class="btn btn-primary add_btn">Submit <img
-                                                        src="assets/images/arrow_right.png"></button>
-                                            </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button type="button" (click)="backToStepIndex(2)"
+                                                class="btn btn-primary back_btn"> <img
+                                                    src="assets/images/arrow_left.png"> Back</button>
+                                        </div>
+                                        <div class="col-md-6 text-end">
+                                            <button type="button" class="btn btn-primary add_btn"
+                                                (click)="publishLater()">Publish Later <img
+                                                    src="assets/images/arrow_right.png"></button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
+                                <!-- </form> -->
                             </div>
 
                             <!-- <button (click)="validateStep4()">Submit</button> -->
@@ -276,3 +282,31 @@
         </div>
     </div>
 </div>
+
+<!-- group publish profile -->
+
+<p-dialog [(visible)]="displayPublishModel" [style]="{width: '45vw'}">
+    <div class="modal-body publish_modal text-center">
+        <div class="col-md-12">
+            <img src="assets/images/success.png" class="success" />
+            <h4 class="modal-title">Bio Published Successfully</h4>
+            <p>Share to start getting noticed</p>
+            <div class="input-group">
+                <!-- <input type="text" class="form-control" [disabled]="showAddProfileBtn"
+                    placeholder="{{origin}}/profile/{{userName}}"> -->
+                <span type="button" class="input-group-text">copy</span>
+            </div>
+            <h6><span class="border_left"></span>Share with<span class="border_right"></span>
+            </h6>
+            <ul class="social_icons">
+                <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+            </ul>
+
+        </div>
+
+
+    </div>
+</p-dialog>

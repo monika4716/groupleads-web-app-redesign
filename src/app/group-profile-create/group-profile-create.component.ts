@@ -27,6 +27,7 @@ export class GroupProfileCreateComponent implements OnInit {
   groupProfiles: any = [];
   groupId: any;
   fbGroupId: any;
+  groupProfileId: any = '';
   groupProfile: any = [];
   groupDetails: any;
   groupOverview: any;
@@ -40,7 +41,7 @@ export class GroupProfileCreateComponent implements OnInit {
   selectedLocation: any = 1;
   uniqueName: any;
   description: any;
-  topic: string[] = [];
+  topic: any = [];
   files: any = [];
   previewFlag: boolean = true;
 
@@ -51,6 +52,15 @@ export class GroupProfileCreateComponent implements OnInit {
   topConversationForm: FormGroup;
   uploadedFiles: any[] = [];
   urls = new Array<string>();
+
+  displayPublishModel: boolean = false;
+  facebookShare: any = '';
+  instagramShare: any = '';
+  twitterShare: any = '';
+  linkedInShare: any = '';
+
+  fileList: File[] = [];
+  listOfFiles: any[] = [];
 
   constructor(
     private router: Router,
@@ -78,11 +88,15 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    var token = localStorage.getItem('token');
+    this.token = token;
     this.urls = [];
     this.activatedRoute.queryParams.subscribe((params) => {
       console.log(params);
       this.groupId = params['group_id'];
-      this.fbGroupId = params['fb_group_id'];
+      if (params['id']) {
+        this.groupProfileId = params['id'];
+      }
     });
 
     this.apiService.getGroupProfile().subscribe((response) => {
@@ -96,7 +110,7 @@ export class GroupProfileCreateComponent implements OnInit {
         this.groupCategories = response.GroupCategories;
         console.log(this.groupProfile);
         console.log(this.groupId);
-        console.log(this.fbGroupId);
+        console.log(this.groupProfileId);
         let found = this.groupProfile.findIndex((value: any) => {
           return value.id == this.groupId;
         });
@@ -107,6 +121,9 @@ export class GroupProfileCreateComponent implements OnInit {
             this.previewFlag = false;
           }
           this.groupName = this.groupProfile[found].group_name;
+          this.fbGroupId = this.groupProfile[found].fb_group_id;
+          let url = '';
+          this.setSocialLink(url);
         }
 
         console.log(this.groupProfile[found]);
@@ -148,18 +165,22 @@ export class GroupProfileCreateComponent implements OnInit {
     this.spinner.show();
     var token = localStorage.getItem('token');
     this.apiService
-      .getParticularGroupProfile(this.groupId, token, this.fbGroupId)
+      .getParticularGroupProfile(this.groupId, token, this.groupProfileId)
       .subscribe((response: any) => {
         // console.log(response.groupProfileDetail);
         if (response.status == 200) {
           this.groupFlag = true;
           this.groupDetails = response.groupProfileDetail;
+          this.fbGroupId = this.groupDetails.fb_group_id;
           if (this.groupDetails.group_profile_id != null) {
             this.previewFlag = false;
           }
           this.groupLocations = response.GroupLocations;
           this.groupCategories = response.GroupCategories;
           // console.log(this.groupDetails);
+
+          let url = '';
+          this.setSocialLink(url);
         }
         this.spinner.hide();
       });
@@ -196,26 +217,52 @@ export class GroupProfileCreateComponent implements OnInit {
   }
   validateStep2() {
     console.log(this.popularTopicForm);
-    if (this.popularTopicForm.value.topic.length > 0) {
-      this.topic = this.popularTopicForm.value.topic;
-    }
-    console.log(this.topic);
+
     this.activeStepIndex = 2;
   }
 
-  uploadImages(imageInput: any) {
-    console.log(imageInput.files);
-    this.files = imageInput.files;
+  uploadImages(event: any) {
+    console.log(event.target.files);
+    this.files = event.target.files;
     console.log(this.files);
-    if (this.files) {
-      for (let file of this.files) {
-        let reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.urls.push(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
+    for (var i = 0; i <= this.files.length - 1; i++) {
+      let reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.urls.push(e.target.result);
+      };
+      reader.readAsDataURL(this.files[i]);
+
+      var selectedFile = event.target.files[i];
+      this.fileList.push(selectedFile);
+      this.listOfFiles.push(selectedFile.name);
     }
+  }
+
+  // uploadImages2(imageInput: any) {
+  //   console.log(imageInput.files);
+  //   this.files = imageInput.files;
+  //   console.log(this.files);
+  //   if (this.files) {
+  //     for (let file of this.files) {
+  //       let reader = new FileReader();
+  //       reader.onload = (e: any) => {
+  //         this.urls.push(e.target.result);
+  //       };
+  //       reader.readAsDataURL(file);
+  //     }
+  //   }
+  // }
+
+  removeSelectedFile(index: any) {
+    this.urls.splice(index, 1);
+    // Delete the item from fileNames list
+    this.listOfFiles.splice(index, 1);
+    // delete file from FileList
+    this.fileList.splice(index, 1);
+
+    console.log(this.listOfFiles); // name of files
+    console.log(this.fileList); //array of files
+    console.log(this.urls); // show image encrypt image code
   }
 
   validateStep3() {
@@ -223,8 +270,79 @@ export class GroupProfileCreateComponent implements OnInit {
     this.activeStepIndex = 3;
   }
   validateStep4() {
-    alert('Form submitted');
+    this.saveGroupProfile();
+    this.displayPublishModel = true;
     // this.activeStepIndex = 1;
+  }
+
+  publishLater() {
+    this.saveGroupProfile();
+  }
+
+  saveGroupProfile() {
+    console.log(this.overViewForm);
+    console.log(this.popularTopicForm);
+    console.log(this.files);
+    this.selectedCategory = this.overViewForm.value.category;
+    this.description = this.overViewForm.value.description;
+    this.selectedLocation = this.overViewForm.value.location;
+    this.uniqueName = this.overViewForm.value.uniqueName;
+
+    if (this.popularTopicForm.value.topic.length > 0) {
+      this.topic = this.popularTopicForm.value.topic;
+    }
+    console.log(this.token);
+    console.log(typeof this.files);
+
+    const formData: FormData = new FormData();
+
+    formData.append('categoryId', this.selectedCategory);
+    formData.append('description', this.description);
+    formData.append('locationId', this.selectedLocation);
+    formData.append('uniqueName', this.uniqueName);
+    formData.append('topic', this.topic);
+
+    let imagesArray = this.fileList;
+
+    for (let image of imagesArray) {
+      formData.append('images[]', image);
+    }
+    formData.append('group_id', this.groupId);
+    formData.append('fb_group_id', this.fbGroupId);
+
+    // let parameters = {
+    //   categoryId: this.selectedCategory,
+    //   description: this.description,
+    //   locationId: this.selectedLocation,
+    //   uniqueName: this.uniqueName,
+    //   topic: this.topic,
+    //   images: this.files,
+    //   group_id: this.groupId,
+    //   fb_group_id: this.fbGroupId,
+    // };
+
+    // let parm = new FormData();
+    // parm.set('categoryId', this.selectedCategory);
+    // parm.set('description', this.description);
+    // parm.set('locationId', this.selectedLocation);
+    // parm.set('uniqueName', this.uniqueName);
+    // parm.set('topic', this.topic);
+    // parm.set('images', this.files);
+    // parm.set('group_id', this.groupId);
+    // parm.set('fb_group_id', this.fbGroupId);
+
+    // console.log(formData);
+    this.apiService
+      .saveGroupProfile(this.token, formData)
+      .subscribe((response: any) => {
+        console.log(response);
+
+        // if (response.status == 200) {
+        //   //show copy profile link popup
+        //   this.displayBasic = true;
+        //   this.setAdminBioValue(response);
+        // }
+      });
   }
 
   backToStepIndex(stepIndex: any) {
@@ -240,5 +358,16 @@ export class GroupProfileCreateComponent implements OnInit {
     console.log(e);
     this.selectedLocation = e.value;
     console.log(this.selectedLocation);
+  }
+
+  setSocialLink(url: any) {
+    this.facebookShare =
+      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+    this.instagramShare = '';
+    this.twitterShare =
+      'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url);
+    this.linkedInShare =
+      'https://www.linkedin.com/sharing/share-offsite/?url=' +
+      encodeURIComponent(url);
   }
 }
