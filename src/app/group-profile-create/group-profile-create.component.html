@@ -57,7 +57,7 @@
                                                 placeholder="Write a brief description about yourself with regards to your group..."
                                                 class="form-control"></textarea> -->
                                             <textarea [rows]="5" formControlName="description" required pInputTextarea
-                                                [autoResize]="true"></textarea>
+                                                [autoResize]="true" [ngModel]="description"></textarea>
 
                                             <div *ngIf="o['description'].touched && o['description'].invalid"
                                                 class="alert alert-danger">
@@ -108,7 +108,7 @@
                                         </p>
                                         <div>
                                             <input type="text" class="form-control" formControlName="uniqueName"
-                                                required="required" placeholder="danedwards">
+                                                required="required" [ngModel]="uniqueName" placeholder="danedwards">
 
                                             <div *ngIf="o['uniqueName'].touched && o['uniqueName'].invalid"
                                                 class="alert alert-danger">
@@ -177,16 +177,20 @@
                                             <p>Upload screenshots of engaging conversations happening in your group
                                                 below.
                                                 Help brands see what you do.</p>
-                                            <div id="upload-image" *ngFor="let url of urls; let index = index">
+
+                                            <div class="upload-image"
+                                                *ngFor="let image of previousImage; let index = index">
+                                                <img [src]="imagePath+'/'+image" class="rounded mb-3 mt-4"><span
+                                                    mat-icon-button (click)="removePreviousFile(index)"><img
+                                                        src="assets/images/Cancel.png"></span>
+                                            </div>
+
+
+                                            <div class="upload-image" *ngFor="let url of urls; let index = index">
                                                 <img [src]="url" class="rounded mb-3 mt-4"><span mat-icon-button
                                                     (click)="removeSelectedFile(index)"><img
                                                         src="assets/images/Cancel.png"></span>
                                             </div><br><br>
-
-                                            <!-- <div id="upload-image">
-                                                <img *ngFor="let url of urls; let index = index " [src]="url"
-                                                    class="rounded mb-3 mt-4"><br><br>
-                                            </div> -->
                                             <img src="assets/images/upload_ss.png" (click)="selectImage.click()">
                                             <input #imageInput type="file" accept="image/*" multiple
                                                 (change)="uploadImages($event)" style="display: none" #selectImage>

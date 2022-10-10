@@ -360,10 +360,10 @@ textarea {
 button[disabled] {
   cursor: no-drop !important;
 }
-#upload-image {
+.upload-image {
   position: relative !important;
 }
-#upload-image span {
+.upload-image span {
   position: absolute !important;
   right: 78px !important;
   top: 20px !important;

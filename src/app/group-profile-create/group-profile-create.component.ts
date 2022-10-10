@@ -44,6 +44,8 @@ export class GroupProfileCreateComponent implements OnInit {
   topic: any = [];
   files: any = [];
   previewFlag: boolean = true;
+  previousImage: any = [];
+  removeImage: any = [];
 
   activeStepIndex: number = 0;
   overViewForm: FormGroup;
@@ -61,6 +63,7 @@ export class GroupProfileCreateComponent implements OnInit {
 
   fileList: File[] = [];
   listOfFiles: any[] = [];
+  imagePath: any = '';
 
   constructor(
     private router: Router,
@@ -103,11 +106,13 @@ export class GroupProfileCreateComponent implements OnInit {
       if (
         response.hasOwnProperty('groupProfile') &&
         response.hasOwnProperty('GroupLocations') &&
-        response.hasOwnProperty('GroupCategories')
+        response.hasOwnProperty('GroupCategories') &&
+        response.hasOwnProperty('path')
       ) {
         this.groupProfile = response.groupProfile;
         this.groupLocations = response.GroupLocations;
         this.groupCategories = response.GroupCategories;
+        this.imagePath = response.path;
         console.log(this.groupProfile);
         console.log(this.groupId);
         console.log(this.groupProfileId);
@@ -116,12 +121,15 @@ export class GroupProfileCreateComponent implements OnInit {
         });
         console.log(this.groupProfile[found]);
         if (found > -1) {
+          this.groupName = this.groupProfile[found].group_name;
+          this.fbGroupId = this.groupProfile[found].fb_group_id;
           this.groupDetails = this.groupProfile[found];
           if (this.groupDetails.group_profile_id != null) {
             this.previewFlag = false;
+
+            this.setProfileValues();
           }
-          this.groupName = this.groupProfile[found].group_name;
-          this.fbGroupId = this.groupProfile[found].fb_group_id;
+
           let url = '';
           this.setSocialLink(url);
         }
@@ -170,13 +178,17 @@ export class GroupProfileCreateComponent implements OnInit {
         // console.log(response.groupProfileDetail);
         if (response.status == 200) {
           this.groupFlag = true;
-          this.groupDetails = response.groupProfileDetail;
-          this.fbGroupId = this.groupDetails.fb_group_id;
-          if (this.groupDetails.group_profile_id != null) {
-            this.previewFlag = false;
-          }
+          this.imagePath = response.path;
           this.groupLocations = response.GroupLocations;
           this.groupCategories = response.GroupCategories;
+          this.groupDetails = response.groupProfileDetail;
+          this.fbGroupId = this.groupDetails.fb_group_id;
+
+          if (this.groupDetails.group_profile_id != null) {
+            this.previewFlag = false;
+            this.setProfileValues();
+          }
+
           // console.log(this.groupDetails);
 
           let url = '';
@@ -184,6 +196,26 @@ export class GroupProfileCreateComponent implements OnInit {
         }
         this.spinner.hide();
       });
+  }
+
+  setProfileValues() {
+    console.log(this.groupDetails);
+    console.log(this.imagePath);
+    console.log(this.groupLocations);
+    console.log(this.groupCategories);
+    this.description = this.groupDetails.description;
+    this.uniqueName = this.groupDetails.unique_name;
+
+    if (this.groupDetails.topic != '') {
+      this.topic = this.groupDetails.topic.split(',');
+    }
+    console.log(this.groupDetails.images);
+    console.log(typeof this.groupDetails.images);
+    if (this.groupDetails.images != '') {
+      console.log('if');
+      this.previousImage = JSON.parse(this.groupDetails.images);
+      console.log(this.previousImage);
+    }
   }
 
   get o() {
@@ -236,6 +268,16 @@ export class GroupProfileCreateComponent implements OnInit {
       this.fileList.push(selectedFile);
       this.listOfFiles.push(selectedFile.name);
     }
+  }
+
+  removePreviousFile(index: any) {
+    console.log(index);
+    console.log(this.previousImage);
+    this.removeImage.push(this.previousImage[index]);
+    console.log(this.removeImage);
+    this.previousImage.splice(index, 1);
+    console.log(this.removeImage);
+    //console.log(this.previousImage);
   }
 
   // uploadImages2(imageInput: any) {
@@ -301,6 +343,7 @@ export class GroupProfileCreateComponent implements OnInit {
     formData.append('locationId', this.selectedLocation);
     formData.append('uniqueName', this.uniqueName);
     formData.append('topic', this.topic);
+    formData.append('removeImage', this.removeImage);
 
     let imagesArray = this.fileList;
 
@@ -309,29 +352,6 @@ export class GroupProfileCreateComponent implements OnInit {
     }
     formData.append('group_id', this.groupId);
     formData.append('fb_group_id', this.fbGroupId);
-
-    // let parameters = {
-    //   categoryId: this.selectedCategory,
-    //   description: this.description,
-    //   locationId: this.selectedLocation,
-    //   uniqueName: this.uniqueName,
-    //   topic: this.topic,
-    //   images: this.files,
-    //   group_id: this.groupId,
-    //   fb_group_id: this.fbGroupId,
-    // };
-
-    // let parm = new FormData();
-    // parm.set('categoryId', this.selectedCategory);
-    // parm.set('description', this.description);
-    // parm.set('locationId', this.selectedLocation);
-    // parm.set('uniqueName', this.uniqueName);
-    // parm.set('topic', this.topic);
-    // parm.set('images', this.files);
-    // parm.set('group_id', this.groupId);
-    // parm.set('fb_group_id', this.fbGroupId);
-
-    // console.log(formData);
     this.apiService
       .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
