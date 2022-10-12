@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { countriesObject } from '../../assets/json/countries';
 import {
   FormGroup,
   FormControl,
@@ -32,20 +33,22 @@ export class GroupProfileCreateComponent implements OnInit {
   groupDetails: any;
   groupOverview: any;
   submitted: boolean = false;
-  groupFlag: boolean = false;
+  model_text: any = 'Copy';
+
   items: MenuItem[] = [];
   groupName: any;
-  groupLocations: any = [];
+  public groupLocations: any = countriesObject;
   groupCategories: any = [];
   selectedCategory: any = 1;
-  selectedLocation: any = 1;
+  selectedLocation: any = 'AF';
   uniqueName: any;
   description: any;
   topic: any = [];
   files: any = [];
-  previewFlag: boolean = true;
+  previewFlag: boolean = false;
   previousImage: any = [];
   removeImage: any = [];
+  showAddProfileBtn: boolean = true;
 
   activeStepIndex: number = 0;
   overViewForm: FormGroup;
@@ -64,7 +67,13 @@ export class GroupProfileCreateComponent implements OnInit {
   fileList: File[] = [];
   listOfFiles: any[] = [];
   imagePath: any = '';
-
+  slug: any = '';
+  origin: any = '';
+  href: any = '';
+  displayForm: boolean = true;
+  displaycloseButton: boolean = false;
+  displayIframe: boolean = true;
+  iframeUrl: any = '';
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -73,6 +82,7 @@ export class GroupProfileCreateComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private fb: FormBuilder
   ) {
+    this.origin = location.origin;
     this.overViewForm = this.fb.group({
       description: ['', Validators.required],
       category: ['', Validators.required],
@@ -94,6 +104,7 @@ export class GroupProfileCreateComponent implements OnInit {
     var token = localStorage.getItem('token');
     this.token = token;
     this.urls = [];
+    this.href = this.router.url;
     this.activatedRoute.queryParams.subscribe((params) => {
       console.log(params);
       this.groupId = params['group_id'];
@@ -103,38 +114,37 @@ export class GroupProfileCreateComponent implements OnInit {
     });
 
     this.apiService.getGroupProfile().subscribe((response) => {
+      console.log(response);
       if (
         response.hasOwnProperty('groupProfile') &&
-        response.hasOwnProperty('GroupLocations') &&
         response.hasOwnProperty('GroupCategories') &&
         response.hasOwnProperty('path')
       ) {
         this.groupProfile = response.groupProfile;
-        this.groupLocations = response.GroupLocations;
         this.groupCategories = response.GroupCategories;
         this.imagePath = response.path;
-        console.log(this.groupProfile);
-        console.log(this.groupId);
-        console.log(this.groupProfileId);
         let found = this.groupProfile.findIndex((value: any) => {
           return value.id == this.groupId;
         });
-        console.log(this.groupProfile[found]);
+
         if (found > -1) {
           this.groupName = this.groupProfile[found].group_name;
+          console.log(this.groupName);
           this.fbGroupId = this.groupProfile[found].fb_group_id;
           this.groupDetails = this.groupProfile[found];
           if (this.groupDetails.group_profile_id != null) {
-            this.previewFlag = false;
-
+            this.previewFlag = true;
             this.setProfileValues();
           }
-
           let url = '';
           this.setSocialLink(url);
         }
 
         console.log(this.groupProfile[found]);
+
+        if (this.groupProfileId != '') {
+          this.getProfileImages();
+        }
       } else {
         //console.log(response);
         this.getGroupDetails();
@@ -167,6 +177,25 @@ export class GroupProfileCreateComponent implements OnInit {
         },
       },
     ];
+
+    if (this.href.indexOf('/group-profile') > -1) {
+      setTimeout(() => {
+        $('.group-profiles-list').find('a').addClass('active');
+      }, 500);
+    }
+  }
+
+  getProfileImages() {
+    var token = localStorage.getItem('token');
+    this.apiService
+      .getGProfileImages(token, this.groupProfileId)
+      .subscribe((response: any) => {
+        if (response.status == 200) {
+          console.log(response.profileImages);
+          this.previousImage = response.profileImages;
+          console.log(this.previousImage);
+        }
+      });
   }
 
   getGroupDetails() {
@@ -177,15 +206,16 @@ export class GroupProfileCreateComponent implements OnInit {
       .subscribe((response: any) => {
         // console.log(response.groupProfileDetail);
         if (response.status == 200) {
-          this.groupFlag = true;
           this.imagePath = response.path;
-          this.groupLocations = response.GroupLocations;
           this.groupCategories = response.GroupCategories;
           this.groupDetails = response.groupProfileDetail;
           this.fbGroupId = this.groupDetails.fb_group_id;
+          this.previousImage = response.profileImages;
+
+          this.groupName = this.groupDetails.group_name;
 
           if (this.groupDetails.group_profile_id != null) {
-            this.previewFlag = false;
+            this.previewFlag = true;
             this.setProfileValues();
           }
 
@@ -201,21 +231,30 @@ export class GroupProfileCreateComponent implements OnInit {
   setProfileValues() {
     console.log(this.groupDetails);
     console.log(this.imagePath);
-    console.log(this.groupLocations);
     console.log(this.groupCategories);
     this.description = this.groupDetails.description;
     this.uniqueName = this.groupDetails.unique_name;
+    this.slug = this.groupDetails.unique_name.toLowerCase();
+
+    this.groupName = this.groupDetails.group_name;
+
+    this.showAddProfileBtn = false;
+    console.log(this.slug);
 
     if (this.groupDetails.topic != '') {
       this.topic = this.groupDetails.topic.split(',');
     }
-    console.log(this.groupDetails.images);
-    console.log(typeof this.groupDetails.images);
-    if (this.groupDetails.images != '') {
-      console.log('if');
-      this.previousImage = JSON.parse(this.groupDetails.images);
-      console.log(this.previousImage);
-    }
+
+    this.selectedCategory = this.groupDetails.category_id;
+    this.selectedLocation = this.groupDetails.location_id;
+
+    // console.log(this.groupDetails.images);
+    // console.log(typeof this.groupDetails.images);
+    // if (this.groupDetails.images != '') {
+    //   console.log('if');
+    //   this.previousImage = JSON.parse(this.groupDetails.images);
+    //   console.log(this.previousImage);
+    // }
   }
 
   get o() {
@@ -226,9 +265,9 @@ export class GroupProfileCreateComponent implements OnInit {
   validateStep1() {
     //logic perform
     console.log(this.overViewForm);
-
     if (this.overViewForm.value.location != undefined) {
       this.selectedLocation = this.overViewForm.value.location;
+      console.log(this.selectedLocation);
     }
     if (this.overViewForm.value.category != undefined) {
       this.selectedCategory = this.overViewForm.value.category;
@@ -239,31 +278,22 @@ export class GroupProfileCreateComponent implements OnInit {
     if (this.overViewForm.value.uniqueName != undefined) {
       this.uniqueName = this.overViewForm.value.uniqueName;
     }
-
-    console.log(this.selectedLocation);
-    console.log(this.selectedCategory);
-    console.log(this.description);
-    console.log(this.uniqueName);
-
     this.activeStepIndex = 1;
   }
   validateStep2() {
     console.log(this.popularTopicForm);
-
     this.activeStepIndex = 2;
   }
 
   uploadImages(event: any) {
     console.log(event.target.files);
     this.files = event.target.files;
-    console.log(this.files);
     for (var i = 0; i <= this.files.length - 1; i++) {
       let reader = new FileReader();
       reader.onload = (e: any) => {
         this.urls.push(e.target.result);
       };
       reader.readAsDataURL(this.files[i]);
-
       var selectedFile = event.target.files[i];
       this.fileList.push(selectedFile);
       this.listOfFiles.push(selectedFile.name);
@@ -271,29 +301,9 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   removePreviousFile(index: any) {
-    console.log(index);
-    console.log(this.previousImage);
     this.removeImage.push(this.previousImage[index]);
-    console.log(this.removeImage);
     this.previousImage.splice(index, 1);
-    console.log(this.removeImage);
-    //console.log(this.previousImage);
   }
-
-  // uploadImages2(imageInput: any) {
-  //   console.log(imageInput.files);
-  //   this.files = imageInput.files;
-  //   console.log(this.files);
-  //   if (this.files) {
-  //     for (let file of this.files) {
-  //       let reader = new FileReader();
-  //       reader.onload = (e: any) => {
-  //         this.urls.push(e.target.result);
-  //       };
-  //       reader.readAsDataURL(file);
-  //     }
-  //   }
-  // }
 
   removeSelectedFile(index: any) {
     this.urls.splice(index, 1);
@@ -312,38 +322,34 @@ export class GroupProfileCreateComponent implements OnInit {
     this.activeStepIndex = 3;
   }
   validateStep4() {
-    this.saveGroupProfile();
-    this.displayPublishModel = true;
-    // this.activeStepIndex = 1;
+    let publish = true;
+    this.saveGroupProfile(publish);
   }
 
   publishLater() {
-    this.saveGroupProfile();
+    let publish = false;
+    this.saveGroupProfile(publish);
   }
 
-  saveGroupProfile() {
-    console.log(this.overViewForm);
-    console.log(this.popularTopicForm);
-    console.log(this.files);
+  saveGroupProfile(publish: any) {
+    console.log(publish);
     this.selectedCategory = this.overViewForm.value.category;
     this.description = this.overViewForm.value.description;
     this.selectedLocation = this.overViewForm.value.location;
     this.uniqueName = this.overViewForm.value.uniqueName;
-
     if (this.popularTopicForm.value.topic.length > 0) {
       this.topic = this.popularTopicForm.value.topic;
     }
-    console.log(this.token);
-    console.log(typeof this.files);
 
+    console.log(this.selectedLocation);
     const formData: FormData = new FormData();
-
     formData.append('categoryId', this.selectedCategory);
     formData.append('description', this.description);
     formData.append('locationId', this.selectedLocation);
     formData.append('uniqueName', this.uniqueName);
     formData.append('topic', this.topic);
-    formData.append('removeImage', this.removeImage);
+    formData.append('removeImage', JSON.stringify(this.removeImage));
+    formData.append('profile_id', this.groupProfileId);
 
     let imagesArray = this.fileList;
 
@@ -356,12 +362,14 @@ export class GroupProfileCreateComponent implements OnInit {
       .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
         console.log(response);
-
-        // if (response.status == 200) {
-        //   //show copy profile link popup
-        //   this.displayBasic = true;
-        //   this.setAdminBioValue(response);
-        // }
+        if (response.status == 200) {
+          if (publish) {
+            this.displayPublishModel = true;
+          }
+          //show copy profile link popup
+          // this.displayBasic = true;
+          // this.setAdminBioValue(response);
+        }
       });
   }
 
@@ -380,7 +388,8 @@ export class GroupProfileCreateComponent implements OnInit {
     console.log(this.selectedLocation);
   }
 
-  setSocialLink(url: any) {
+  setSocialLink(link: any) {
+    let url = this.origin + '/group-profile/' + this.slug;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
     this.instagramShare = '';
@@ -389,5 +398,51 @@ export class GroupProfileCreateComponent implements OnInit {
     this.linkedInShare =
       'https://www.linkedin.com/sharing/share-offsite/?url=' +
       encodeURIComponent(url);
+  }
+
+  copyGroupProfileModel(slug: any) {
+    let profileSlug = this.origin + '/group-profile/' + slug;
+    this.model_text = 'Copied';
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(profileSlug).then(
+        () => {
+          //alert("Copied to Clipboard");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log('Browser do not support Clipboard API');
+    }
+    setTimeout(() => {
+      this.model_text = 'Copy';
+    }, 2000);
+  }
+
+  /* OPEN ADMIN BIO PREVIEW */
+  openPreview() {
+    let url =
+      this.origin + '/group-profile/' + this.slug + '?displayClose=true';
+    console.log(url);
+    this.displayForm = false;
+    this.displaycloseButton = true;
+    this.displayIframe = true;
+    this.iframeUrl = url;
+    this.getIframPreview();
+    $('.preview_btn').prop('disabled', false);
+    $('.share_btn').prop('disabled', false);
+  }
+
+  /* GET IFRAME PREVIEW */
+  getIframPreview() {
+    let setDefaultSetting = setInterval(() => {
+      let iframe = document.getElementById('openIframe');
+      if (iframe == null) {
+        clearInterval(setDefaultSetting);
+        this.displayForm = true;
+        this.displayIframe = false;
+      }
+    }, 100);
   }
 }

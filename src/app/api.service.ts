@@ -92,6 +92,9 @@ export class ApiService {
     );
   }
 
+  // -------------------------------ADMIN BIO API-------------------------------------//
+
+  //GET ADMIN BIO DETAILS
   getAdminBio(token: any) {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Accept', 'application/json');
@@ -100,7 +103,7 @@ export class ApiService {
       headers: headers,
     });
   }
-
+  //SAVE ADMIN BIO DETAILS
   saveAdminBio(token: any, params: any) {
     console.log(token);
     console.log(params);
@@ -111,10 +114,11 @@ export class ApiService {
       headers: headers,
     });
   }
+  //PREVIEW ADMIN BIO DETAILS
   getAdminBioPreivew(id: any) {
     return this.httpClient.get(this.API_URL + 'get-admin-preview/' + id);
   }
-
+  // CHECK UNIQUE USER NAME FOR ADMIN BIO SLUG
   checkUsernameNotTaken(token: any, username: string) {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Accept', 'application/json');
@@ -126,6 +130,7 @@ export class ApiService {
       }
     );
   }
+
   userExistsValidator(token: any, user: any): AsyncValidatorFn {
     return (control: AbstractControl) => {
       return this.checkUsernameNotTaken(token, control.value).pipe(
@@ -134,8 +139,9 @@ export class ApiService {
     };
   }
 
-  //Group profile api
+  // -------------------------GROUP PROFILES API-----------------------------------------//
 
+  //GROUPS DETAILS WITH PROFILE / OBSERVABLE
   getGroupProfile(): Observable<any> {
     console.log(this.groupProfiles);
     return this.groupProfiles.asObservable();
@@ -149,7 +155,7 @@ export class ApiService {
     console.log(this.groupProfiles.value);
     return this.groupProfiles.value;
   }
-
+  // GET GROUPS DETAILS
   getGroupDetails(token: any) {
     console.log(token);
     let headers: HttpHeaders = new HttpHeaders();
@@ -159,6 +165,7 @@ export class ApiService {
       headers: headers,
     });
   }
+  // GET PARTICULAR GROUP PROFILE DETAILS
   getParticularGroupProfile(id: any, token: any, groupProfileId: any) {
     console.log(token);
     let headers: HttpHeaders = new HttpHeaders();
@@ -173,7 +180,7 @@ export class ApiService {
       { headers: headers }
     );
   }
-
+  // SAVE GROUP PROFILE
   saveGroupProfile(token: any, parm: any) {
     console.log(token);
     console.log(parm);
@@ -183,5 +190,26 @@ export class ApiService {
     return this.httpClient.post(this.API_URL + 'save-group-profile', parm, {
       headers: headers,
     });
+  }
+  // GET GROUP PROFILE IMAGES
+  getGProfileImages(token: any, groupProfileId: any) {
+    console.log(token);
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.get(
+      this.API_URL +
+        'get-group-profile-images?group_Profile_id=' +
+        groupProfileId,
+      { headers: headers }
+    );
+  }
+
+  // ------------------------------------Group Profile PREVIEW API----------------------//
+
+  getGroupProfilePreview(slug: any) {
+    return this.httpClient.get(
+      this.API_URL + 'get-group-profile-preview/' + slug
+    );
   }
 }

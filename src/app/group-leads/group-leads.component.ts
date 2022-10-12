@@ -71,7 +71,7 @@ export class GroupLeadsComponent implements OnInit {
     this.href = this.router.url;
     console.log(this.href);
     this.showSelectedFilter();
-    if (this.href.indexOf('/groupLeads') > -1) {
+    if (this.href.indexOf('/group-leads') > -1) {
       setTimeout(() => {
         $('.group-list-leads').find('a').addClass('active');
       }, 500);
@@ -219,6 +219,8 @@ export class GroupLeadsComponent implements OnInit {
         this.id +
         '&filter=' +
         this.filter;
+
+      //console.log(exportUrl);
       window.open(exportUrl);
     }
   }

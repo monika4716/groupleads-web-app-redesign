@@ -737,9 +737,9 @@ p {
   font-weight: 500 !important;
   font-size: 16px !important;
   line-height: 20px !important;
-  padding: 13px 36px !important;
-  border: 2px solid #3c61ad !important;
-  border-radius: 4px !important;
+  padding: 13px 36px;
+  border: 2px solid #3c61ad;
+  border-radius: 4px;
   color: #3c61ad;
 }
 .preview_btn.bio_btn {
@@ -1101,10 +1101,10 @@ li.p-ripple.p-element.p-dropdown-item {
   margin-top: 13px;
 }
 .card-body .btn {
-  background: #3c61ad !important;
+  background: #3c61ad;
   border-radius: 4px !important;
-  color: white !important;
-  border: none !important;
+  color: white;
+  border: none;
 }
 .general_settings .btn {
   padding: 13px 22px !important;
@@ -1397,7 +1397,7 @@ input:checked + .slider:before {
   margin-right: 9px;
 }
 .card-body .admin_profile_sec {
-  width: 60%;
+  width: 58%;
 }
 .card-body .admin_sec {
   margin-top: 21px;
@@ -1739,16 +1739,16 @@ input:checked + .slider:before {
   width: 60%;
 }
 .manage_profile_banner a {
-  background: rgba(60, 97, 173, 0.24);
-  backdrop-filter: blur(12px);
-  border-radius: 4px;
+  background: rgba(60, 97, 173, 0.24) !important;
+  backdrop-filter: blur(12px) !important;
+  border-radius: 4px !important;
   color: #ffffff !important;
   border: none !important;
 }
 .manage_profile_banner a:hover {
-  background: rgba(60, 97, 173, 0.24);
-  backdrop-filter: blur(12px);
-  border-radius: 4px;
+  background: rgba(60, 97, 173, 0.24) !important;
+  backdrop-filter: blur(12px) !important;
+  border-radius: 4px !important;
   color: #ffffff !important;
   border: none !important;
 }
@@ -1757,44 +1757,44 @@ input:checked + .slider:before {
 .manage_profile_banner a.btn-primary.active,
 .manage_profile_banner a.btn-primary:active,
 .show > .btn-primary.dropdown-toggle {
-  background: rgba(60, 97, 173, 0.24);
-  backdrop-filter: blur(12px);
-  border-radius: 4px;
+  background: rgba(60, 97, 173, 0.24) !important;
+  backdrop-filter: blur(12px) !important;
+  border-radius: 4px !important;
 }
 .manage_profile_banner a.btn-check:focus + .btn-primary,
 .manage_profile_banner a.btn-primary:focus {
-  color: #fff;
-  background: rgba(60, 97, 173, 0.24);
-  backdrop-filter: blur(12px);
+  color: #fff !important;
+  background: rgba(60, 97, 173, 0.24) !important;
+  backdrop-filter: blur(12px) !important;
 }
 .manage_profile_banner .share {
-  margin-right: 10px;
+  margin-right: 10px !important;
 }
 .profile_banner_cols {
-  padding-right: 40px;
+  padding-right: 40px !important;
 }
 .total_reviews {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
-  background: #ffffff;
-  padding: 12px 14px;
-  color: #3c61ad;
-  margin-left: 10px;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  background: #ffffff !important;
+  padding: 12px 14px !important;
+  color: #3c61ad !important;
+  margin-left: 10px !important;
 }
 .total_review_btn {
   padding: 13px 11px !important;
-  padding-right: 11px;
+  padding-right: 11px !important;
   padding-right: 0 !important;
 }
 /**************edit modal*****************/
 .modal-body h5 {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 24px;
-  color: #757575;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
+  color: #757575 !important;
 }
 .key_stats h3 {
   font-style: normal;
@@ -1931,4 +1931,15 @@ input:checked + .slider:before {
   font-weight: 400 !important;
   color: #000000 !important;
   font-size: 18px !important;
+}
+.message-btn {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  padding: 13px 36px;
+  border: 2px solid #3c61ad;
+  border-radius: 4px;
+  color: #3c61ad;
+  background-color: white;
 }

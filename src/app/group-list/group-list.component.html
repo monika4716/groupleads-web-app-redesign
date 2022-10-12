@@ -35,7 +35,7 @@
                                     <img src="assets/images/note-remove.png" />
                                     <h3>No Group Have Been Created Yet</h3>
                                     <p>Connect your groups through the chrome extension to see the lead generation
-                                        chart. See more <a href="javascript:void(0)" routerLink="/adminBio">here.</a>
+                                        chart. See more <a href="javascript:void(0)" routerLink="/admin-bio">here.</a>
                                     </p>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                     <ng-template pTemplate="body" let-group let-rowData let-columns="columns">
                                         <tr [pSelectableRow]="rowData" [pEditableRow]="rowData"
                                             *ngIf="rowData.group_id != 0">
-                                            <td [routerLink]="['/groupLeads']"
+                                            <td [routerLink]="['/group-leads']"
                                                 [queryParams]="{group_id:rowData.group_id,fb_group_id:rowData.fb_group_id}"
                                                 style="cursor: pointer;color: #9B9898;">{{rowData.group_name}}</td>
                                             <td style="cursor: text;color: #9B9898;">{{rowData.count}}</td>

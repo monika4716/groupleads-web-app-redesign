@@ -43,7 +43,10 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="d-flex">
-                                    <select (change)="onChangeGroup($event)" class="form-control appearance" name="user" [(ngModel)]='selectedGroupId'>
+                                    <!-- class given in select "appearance" -->
+                                    <select (change)="onChangeGroup($event)"
+                                        class="form-control form-select select_groups " name="user"
+                                        [(ngModel)]='selectedGroupId'>
                                         <option *ngFor="let group of group_listing" [value]="group.group_id">
                                             {{group.group_name}}
                                         </option>

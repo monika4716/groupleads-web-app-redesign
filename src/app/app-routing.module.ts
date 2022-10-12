@@ -13,6 +13,7 @@ import { GroupLeadsComponent } from './group-leads/group-leads.component';
 import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.component';
 import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-create.component';
 import { GroupProfileCreateComponent } from './group-profile-create/group-profile-create.component';
+import { GroupProfilePreviewComponent } from './group-profile-preview/group-profile-preview.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -24,40 +25,27 @@ const routes: Routes = [
   },
   { path: 'billing', component: BillingComponent, canActivate: [RoutingGuard] },
   {
-    path: 'groupList',
+    path: 'group-list',
     component: GroupListComponent,
     canActivate: [RoutingGuard],
   },
   {
-    path: 'adminBio',
+    path: 'group-leads',
+    component: GroupLeadsComponent,
+    canActivate: [RoutingGuard],
+  },
+  {
+    path: 'admin-bio',
     component: AdminBioComponent,
     canActivate: [RoutingGuard],
   },
-
   {
     path: 'profile/:slug',
     component: AdminBioPreviewComponent,
   },
-
   {
-    path: 'groupProfiles',
-    component: GroupProfilesComponent,
-    canActivate: [RoutingGuard],
-  },
-
-  {
-    path: 'affiliate',
-    component: AffiliatesComponent,
-    canActivate: [RoutingGuard],
-  },
-  {
-    path: 'groupPlugin',
+    path: 'group-plugin',
     component: GroupPluginComponent,
-    canActivate: [RoutingGuard],
-  },
-  {
-    path: 'groupLeads',
-    component: GroupLeadsComponent,
     canActivate: [RoutingGuard],
   },
   {
@@ -65,10 +53,23 @@ const routes: Routes = [
     component: GroupPluginCreateComponent,
     canActivate: [RoutingGuard],
   },
-
   {
-    path: 'groupProfile',
+    path: 'group-profiles',
+    component: GroupProfilesComponent,
+    canActivate: [RoutingGuard],
+  },
+  {
+    path: 'group-profile',
     component: GroupProfileCreateComponent,
+    canActivate: [RoutingGuard],
+  },
+  {
+    path: 'group-profile/:slug',
+    component: GroupProfilePreviewComponent,
+  },
+  {
+    path: 'affiliate',
+    component: AffiliatesComponent,
     canActivate: [RoutingGuard],
   },
 ];

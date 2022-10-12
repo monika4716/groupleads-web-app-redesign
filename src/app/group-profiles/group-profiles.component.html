@@ -43,13 +43,13 @@
                                         <div
                                             class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
                                             <a *ngIf="group.group_profile_id == null else elseBlock"
-                                                [attr.group-id]="group.id" [routerLink]="['/groupProfile']"
+                                                [attr.group-id]="group.id" [routerLink]="['/group-profile']"
                                                 [queryParams]="{group_id:group.id,id:group.group_profile_id}"
                                                 type="button"
                                                 class="btn btn-primary share_btn mr-3 create_profile_btn">Create
                                                 Profile</a>
                                             <ng-template #elseBlock><button [attr.group-id]="group.id" type="button"
-                                                    [routerLink]="['/groupProfile']"
+                                                    [routerLink]="['/group-profile']"
                                                     [queryParams]="{group_id:group.id,id:group.group_profile_id}"
                                                     class="btn btn-primary share_btn mr-3 create_profile_btn">Manage
                                                     Profile</button></ng-template>
@@ -119,10 +119,10 @@
                     </div>
                     <h6><span class="border_left"></span>Share with<span class="border_right"></span></h6>
                     <ul class="social_icons">
-                        <a href=""><img src="assets/images/facebook.png" /></a>
+                        <a href=""><img src="assets/images/Facebook.png" /></a>
                         <a href="#"><img src="assets/images/Instagram.png" /></a>
                         <a href="#"><img src="assets/images/Twitter.png" /></a>
-                        <a href="#"><img src="assets/images/Linkedin.png" class="linkedin" /></a>
+                        <a href="#"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
                     </ul>
                 </div>
             </div>

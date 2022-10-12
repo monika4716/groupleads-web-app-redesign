@@ -14,6 +14,7 @@ import { StepsModule } from 'primeng/steps';
 import { CardModule } from 'primeng/card';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ChipsModule } from 'primeng/chips';
+import { CarouselModule } from 'primeng/carousel';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,6 +38,8 @@ import { SafePipe } from './pipe/safe.pipe';
 import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.component';
 import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-create.component';
 import { GroupProfileCreateComponent } from './group-profile-create/group-profile-create.component';
+import { GroupProfilePreviewComponent } from './group-profile-preview/group-profile-preview.component';
+import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,8 @@ import { GroupProfileCreateComponent } from './group-profile-create/group-profil
     AdminBioPreviewComponent,
     GroupPluginCreateComponent,
     GroupProfileCreateComponent,
+    GroupProfilePreviewComponent,
+    ManageProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +83,7 @@ import { GroupProfileCreateComponent } from './group-profile-create/group-profil
     CardModule,
     InputTextareaModule,
     ChipsModule,
+    CarouselModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],
