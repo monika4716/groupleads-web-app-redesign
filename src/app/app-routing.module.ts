@@ -14,6 +14,7 @@ import { AdminBioPreviewComponent } from './admin-bio-preview/admin-bio-preview.
 import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-create.component';
 import { GroupProfileCreateComponent } from './group-profile-create/group-profile-create.component';
 import { GroupProfilePreviewComponent } from './group-profile-preview/group-profile-preview.component';
+import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -59,8 +60,13 @@ const routes: Routes = [
     canActivate: [RoutingGuard],
   },
   {
-    path: 'group-profile',
+    path: 'group-profile-create',
     component: GroupProfileCreateComponent,
+    canActivate: [RoutingGuard],
+  },
+  {
+    path: 'group-profile-manage',
+    component: ManageProfileComponent,
     canActivate: [RoutingGuard],
   },
   {

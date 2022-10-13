@@ -112,8 +112,16 @@
                                                 class="alert alert-danger">
                                                 <div
                                                     *ngIf="o['uniqueName'].errors && o['uniqueName'].errors['required']">
-                                                    Unique name is
+                                                    Groupname is
                                                     required.</div>
+
+                                                <div
+                                                    *ngIf="o['uniqueName'].errors && o['uniqueName'].errors['minlength']">
+                                                    Groupname must be at least 5 characters.</div>
+
+                                                <div
+                                                    *ngIf="o['uniqueName'].errors && o['uniqueName'].errors['uniqueNameExists']">
+                                                    Groupname {{uniqueName}} already taken.</div>
                                             </div>
                                         </div>
                                     </div>

@@ -72,8 +72,9 @@ export class GroupProfileCreateComponent implements OnInit {
   href: any = '';
   displayForm: boolean = true;
   displaycloseButton: boolean = false;
-  displayIframe: boolean = true;
+  displayIframe: boolean = false;
   iframeUrl: any = '';
+  isPublish: any = 0;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -82,12 +83,25 @@ export class GroupProfileCreateComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private fb: FormBuilder
   ) {
+    var token = localStorage.getItem('token');
     this.origin = location.origin;
     this.overViewForm = this.fb.group({
       description: ['', Validators.required],
       category: ['', Validators.required],
       location: ['', Validators.required],
-      uniqueName: ['', Validators.required],
+      uniqueName: [
+        '',
+        {
+          validators: [Validators.required, Validators.minLength(5)],
+          asyncValidators: [
+            this.apiService.GroupUniqueNameExistsValidator(
+              token,
+              this.uniqueName
+            ),
+          ],
+          updateOn: 'blur',
+        },
+      ],
     });
 
     this.popularTopicForm = this.fb.group({
@@ -235,26 +249,13 @@ export class GroupProfileCreateComponent implements OnInit {
     this.description = this.groupDetails.description;
     this.uniqueName = this.groupDetails.unique_name;
     this.slug = this.groupDetails.unique_name.toLowerCase();
-
     this.groupName = this.groupDetails.group_name;
-
     this.showAddProfileBtn = false;
-    console.log(this.slug);
-
     if (this.groupDetails.topic != '') {
       this.topic = this.groupDetails.topic.split(',');
     }
-
     this.selectedCategory = this.groupDetails.category_id;
     this.selectedLocation = this.groupDetails.location_id;
-
-    // console.log(this.groupDetails.images);
-    // console.log(typeof this.groupDetails.images);
-    // if (this.groupDetails.images != '') {
-    //   console.log('if');
-    //   this.previousImage = JSON.parse(this.groupDetails.images);
-    //   console.log(this.previousImage);
-    // }
   }
 
   get o() {
@@ -323,11 +324,13 @@ export class GroupProfileCreateComponent implements OnInit {
   }
   validateStep4() {
     let publish = true;
+    this.isPublish = 1;
     this.saveGroupProfile(publish);
   }
 
   publishLater() {
     let publish = false;
+    this.isPublish = 0;
     this.saveGroupProfile(publish);
   }
 
@@ -350,6 +353,7 @@ export class GroupProfileCreateComponent implements OnInit {
     formData.append('topic', this.topic);
     formData.append('removeImage', JSON.stringify(this.removeImage));
     formData.append('profile_id', this.groupProfileId);
+    formData.append('isPublish', this.isPublish);
 
     let imagesArray = this.fileList;
 

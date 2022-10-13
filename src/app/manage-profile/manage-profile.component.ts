@@ -20,15 +20,15 @@ export class ManageProfileComponent implements OnInit {
   ngOnInit(): void {
     this.origin = location.origin;
     this.spinner.show();
-    this.groupSlug = this.activatedRoute.snapshot.paramMap.get('slug');
-    this.getGroupProfilePreview();
+    // this.groupSlug = this.activatedRoute.snapshot.paramMap.get('slug');
+    //this.getGroupProfilePreview();
   }
 
-  getGroupProfilePreview() {
-    console.log(this.groupSlug);
+  // getGroupProfilePreview() {
+  //   console.log(this.groupSlug);
 
-    this.apiService
-      .getGroupProfilePreview(this.groupSlug)
-      .subscribe((response: any) => {});
-  }
+  //   this.apiService
+  //     .getGroupProfilePreview(this.groupSlug)
+  //     .subscribe((response: any) => {});
+  // }
 }

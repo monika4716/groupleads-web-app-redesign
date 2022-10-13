@@ -7,7 +7,8 @@
                 <img src="assets/images/logo.png" />
             </div>
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
-                <button type="button" class="btn btn-outline-primary preview_btn bio_btn">Close Preview</button>
+                <button type="button" class="btn btn-outline-primary preview_btn bio_btn" (click)="closePreview()">Close
+                    Preview</button>
                 <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
                     data-bs-target="#profile_publish_Modal">Publish Profile</button>
             </div>
@@ -27,13 +28,15 @@
                                         <img src="assets/images/star_white_fill.png" />
                                         <img src="assets/images/star_white_fill.png" />
                                         <img src="assets/images/star_white_fill.png" />
-                                        <span class="total_reviews">64 reviews</span>
+                                        <span class="total_reviews">0 reviews</span>
                                     </a>
 
                                 </div>
                                 <div class="col-md-6 d-flex align-items-end justify-content-end profile_banner_cols">
-                                    <a href="#" class="btn btn-primary share"><img src="assets/images/share.png" /></a>
-                                    <a href="#" class="btn btn-primary"><img src="assets/images/export_white.png" />
+                                    <a data-bs-toggle="modal" data-bs-target="#profile_share_Modal"
+                                        class="btn btn-primary share"><img src="assets/images/share.png" /></a>
+                                    <a target="_blank" href="{{facebookGroupLink}}" class="btn btn-primary"><img
+                                            src="assets/images/export_white.png" />
                                         View Facebook Group</a>
                                 </div>
                             </div>
@@ -49,19 +52,25 @@
                                 </ul> -->
                             </div>
                             <div class="col-md-6 d-flex align-items-center">
-                                <button type="button"
-                                    class=" btn-outline-primary btn-block group_admin message-btn"><img
-                                        src="assets/images/sms-tracking.png " /> Message Group Admin</button>
-                                <button type="button" class="btn btn-primary btn-block review_btn"><img
-                                        src="assets/images/star_white.png " /> Write A Review</button>
+                                <div class="col-md-7">
+                                    <!-- <button type="button"
+                                        class=" btn-outline-primary btn-block group_admin message-btn"><img
+                                            src="assets/images/sms-tracking.png " /> Message Group Admin</button> -->
+                                </div>
+                                <div class="col-md-5"><button type="button"
+                                        class="btn btn-primary btn-block review_btn"><img
+                                            src="assets/images/star_white.png " /> Write A Review</button></div>
                             </div>
                         </div>
                     </div>
                     <div class="manage_profile tab_sec">
                         <ul>
-                            <li><a href="#" class="active">Overview</a></li>
-                            <li><a href="#topics">Topics</a></li>
-                            <li><a href="#conversations">Conversations</a></li>
+                            <li><a (click)="scrollTarget('overview')" class="active tab-menu overview-tab">Overview</a>
+                            </li>
+                            <li><a class="tab-menu topics-tab" (click)="scrollTarget('topics')">Topics</a></li>
+                            <li><a class="tab-menu conversations-tab"
+                                    (click)="scrollTarget('conversations')">Conversations</a>
+                            </li>
                             <!-- <li><a href="#key_stats">Stats</a></li> -->
                         </ul>
                     </div>
@@ -69,7 +78,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-body key_stats overview">
+                            <div class="card-body key_stats overview" id="overview">
                                 <div class="d-flex">
                                     <div class="stats_cols">
                                         <h2><img src="assets/images/location.png" /> Location</h2>
@@ -301,7 +310,7 @@
                                                     src="{{countryFlag}}" />{{adminlocation}}</h5>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <h5><a href="{{adminSlug}}">View bio</a></h5>
+                                            <h5 *ngIf="showAdminBio"><a href="{{adminSlug}}">View bio</a></h5>
                                         </div>
                                     </div>
                                     <!-- <div class="d-flex admin_sec">
@@ -358,20 +367,54 @@
             <div class="modal-body publish_modal text-center">
                 <div class="col-md-12">
                     <img src="assets/images/success.png" class="success" />
-                    <h4 class="modal-title">Profile Published Successfully</h4>
+                    <h4 class="modal-title">Group Profile Published Successfully</h4>
                     <p>Share to start getting noticed</p>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="https://groupleds.net/profile/danedwards">
-                        <span class="input-group-text">Copy</span>
+                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{groupSlug}}">
+                        <span class="input-group-text" (click)="copyGroupProfileModel(groupSlug)">{{model_text}}</span>
                     </div>
                     <h6><span class="border_left"></span>Share with<span class="border_right"></span></h6>
                     <ul class="social_icons">
-                        <a href="#"><img src="assets/images/Facebook.png" /></a>
-                        <a href="#"><img src="assets/images/Instagram.png" /></a>
-                        <a href="#"><img src="assets/images/Twitter.png" /></a>
-                        <a href="#"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                        <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                        <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                        <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                        <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
                     </ul>
 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------share group profile modal--------------->
+
+<div class="modal group_modal" id="profile_share_Modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                        src="assets/images/Cancel.png" /></button>
+            </div>
+            <div class="modal-body publish_modal text-center">
+                <div class="col-md-12">
+
+                    <h4 class="modal-title">Share This Bio</h4>
+                    <h6><span class="border_left"></span>Share with social media<span class="border_right"></span>
+                    </h6>
+
+                    <ul class="social_icons">
+                        <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                        <a href="javascript:void(0);"><img src="assets/images/Instagram.png" /></a>
+                        <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                        <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                    </ul>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{groupSlug}}">
+                        <span type="button" class="input-group-text"
+                            (click)="copyGroupProfileModel(groupSlug)">{{model_text}}</span>
+                    </div>
                 </div>
             </div>
         </div>
