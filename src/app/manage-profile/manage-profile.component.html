@@ -1,4 +1,8 @@
 <div class="section">
+    <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7" type="ball-scale-multiple"
+        [fullScreen]="true">
+        <p style="color: white"> Loading... </p>
+    </ngx-spinner>
 
     <div class="container-fluid admin_bio_list">
 
@@ -21,16 +25,16 @@
                     <div class="manage_profile_banner">
                         <div class="col-md-12">
                             <div class="row manage_profile_banner_review">
-                                <div class="col-md-6">
-                                    <a href="#" class="btn-primary total_review_btn">
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <span class="total_reviews">64 reviews</span>
-                                    </a>
-
+                                <div class="col-md-6 ">
+                                    <div class="row">
+                                        <div class="col-md-3 pr-0 rating review-setting">
+                                            <p-rating [ngModel]="averageRating" [readonly]="true" [cancel]="false">
+                                            </p-rating>
+                                        </div>
+                                        <div class="col-md-4 pl-0 review-write">
+                                            <span class="total_reviews">{{groupReview.length}} reviews</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6 d-flex align-items-end justify-content-end profile_banner_cols">
                                     <a href="#" class="btn btn-primary share"><img src="assets/images/share.png" /></a>
@@ -43,20 +47,23 @@
                     <div class="card-body admin_profile manage_profile">
                         <div class="row">
                             <div class="col-md-8">
-                                <h4>Chatsilo Support Community</h4>
-                                <ul>
+                                <h4>{{linkedGroup.group_name
+                                    }}</h4>
+                                <!-- <ul>
                                     <li><img src="assets/images/public_1.png" />Public</li>
                                     <li><img src="assets/images/members_1.png" />364 members</li>
-                                </ul>
+                                </ul> -->
                             </div>
                         </div>
                     </div>
                     <div class="manage_profile tab_sec">
                         <ul>
-                            <li><a href="#" class="active">Overview</a></li>
-                            <li><a href="#topics">Topics</a></li>
-                            <li><a href="#conversations">Conversations</a></li>
-                            <li><a href="#key_stats">Stats</a></li>
+                            <li><a (click)="scrollTarget('overview')" class="active tab-menu overview-tab">Overview</a>
+                            </li>
+                            <li><a class="tab-menu topics-tab" (click)="scrollTarget('topics')">Topics</a></li>
+                            <li><a class="tab-menu conversations-tab"
+                                    (click)="scrollTarget('conversations')">Conversations</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -67,15 +74,15 @@
                                 <div class="d-flex">
                                     <div class="stats_cols">
                                         <h2><img src="assets/images/location.png" /> Location</h2>
-                                        <h4>United States</h4>
+                                        <h4>{{location}}</h4>
                                     </div>
                                     <div class="stats_cols">
-                                        <h2><img src="assets/images/category.png" /> Location</h2>
-                                        <h4>Photography</h4>
+                                        <h2><img src="assets/images/category.png" /> Category</h2>
+                                        <h4>{{category}}</h4>
                                     </div>
                                     <div class="stats_cols">
-                                        <h2><img src="assets/images/calendar.png" /> Location</h2>
-                                        <h4>July 15, 2022 </h4>
+                                        <h2><img src="assets/images/calendar.png" /> Calendar</h2>
+                                        <h4>{{created | date: 'MMMM dd, yyyy'}} </h4>
                                     </div>
                                 </div>
                             </div>
@@ -93,12 +100,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p>Madison is fueled by her passion for understanding the nuances of cross-cultural
-                                    advertising. She considers herself a ‘forever student,’ eager to both build on her
-                                    academic foundations in psychology and sociology and stay in tune with the latest
-                                    digital marketing strategies through continued coursework and professional
-                                    development.</p>
-                                <a href="#">See More</a>
+
+                                <p [ngClass]="{'limitTextHeight': isSeeMore}" [innerHTML]="about"></p>
+                                <a href="javascript:void(0);" (click)="isSeeMore=!isSeeMore">
+                                    {{ isSeeMore ? 'See More': 'See Less' }}
+                                </a>
                             </div>
                         </div>
                         <div class="card" id="topics">
@@ -113,14 +119,7 @@
                                     </div>
                                 </div>
                                 <div class="topics_name">
-                                    <span>Photography</span>
-                                    <span>Photography</span>
-                                    <span>Photography</span>
-                                    <span>Photography</span>
-                                    <span>Photography</span>
-                                    <span>Photography</span>
-                                    <span>Photography</span>
-                                    <span>Photography</span>
+                                    <span *ngFor="let topic of topics">{{topic}}</span>
                                 </div>
                             </div>
                         </div>
@@ -135,104 +134,37 @@
                                             data-bs-target="#edit_conversation_Modal" />
                                     </div>
                                 </div>
-                                <div class="owl-carousel owl-theme mt-4 text-center top_conversations">
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
 
+                                <p-carousel [value]="conversations" styleClass="custom-carousel"
+                                    [responsiveOptions]="responsiveOptions" [numVisible]="3" [numScroll]="3"
+                                    [circular]="true" [autoplayInterval]="3000">
+                                    <ng-template let-conversation pTemplate="item">
+                                        <div class="conversation-item">
+                                            <div class="conversation-item-content">
+                                                <div class="mb-3">
+                                                    <img src="{{conversationImageUrl}}/{{conversation.image}}"
+                                                        [alt]="conversation.image" class="conversation-image" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
+                                    </ng-template>
+                                </p-carousel>
                             </div>
                         </div>
-                        <!-- <div class="card" id="key_stats">
-                            <div class="card-body key_stats">
-                                <div class="col-md-12 p-0">
-                                    <div class="d-flex">
-                                        <div class="heading">
-                                            <h3>Key Stats</h3>
-                                        </div>
-                                        <div class="edit_field">
-                                            <img src="assets/images/edit_blue.png" data-bs-toggle="modal"
-                                                data-bs-target="#key_stats_Modal" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <div class="stats_cols">
-                                        <h4>Monthly conversations</h4>
-                                        <h2>126.8K</h2>
-                                    </div>
-                                    <div class="stats_cols">
-                                        <h4>Monthly conversations</h4>
-                                        <h2>126.8K</h2>
-                                    </div>
-                                    <div class="stats_cols">
-                                        <h4>Monthly conversations</h4>
-                                        <h2>126.8K</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-
                     </div>
                     <div class="col-md-4 pl-0 right_sec">
-                        <div class="card bio_tab no_reviews">
+
+                        <div class="card bio_tab reviews" *ngIf="groupReview.length > 0 else elseBlock">
                             <div class="card-body">
                                 <h3>Reviews</h3>
-                                <div class="col-md-12 text-center">
-                                    <img src="assets/images/no_reviews.png" />
-                                    <h3>No Reviews Yet!</h3>
-                                    <h5>Be the first to leave a review.</h5>
+                                <div class="col-md-12 text-center reviews">
+
+                                    <span class="review-rating"><img
+                                            src="assets/images/star_white_fill.png " />{{averageRating}}</span>
+                                    <!-- <img src="assets/images/review.png" /> -->
                                 </div>
-                                <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-primary btn-block review_btn"
-                                        data-bs-toggle="modal" data-bs-target="#write_review_Modal"><img
-                                            src="assets/images/star_white.png " /> Write A Review</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card bio_tab reviews">
-                            <div class="card-body">
-                                <h3>Reviews</h3>
                                 <div class="col-md-12 text-center">
-                                    <img src="assets/images/review.png" />
-                                    <h5>based on 64 reviews</h5>
+                                    <h5>based on {{groupReview.length}} reviews</h5>
                                 </div>
 
                                 <div class="col-md-12 d-grid admin_sec">
@@ -241,74 +173,51 @@
                                             src="assets/images/star_white.png " /> Write A Review</button>
                                 </div>
                                 <div class="review_sec">
-                                    <div class="col-md-12 d-grid admin_sec">
-                                        <div class="d-flex">
+                                    <div class="col-md-12 d-grid admin_sec" *ngFor="let review of groupReview">
+                                        <div class="d-flex review-setting">
                                             <div class="user_profile">
-                                                <h2 class="name"><img src="assets/images/user.png" /> Alex Jordan</h2>
+                                                <h2 class="name"><img src="assets/images/user.png" /> {{review.name}}
+                                                </h2>
                                             </div>
-                                            <div class="review_star">
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star_blank.png" />
-                                            </div>
+                                            <p-rating [(ngModel)]="review.star" [cancel]="false" [readonly]="true">
+                                            </p-rating>
                                         </div>
-                                        <p>This group is so informative.. I always learn a lot from them and I’m
-                                            grateful for the support they’ve given me so far to take my photography
-                                            career to the next level.</p>
-                                        <h6 class="days">3 days ago</h6>
-                                    </div>
-                                    <div class="col-md-12 d-grid admin_sec">
-                                        <div class="d-flex">
-                                            <div class="user_profile">
-                                                <h2 class="name"><img src="assets/images/user.png" /> Alex Jordan</h2>
-                                            </div>
-                                            <div class="review_star">
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star_blank.png" />
-                                            </div>
-                                        </div>
-                                        <p>This group is so informative.. I always learn a lot from them and I’m
-                                            grateful for the support they’ve given me so far to take my photography
-                                            career to the next level.</p>
-                                        <h6 class="days">3 days ago</h6>
-                                    </div>
-                                    <div class="col-md-12 d-grid admin_sec">
-                                        <div class="d-flex">
-                                            <div class="user_profile">
-                                                <h2 class="name"><img src="assets/images/user.png" /> Alex Jordan</h2>
-                                            </div>
-                                            <div class="review_star">
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star_blank.png" />
-                                            </div>
-                                        </div>
-                                        <p>This group is so informative.. I always learn a lot from them and I’m
-                                            grateful for the support they’ve given me so far to take my photography
-                                            career to the next level.</p>
-                                        <h6 class="days">3 days ago</h6>
+                                        <p>{{review.description}}</p>
+                                        <h6 class="days">{{review.created_at | date: 'MMMM dd, yyyy'}}</h6>
                                     </div>
                                 </div>
                                 <div class="col-md-12 d-grid admin_sec">
                                     <button type="button" class="btn btn-outline-primary btn-block"
                                         data-bs-toggle="modal" data-bs-target="#review_settings_Modal">See All
                                         Reviews</button>
+
+
                                 </div>
                             </div>
                         </div>
+                        <ng-template #elseBlock>
+                            <div class="card bio_tab no_reviews">
+                                <div class="card-body">
+                                    <h3>Reviews</h3>
+                                    <div class="col-md-12 text-center">
+                                        <img src="assets/images/no_reviews.png" />
+                                        <h3>No Reviews Yet!</h3>
+                                        <h5>Be the first to leave a review.</h5>
+                                    </div>
+                                    <div class="col-md-12 d-grid admin_sec">
+                                        <button type="button" class="btn btn-primary btn-block review_btn"
+                                            data-bs-toggle="modal" data-bs-target="#write_review_Modal"><img
+                                                src="assets/images/star_white.png " /> Write A Review</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
                         <div class="card">
                             <div class="card-body">
                                 <div class="col-md-12 p-0">
                                     <div class="d-flex">
                                         <div>
-                                            <h3>Group Admins <span class="badge badge-primary">4</span></h3>
+                                            <h3>Group Admins <span class="badge badge-primary">1</span></h3>
                                         </div>
                                         <div class="edit_field">
                                             <img src="assets/images/edit_blue.png" data-bs-toggle="modal"
@@ -319,45 +228,23 @@
                                 <div class="col-md-12">
                                     <div class="d-flex admin_sec">
                                         <div class="admin_left_sec d-flex align-items-center justify-content-center">
-                                            <img src="assets/images/user.png" />
+                                            <img class="admin-imag" src="{{adminImage}}" />
                                         </div>
                                         <div class="admin_profile_sec">
-                                            <h2 class="name">Daniel Edwards</h2>
-                                            <h5 class="place"><img src="assets/images/flag.png" />Nigeria</h5>
+                                            <h2 class="name">{{adminName}}</h2>
+                                            <h5 class="place"><img class="country-image"
+                                                    src="{{countryFlag}}" />{{adminlocation}}</h5>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <h5><a href="#">View bio</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex admin_sec">
-                                        <div class="admin_left_sec d-flex align-items-center justify-content-center">
-                                            <img src="assets/images/user.png" />
-                                        </div>
-                                        <div class="admin_profile_sec">
-                                            <h2 class="name">Daniel Edwards</h2>
-                                            <h5 class="place"><img src="assets/images/flag.png" />Nigeria</h5>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <h5><a href="#">View bio</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex admin_sec">
-                                        <div class="admin_left_sec d-flex align-items-center justify-content-center">
-                                            <img src="assets/images/user.png" />
-                                        </div>
-                                        <div class="admin_profile_sec">
-                                            <h2 class="name">Daniel Edwards</h2>
-                                            <h5 class="place"><img src="assets/images/flag.png" />Nigeria</h5>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <h5><a href="#">View bio</a></h5>
+                                            <h5 *ngIf="showAdminBio"><a target="_blank" href="{{adminSlug}}">View
+                                                    bio</a></h5>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 d-grid admin_sec">
+                                <!-- <div class="col-md-12 d-grid admin_sec">
                                     <button type="button" class="btn btn-outline-primary btn-block">See All
                                         Admins</button>
-                                </div>
+                                </div> -->
 
                             </div>
                         </div>
@@ -446,40 +333,42 @@
                         src="assets/images/Cancel.png" /></button>
             </div>
             <div class="modal-body edit_modal">
-                <div class="mb-3 mt-2">
-                    <label for="topic" class="form-label">Group Description<span class="required">*</span></label>
-                    <input type="text" class="form-control" id="description" placeholder="Enter email"
-                        name="description">
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3 form-group">
-                            <label for="location" class="form-label">Group Category<span
-                                    class="required">*</span></label>
-                            <select class="form-select">
-                                <option>Nigeria</option>
-                                <option>Nigeria</option>
-                                <option>Nigeria</option>
-                                <option>Nigeria</option>
-                            </select>
+                <form>
+                    <div class="mb-3 mt-2">
+                        <label for="topic" class="form-label">Group Description<span class="required">*</span></label>
+                        <input type="text" class="form-control" id="description" placeholder="Enter email"
+                            name="description">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3 form-group">
+                                <label for="location" class="form-label">Group Category<span
+                                        class="required">*</span></label>
+                                <select class="form-select">
+                                    <option>Nigeria</option>
+                                    <option>Nigeria</option>
+                                    <option>Nigeria</option>
+                                    <option>Nigeria</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 form-group">
+                                <label for="location" class="form-label">Group Location<span
+                                        class="required">*</span></label>
+                                <select class="form-select">
+                                    <option>Nigeria</option>
+                                    <option>Nigeria</option>
+                                    <option>Nigeria</option>
+                                    <option>Nigeria</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="mb-3 form-group">
-                            <label for="location" class="form-label">Group Location<span
-                                    class="required">*</span></label>
-                            <select class="form-select">
-                                <option>Nigeria</option>
-                                <option>Nigeria</option>
-                                <option>Nigeria</option>
-                                <option>Nigeria</option>
-                            </select>
-                        </div>
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="button" class="btn btn-primary btn-block select_group_btn">Edit Overview</button>
                     </div>
-                </div>
-                <div class="col-md-12 d-grid mt-4">
-                    <button type="button" class="btn btn-primary btn-block select_group_btn">Edit Overview</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>

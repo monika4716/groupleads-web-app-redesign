@@ -1946,3 +1946,32 @@ input:checked + .slider:before {
 .tab-menu {
   cursor: pointer;
 }
+.review-rating {
+  background: #ff7a59;
+  width: 80px;
+  height: 80px;
+  float: left;
+  border-radius: 50%;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 38px;
+  color: #ffffff;
+  text-align: center;
+  padding-top: 20px;
+}
+.reviews {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.review-write {
+  padding-left: 0px !important;
+}
+.rating {
+  padding-right: 0px !important;
+  background: rgba(60, 97, 173, 0.24);
+  backdrop-filter: blur(12px);
+}

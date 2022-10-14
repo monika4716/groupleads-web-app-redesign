@@ -53,7 +53,6 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   getGroupProfilePreview() {
     console.log(this.groupSlug);
-
     this.apiService
       .getGroupProfilePreview(this.groupSlug)
       .subscribe((response: any) => {

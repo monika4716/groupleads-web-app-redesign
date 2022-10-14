@@ -237,4 +237,15 @@ export class ApiService {
       this.API_URL + 'get-group-profile-preview/' + slug
     );
   }
+
+  // -------------------------------------Group Manage Profile--------------------------//
+  getManageProfileDetails(id: any, group_id: any, token: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.get(
+      this.API_URL + 'app-get-manage-profile?group_id=' + id + '&id=' + id,
+      { headers: headers }
+    );
+  }
 }

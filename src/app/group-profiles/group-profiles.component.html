@@ -42,7 +42,7 @@
                                         </div>
                                         <div
                                             class="col-md-3 d-flex align-items-center justify-content-center group_right_sec">
-                                            <a *ngIf="group.group_profile_id == null && (group.is_publish == null ||group.is_publish==0) else elseBlock"
+                                            <a *ngIf="group.group_profile_id == null && (group.status == null ||group.status == '0') else elseBlock"
                                                 [attr.group-id]="group.id" [routerLink]="['/group-profile-create']"
                                                 [queryParams]="{group_id:group.id,id:group.group_profile_id}"
                                                 type="button"

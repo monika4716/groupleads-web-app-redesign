@@ -74,7 +74,7 @@ export class GroupProfileCreateComponent implements OnInit {
   displaycloseButton: boolean = false;
   displayIframe: boolean = false;
   iframeUrl: any = '';
-  isPublish: any = 0;
+  status: any = 0;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -324,13 +324,13 @@ export class GroupProfileCreateComponent implements OnInit {
   }
   validateStep4() {
     let publish = true;
-    this.isPublish = 1;
+    this.status = 1;
     this.saveGroupProfile(publish);
   }
 
   publishLater() {
     let publish = false;
-    this.isPublish = 0;
+    this.status = 0;
     this.saveGroupProfile(publish);
   }
 
@@ -353,7 +353,7 @@ export class GroupProfileCreateComponent implements OnInit {
     formData.append('topic', this.topic);
     formData.append('removeImage', JSON.stringify(this.removeImage));
     formData.append('profile_id', this.groupProfileId);
-    formData.append('isPublish', this.isPublish);
+    formData.append('status', this.status);
 
     let imagesArray = this.fileList;
 

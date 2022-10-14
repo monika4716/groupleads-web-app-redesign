@@ -32,15 +32,13 @@ export class GroupProfilesComponent implements OnInit {
           this.getGroupDetails();
         }
       } else {
-        console.log(response.hasOwnProperty('groupProfile'));
         if (response.hasOwnProperty('groupProfile')) {
           this.groupProfiles = response.groupProfile;
+          this.spinner.hide();
           console.log(this.groupProfiles);
         }
       }
     });
-    // this.spinner.show();
-    // this.getGroupDetails();
   }
 
   getGroupDetails() {
@@ -51,8 +49,6 @@ export class GroupProfilesComponent implements OnInit {
       if (response.status == 200) {
         this.groupProfiles = response.groupProfile;
         this.apiService.updateGroupProfile(response);
-
-        // this.setAdminBioValue(response);
         this.spinner.hide();
       }
     });

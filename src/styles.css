@@ -392,3 +392,7 @@ button[disabled] {
   border-radius: 52px !important;
   width: 50px !important;
 }
+
+.review-setting .p-rating .p-rating-icon.pi-star-fill {
+  color: #ffc107 !important;
+}
