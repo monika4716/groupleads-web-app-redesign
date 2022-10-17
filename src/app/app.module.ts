@@ -16,6 +16,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ChipsModule } from 'primeng/chips';
 import { CarouselModule } from 'primeng/carousel';
 import { RatingModule } from 'primeng/rating';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -86,6 +87,7 @@ import { ManageProfileComponent } from './manage-profile/manage-profile.componen
     ChipsModule,
     CarouselModule,
     RatingModule,
+    InputSwitchModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

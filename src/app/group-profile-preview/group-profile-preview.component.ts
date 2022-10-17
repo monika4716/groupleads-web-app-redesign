@@ -37,6 +37,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   twitterShare: any = '';
   linkedInShare: any = '';
   model_text: any = 'Copy';
+  groupImage: any = 'assets/images/profile_banner.png';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -48,7 +49,17 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.origin = location.origin;
     this.spinner.show();
     this.groupSlug = this.activatedRoute.snapshot.paramMap.get('slug');
-    this.getGroupProfilePreview();
+
+    this.apiService.getGroupManage().subscribe((response) => {
+      console.log(response);
+      if (
+        response.hasOwnProperty('groupProfile') &&
+        response.hasOwnProperty('GroupCategories') &&
+        response.hasOwnProperty('path')
+      ) {
+        this.getGroupProfilePreview();
+      }
+    });
   }
 
   getGroupProfilePreview() {

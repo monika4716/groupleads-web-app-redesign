@@ -1,4 +1,4 @@
-<div class="section">
+<div class="section" *ngIf="displayForm">
     <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7" type="ball-scale-multiple"
         [fullScreen]="true">
         <p style="color: white"> Loading... </p>
@@ -12,9 +12,10 @@
                         Profiles</a></h4>
             </div>
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
-                <button type="button" class="btn btn-outline-primary preview_btn bio_btn">Peview Profile</button>
+                <button type="button" class="btn btn-outline-primary preview_btn bio_btn" (click)="openPreview()">Peview
+                    Profile</button>
                 <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
-                    data-bs-target="#profile_publish_Modal">Publish Profile</button>
+                    data-bs-backdrop="static" data-bs-target="#profile_publish_Modal">Publish Profile</button>
             </div>
         </div>
     </div>
@@ -22,7 +23,7 @@
         <div class="row mt-4">
             <div class="col-md-12 bio_tab">
                 <div class="card ">
-                    <div class="manage_profile_banner">
+                    <div class="manage_profile_banner" style="background-image: url({{groupImage}});">
                         <div class="col-md-12">
                             <div class="row manage_profile_banner_review">
                                 <div class="col-md-6 ">
@@ -37,8 +38,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex align-items-end justify-content-end profile_banner_cols">
-                                    <a href="#" class="btn btn-primary share"><img src="assets/images/share.png" /></a>
-                                    <a href="#" class="btn btn-primary"><img src="assets/images/export_white.png" />
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-backdrop="static"
+                                        data-bs-target="#profile_share_Modal" class="btn btn-primary share"><img
+                                            src="assets/images/share.png" /></a>
+                                    <a href="javascript:void(0)" class="btn btn-primary"
+                                        (click)="selectGroupImage.click()"><img src="assets/images/export_white.png" />
+                                        <input type="file" accept="image/*" (change)="uploadGroupImages($event)"
+                                            style="display: none" #selectGroupImage>
                                         Change Image</a>
                                 </div>
                             </div>
@@ -96,12 +102,12 @@
                                         </div>
                                         <div class="edit_field">
                                             <img src="assets/images/edit_blue.png" data-bs-toggle="modal"
-                                                data-bs-target="#edit_overview_Modal" />
+                                                data-bs-backdrop="static" data-bs-target="#edit_overview_Modal" />
                                         </div>
                                     </div>
                                 </div>
 
-                                <p [ngClass]="{'limitTextHeight': isSeeMore}" [innerHTML]="about"></p>
+                                <p [ngClass]="{'limitTextHeight': isSeeMore}" [innerHTML]="description"></p>
                                 <a href="javascript:void(0);" (click)="isSeeMore=!isSeeMore">
                                     {{ isSeeMore ? 'See More': 'See Less' }}
                                 </a>
@@ -115,7 +121,7 @@
                                     </div>
                                     <div class="edit_field">
                                         <img src="assets/images/edit_blue.png" data-bs-toggle="modal"
-                                            data-bs-target="#edit_topics_Modal" />
+                                            data-bs-backdrop="static" data-bs-target="#edit_topics_Modal" />
                                     </div>
                                 </div>
                                 <div class="topics_name">
@@ -131,19 +137,22 @@
                                     </div>
                                     <div class="edit_field">
                                         <img src="assets/images/edit_blue.png" data-bs-toggle="modal"
-                                            data-bs-target="#edit_conversation_Modal" />
+                                            data-bs-backdrop="static" data-bs-target="#edit_conversation_Modal" />
                                     </div>
                                 </div>
 
-                                <p-carousel [value]="conversations" styleClass="custom-carousel"
+                                <!-- <p-carousel [value]="uploadUrls" styleClass="custom-carousel"
                                     [responsiveOptions]="responsiveOptions" [numVisible]="3" [numScroll]="3"
-                                    [circular]="true" [autoplayInterval]="3000">
+                                    [circular]="true" [autoplayInterval]="3000"> -->
+                                <p-carousel [value]="uploadUrls" styleClass="custom-carousel" [numVisible]="3"
+                                    [numScroll]="1" [circular]="true" [autoplayInterval]="3000"
+                                    [responsiveOptions]="responsiveOptions">
                                     <ng-template let-conversation pTemplate="item">
                                         <div class="conversation-item">
                                             <div class="conversation-item-content">
-                                                <div class="mb-3">
-                                                    <img src="{{conversationImageUrl}}/{{conversation.image}}"
-                                                        [alt]="conversation.image" class="conversation-image" />
+                                                <div class="mb-3" id="image-conversations">
+                                                    <img [src]="conversation |safe" [alt]="conversation"
+                                                        class="conversation-image" />
                                                 </div>
                                             </div>
                                         </div>
@@ -169,14 +178,16 @@
 
                                 <div class="col-md-12 d-grid admin_sec">
                                     <button type="button" class="btn btn-primary btn-block review_btn"
-                                        data-bs-toggle="modal" data-bs-target="#write_review_Modal"><img
-                                            src="assets/images/star_white.png " /> Write A Review</button>
+                                        data-bs-toggle="modal" data-bs-backdrop="static"
+                                        data-bs-target="#write_review_Modal"><img src="assets/images/star_white.png " />
+                                        Write A Review</button>
                                 </div>
                                 <div class="review_sec">
                                     <div class="col-md-12 d-grid admin_sec" *ngFor="let review of groupReview">
                                         <div class="d-flex review-setting">
                                             <div class="user_profile">
-                                                <h2 class="name"><img src="assets/images/user.png" /> {{review.name}}
+                                                <h2 class="name"><img class="reviews-image"
+                                                        src="assets/images/default.jpg" /> {{review.name}}
                                                 </h2>
                                             </div>
                                             <p-rating [(ngModel)]="review.star" [cancel]="false" [readonly]="true">
@@ -188,7 +199,8 @@
                                 </div>
                                 <div class="col-md-12 d-grid admin_sec">
                                     <button type="button" class="btn btn-outline-primary btn-block"
-                                        data-bs-toggle="modal" data-bs-target="#review_settings_Modal">See All
+                                        data-bs-toggle="modal" data-bs-backdrop="static"
+                                        data-bs-target="#review_settings_Modal">See All
                                         Reviews</button>
 
 
@@ -206,7 +218,8 @@
                                     </div>
                                     <div class="col-md-12 d-grid admin_sec">
                                         <button type="button" class="btn btn-primary btn-block review_btn"
-                                            data-bs-toggle="modal" data-bs-target="#write_review_Modal"><img
+                                            data-bs-toggle="modal" data-bs-backdrop="static"
+                                            data-bs-target="#write_review_Modal"><img
                                                 src="assets/images/star_white.png " /> Write A Review</button>
                                     </div>
                                 </div>
@@ -219,10 +232,10 @@
                                         <div>
                                             <h3>Group Admins <span class="badge badge-primary">1</span></h3>
                                         </div>
-                                        <div class="edit_field">
+                                        <!-- <div class="edit_field">
                                             <img src="assets/images/edit_blue.png" data-bs-toggle="modal"
                                                 data-bs-target="#edit_admin_Modal" />
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -250,6 +263,10 @@
                         </div>
 
                     </div>
+
+                    <!-- <div id="image-conversations">
+
+                    </div> -->
                 </div>
 
             </div>
@@ -258,7 +275,7 @@
 </div>
 
 <!---------------------publish bio modal--------------->
-<div class="modal group_modal" id="profile_publish_Modal">
+<div class="modal group_modal" id="profile_publish_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -289,66 +306,76 @@
     </div>
 </div>
 <!---------------------edit topics modal--------------->
-<div class="modal group_modal" id="edit_topics_Modal">
+<div class="modal group_modal" id="edit_topics_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Edit Topics</h4>
-                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
-                        src="assets/images/Cancel.png" /></button>
-            </div>
-            <div class="modal-body edit_modal">
-                <div class="col-md-12 mt-2">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Show Topics on page</h5>
-                        </div>
-                        <div
-                            class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                            </label>
+            <form [formGroup]="editTopicsForm" (ngSubmit)="editTopics()">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Topics</h4>
+                    <button type="button" data-bs-dismiss="modal" id="editTopics_cancel" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body edit_modal">
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Show Topics on page</h5>
+                            </div>
+                            <div
+                                class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
+                                <p-inputSwitch formControlName="isTopic" [(ngModel)]="isTopic"></p-inputSwitch>
+                                <!-- <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label> -->
+                            </div>
                         </div>
                     </div>
+                    <div class="mb-3 mt-4">
+                        <label for="topic" class="form-label">Popular Topics</label>
+                        <!-- <input type="text" class="form-control" id="email" placeholder="Enter email" name="topic"> -->
+                        <p-chips [(ngModel)]="topics" class="topics" formControlName="topics" separator=",">
+                        </p-chips>
+                    </div>
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="submit" [disabled]="editTopicsForm.invalid"
+                            class="btn btn-primary btn-block select_group_btn">Edit Topics</button>
+                    </div>
                 </div>
-                <div class="mb-3 mt-4">
-                    <label for="topic" class="form-label">Popular Topics</label>
-                    <input type="text" class="form-control" id="email" placeholder="Enter email" name="topic">
-                </div>
-                <div class="col-md-12 d-grid mt-4">
-                    <button type="button" class="btn btn-primary btn-block select_group_btn">Edit Topics</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
 <!---------------------edit overview modal--------------->
-<div class="modal group_modal" id="edit_overview_Modal">
+<div class="modal group_modal" id="edit_overview_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Edit Overview</h4>
-                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                <button type="button" data-bs-dismiss="modal" id="edit_overview_close" class="cancel_btn"><img
                         src="assets/images/Cancel.png" /></button>
             </div>
             <div class="modal-body edit_modal">
-                <form>
+                <form [formGroup]="editOverViewForm" (ngSubmit)="editOverview()">
                     <div class="mb-3 mt-2">
                         <label for="topic" class="form-label">Group Description<span class="required">*</span></label>
-                        <input type="text" class="form-control" id="description" placeholder="Enter email"
-                            name="description">
+                        <textarea [rows]="3" formControlName="description" [value]="description"
+                            [ngModel]="description"></textarea>
+                        <div *ngIf="o['description'].touched && o['description'].invalid" class="alert alert-danger">
+                            <div *ngIf="o['description'].errors && o['description'].errors['required']">
+                                Description is
+                                required.</div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3 form-group">
                                 <label for="location" class="form-label">Group Category<span
                                         class="required">*</span></label>
-                                <select class="form-select">
-                                    <option>Nigeria</option>
-                                    <option>Nigeria</option>
-                                    <option>Nigeria</option>
-                                    <option>Nigeria</option>
+                                <select class="form-select" [(ngModel)]='selectedCategory'
+                                    (onChange)="onChangeCategory($event)" formControlName="category">
+                                    <option *ngFor="let category of groupCategories" [value]="category.id">
+                                        {{category.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -356,17 +383,18 @@
                             <div class="mb-3 form-group">
                                 <label for="location" class="form-label">Group Location<span
                                         class="required">*</span></label>
-                                <select class="form-select">
-                                    <option>Nigeria</option>
-                                    <option>Nigeria</option>
-                                    <option>Nigeria</option>
-                                    <option>Nigeria</option>
+                                <select class="form-select" [(ngModel)]='selectedLocation'
+                                    (onChange)="onChangeLocation($event)" formControlName="location">
+                                    <option *ngFor="let location of locationList" [value]="location.code">
+                                        {{location.name}}</option>
+
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 d-grid mt-4">
-                        <button type="button" class="btn btn-primary btn-block select_group_btn">Edit Overview</button>
+                        <button type="submit" [disabled]="editOverViewForm.invalid"
+                            class="btn btn-primary btn-block select_group_btn">Edit Overview</button>
                     </div>
                 </form>
             </div>
@@ -374,7 +402,7 @@
     </div>
 </div>
 <!---------------------review settings modal--------------->
-<div class="modal group_modal" id="review_settings_Modal">
+<div class="modal group_modal" id="review_settings_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -409,7 +437,7 @@
     </div>
 </div>
 <!---------------------edit stats modal--------------->
-<div class="modal group_modal" id="key_stats_Modal">
+<div class="modal group_modal" id="key_stats_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -468,7 +496,7 @@
     </div>
 </div>
 <!---------------------edit admin modal--------------->
-<div class="modal group_modal" id="edit_admin_Modal">
+<div class="modal group_modal" id="edit_admin_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -499,73 +527,144 @@
     </div>
 </div>
 <!---------------------edit admin modal--------------->
-<div class="modal group_modal" id="edit_conversation_Modal">
+<div class="modal group_modal" id="edit_conversation_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Edit Top Conversations</h4>
-                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
-                        src="assets/images/Cancel.png" /></button>
-            </div>
-            <div class="modal-body edit_modal">
-                <div class="col-md-12 mt-2">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Show Top Conversations on page</h5>
+            <form [formGroup]="editConversationsForm" (ngSubmit)="editConversations()">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Top Conversations</h4>
+                    <button type="button" data-bs-dismiss="modal" id="editConversations_cancel" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body edit_modal">
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Show Top Conversations on page</h5>
+                            </div>
+                            <div
+                                class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
+                                <p-inputSwitch formControlName="isConversations" [(ngModel)]="isConversations">
+                                </p-inputSwitch>
+                                <!-- <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label> -->
+                            </div>
                         </div>
-                        <div
-                            class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                            </label>
+                        <div class="upload-image" *ngFor="let image of uploadUrls; let index = index">
+                            <img [src]="image | safe" class="rounded mb-3 mt-4"><span mat-icon-button
+                                (click)="removePreviousFile(index)"><img src="assets/images/Cancel.png"></span>
+                        </div>
+                        <div class="upload-image" *ngFor="let url of urls; let index = index">
+                            <img [src]="url" class="rounded mb-3 mt-4"><span mat-icon-button
+                                (click)="removeSelectedFile(index)"><img src="assets/images/Cancel.png"></span>
+                        </div>
+                        <div class="upload_ss">
+                            <img src="assets/images/upload_ss_1.png" (click)="selectImage.click()" />
+                            <input #imageInput type="file" accept="image/*" multiple (change)="uploadImages($event)"
+                                style="display: none" #selectImage>
                         </div>
                     </div>
-                    <div class="upload_ss">
-                        <img src="assets/images/upload_ss_1.png" />
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-block select_group_btn">Edit Top
+                            Conversations</button>
                     </div>
                 </div>
-                <div class="col-md-12 d-grid mt-4">
-                    <button type="button" class="btn btn-primary btn-block select_group_btn">Edit Top
-                        Conversations</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
 <!---------------------write review modal--------------->
-<div class="modal group_modal" id="write_review_Modal">
+<div class="modal group_modal" id="write_review_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Write A Review</h4>
-                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                <button type="button" data-bs-dismiss="modal" id="editReviews_close" class="cancel_btn"><img
                         src="assets/images/Cancel.png" /></button>
             </div>
             <div class="modal-body edit_modal">
-                <div class="col-md-12 mt-2">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Leave a rating</h5>
-                        </div>
-                        <div
-                            class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
-                            <img src="assets/images/star.png" />
-                            <img src="assets/images/star.png" />
-                            <img src="assets/images/star.png" />
-                            <img src="assets/images/star.png" />
-                            <img src="assets/images/star.png" />
+                <form [formGroup]="editReviewsForm" (ngSubmit)="editReviews()">
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Leave a rating</h5>
+                            </div>
+                            <div
+                                class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end review-setting">
+                                <p-rating [(ngModel)]="rating" formControlName="rating" [cancel]="false">
+                                </p-rating>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="mb-3 mt-4">
-                    <label for="topic" class="form-label">Review <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="review" placeholder="Write a review..." name="review">
-                </div>
-                <div class="col-md-12 d-grid mt-4">
-                    <button type="button" class="btn btn-primary btn-block select_group_btn">Leave Review</button>
+                    <div class="mb-3 mt-4">
+                        <label for="topic" class="form-label">Review <span class="required">*</span></label>
+                        <input type="text" class="form-control" formControlName="review" id="review"
+                            placeholder="Write a review..." name="review">
+                        <div *ngIf="r['review'].touched && r['review'].invalid" class="alert alert-danger">
+                            <div *ngIf="r['review'].errors && r['review'].errors['required']">
+                                Review is
+                                required.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="submit" [disabled]="editReviewsForm.invalid"
+                            class="btn btn-primary btn-block select_group_btn">Leave Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <p-dialog header="Header" [(visible)]="displayReviewModel" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displayModal=false" label="Ok" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog> -->
+
+
+<!---------------------share group profile modal--------------->
+
+<div class="modal group_modal" id="profile_share_Modal" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                        src="assets/images/Cancel.png" /></button>
+            </div>
+            <div class="modal-body publish_modal text-center">
+                <div class="col-md-12">
+
+                    <h4 class="modal-title">Share This Bio</h4>
+                    <h6><span class="border_left"></span>Share with social media<span class="border_right"></span>
+                    </h6>
+
+                    <ul class="social_icons">
+                        <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                        <a href="javascript:void(0);"><img src="assets/images/Instagram.png" /></a>
+                        <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                        <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                    </ul>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                        <span type="button" class="input-group-text"
+                            (click)="copyGroupProfileModel(uniqueName)">{{model_text}}</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<iframe *ngIf="displayIframe" height="640px" width="100%" [src]="iframeUrl | safe" id="openIframe"></iframe>

@@ -11,9 +11,11 @@ export class ApiService {
   API_URL = 'https://api.groupleads.net/api/';
   groupOverview: BehaviorSubject<any>;
   groupProfiles: BehaviorSubject<any>;
+  groupManage: BehaviorSubject<any>;
   constructor(private httpClient: HttpClient) {
     this.groupOverview = new BehaviorSubject({});
     this.groupProfiles = new BehaviorSubject({});
+    this.groupManage = new BehaviorSubject({});
   }
 
   loginUser(data: any) {
@@ -247,5 +249,19 @@ export class ApiService {
       this.API_URL + 'app-get-manage-profile?group_id=' + id + '&id=' + id,
       { headers: headers }
     );
+  }
+
+  getGroupManage(): Observable<any> {
+    console.log(this.groupManage);
+    return this.groupManage.asObservable();
+  }
+
+  updateGroupManage(message: any) {
+    this.groupManage.next(message);
+  }
+
+  getGroupManageValue() {
+    console.log(this.groupManage.value);
+    return this.groupManage.value;
   }
 }

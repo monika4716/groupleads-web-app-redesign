@@ -3,6 +3,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { countriesObject } from '../../assets/json/countries';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {
+  FormGroup,
+  FormControl,
+  FormArray,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-manage-profile',
@@ -10,6 +17,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./manage-profile.component.css'],
 })
 export class ManageProfileComponent implements OnInit {
+  displayIframe: boolean = false;
+  iframeUrl: any = '';
   origin: any;
   groupSlug: any;
   groupId: any;
@@ -19,10 +28,10 @@ export class ManageProfileComponent implements OnInit {
   groupImages: any = '';
   groupReview: any = [];
   linkedGroup: any = [];
-  selectedCategory: any = '';
-  about: any = '';
+  selectedCategory: any = 0;
+  description: any = '';
   facebookGroupId: any = '';
-  selectedLocation: any = '';
+  selectedLocation: any = 0;
   status: any = '';
   topics: any = '';
   uniqueName: any = '';
@@ -46,13 +55,60 @@ export class ManageProfileComponent implements OnInit {
   adminSlug: any = '';
   public isSeeMore: boolean = true;
   averageRating: any = 0;
+  rating: any = 0;
+  review: any = '';
   public locationList: any = countriesObject;
+  model_text: any = 'Copy';
+  facebookShare: any = '';
+  twitterShare: any = '';
+  linkedInShare: any = '';
+  instagramShare: any = '';
+  editOverViewForm: FormGroup;
+  editTopicsForm: FormGroup;
+  editConversationsForm: FormGroup;
+  editReviewsForm: FormGroup;
+  isTopic: boolean = false;
+  isConversations: boolean = false;
+  removeImage: any = [];
+  urls = new Array<string>();
+  fileList: File[] = [];
+  listOfFiles: any[] = [];
+  files: any = [];
+  uploadUrls = new Array<string>();
+  groupFile: any = [];
+  groupImage: any = 'assets/images/profile_banner.png';
+
+  displayReviewModel: boolean = false;
+  imageData: any = '';
+  displayForm: boolean = true;
+  displaycloseButton: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private fb: FormBuilder
   ) {
+    this.editOverViewForm = this.fb.group({
+      description: ['', Validators.required],
+      category: ['', Validators.required],
+      location: ['', Validators.required],
+    });
+    this.editTopicsForm = this.fb.group({
+      isTopic: [''],
+      topics: [''],
+    });
+
+    this.editConversationsForm = this.fb.group({
+      isConversations: [''],
+      conversations: [''],
+    });
+
+    this.editReviewsForm = this.fb.group({
+      rating: [''],
+      review: ['', Validators.required],
+    });
+
     this.responsiveOptions = [
       {
         breakpoint: '1024px',
@@ -88,18 +144,36 @@ export class ManageProfileComponent implements OnInit {
     this.getManageProfileDetails();
   }
 
+  get o() {
+    //console.log(this.overViewForm.controls);
+    return this.editOverViewForm.controls;
+  }
+  get r() {
+    //console.log(this.overViewForm.controls);
+    return this.editReviewsForm.controls;
+  }
+
   getManageProfileDetails() {
     this.apiService
       .getManageProfileDetails(this.id, this.groupId, this.token)
       .subscribe((response: any) => {
-        //console.log(response);
+        console.log(response);
+
         this.spinner.hide();
         if (response.status == 200) {
+          this.apiService.updateGroupManage(response);
           let groupDetails = response.groupDetails;
           this.conversationImageUrl = response.groupImageUrl;
           this.adminImageUrl = response.adminImageUrl;
           this.adminBio = groupDetails.admin_bio;
           this.user = groupDetails.user;
+
+          this.conversations = groupDetails.group_conversation_images;
+          for (var i = 0; i <= this.conversations.length - 1; i++) {
+            let imageUrl =
+              this.conversationImageUrl + '/' + this.conversations[i].image;
+            this.uploadUrls.push(imageUrl);
+          }
           if (this.user.length > 0) {
             this.user = this.user[0];
             this.adminName = this.capitalizeFirstLetter(this.user.name);
@@ -110,9 +184,10 @@ export class ManageProfileComponent implements OnInit {
             this.showAdmins(this.adminBio);
           }
           this.groupReview = groupDetails.group_reviews;
-          this.conversations = groupDetails.group_conversation_images;
-          this.linkedGroup = groupDetails.linked_fb_group;
 
+          // this.previousImage = groupDetails.group_conversation_images;
+          this.linkedGroup = groupDetails.linked_fb_group;
+          console.log(this.uploadUrls);
           console.log(this.adminBio);
           console.log(this.user);
           console.log(this.groupReview);
@@ -123,26 +198,27 @@ export class ManageProfileComponent implements OnInit {
 
           this.categoryId = groupDetails.category_id;
           this.setCategoryName(this.categoryId, this.groupCategories);
-          this.about = groupDetails.description;
+          this.description = groupDetails.description;
           this.facebookGroupId = groupDetails.fb_group_id;
           this.id = groupDetails.id;
           this.selectedLocation = groupDetails.location_id;
           this.setLocationValue(this.selectedLocation);
           this.status = groupDetails.status;
           this.topics = groupDetails.topic.split(',');
-          this.uniqueName = groupDetails.unique_name;
+          this.uniqueName = groupDetails.unique_name.toLowerCase();
           this.userId = groupDetails.user_id;
           this.created = groupDetails.created_at;
 
           this.averageRating = this.calculateAverageReview();
+          this.setSocialLink();
         }
       });
   }
 
   setCategoryName(id: any, groupCategories: any) {
+    id = parseInt(id);
     let index = groupCategories.findIndex((x: any) => x.id === id);
     let categoryIndex = groupCategories[index];
-    console.log;
     this.category = categoryIndex.name;
     this.selectedCategory = categoryIndex.id;
   }
@@ -167,7 +243,6 @@ export class ManageProfileComponent implements OnInit {
         (x: any) => x.code === admin.location
       );
       let selectedCountry = this.locationList[index];
-
       this.adminlocation = selectedCountry.name;
       this.countryFlag = selectedCountry.image;
       this.adminImage = this.adminImageUrl + admin.image;
@@ -195,5 +270,151 @@ export class ManageProfileComponent implements OnInit {
     }
     let likePercentageStars = (5 / totalRating) * maxNumberOfStars;
     return likePercentageStars;
+  }
+
+  copyGroupProfileModel(slug: any) {
+    let profileSlug = this.origin + '/group-profile/' + this.uniqueName;
+    this.model_text = 'Copied';
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(profileSlug).then(
+        () => {
+          //alert("Copied to Clipboard");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log('Browser do not support Clipboard API');
+    }
+    setTimeout(() => {
+      this.model_text = 'Copy';
+    }, 2000);
+  }
+
+  setSocialLink() {
+    let url = this.origin + '/group-profile/' + this.uniqueName;
+    this.facebookShare =
+      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+    this.instagramShare = '';
+    this.twitterShare =
+      'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url);
+    this.linkedInShare =
+      'https://www.linkedin.com/sharing/share-offsite/?url=' +
+      encodeURIComponent(url);
+  }
+
+  onChangeCategory(e: any) {
+    console.log(e);
+    this.selectedCategory = e.value;
+  }
+
+  onChangeLocation(e: any) {
+    console.log(e);
+    this.selectedLocation = e.value;
+  }
+
+  editOverview() {
+    console.log(this.editOverViewForm);
+    this.description = this.editOverViewForm.value.description;
+    this.selectedCategory = this.editOverViewForm.value.category;
+    this.selectedLocation = this.editOverViewForm.value.location;
+    this.setLocationValue(this.selectedLocation);
+    this.setCategoryName(this.selectedCategory, this.groupCategories);
+
+    setTimeout(() => {
+      $('#edit_overview_close').click();
+    }, 500);
+  }
+  editTopics() {
+    console.log(this.editTopicsForm);
+    this.isTopic = this.editTopicsForm.value.isTopic;
+    this.topics = this.editTopicsForm.value.topics;
+    setTimeout(() => {
+      $('#editTopics_cancel').click();
+    }, 500);
+  }
+  editConversations() {
+    console.log(this.files);
+    console.log(this.editConversationsForm.value.isConversations);
+    this.isConversations = this.editConversationsForm.value.isConversations;
+    setTimeout(() => {
+      $('#editConversations_cancel').click();
+      console.log(this.urls);
+    }, 1000);
+  }
+  removePreviousFile(i: any) {
+    console.log(i);
+    this.removeImage.push(this.conversations[i]);
+    this.uploadUrls.splice(i, 1);
+  }
+  removeSelectedFile(index: any) {
+    this.urls.splice(index, 1);
+    // Delete the item from fileNames list
+    this.listOfFiles.splice(index, 1);
+    // delete file from FileList
+    this.fileList.splice(index, 1);
+
+    console.log(this.listOfFiles); // name of files
+    console.log(this.fileList); //array of files
+    console.log(this.urls); // show image encrypt image code
+  }
+  uploadImages(event: any) {
+    console.log(event.target.files);
+    this.files = event.target.files;
+    for (var i = 0; i <= this.files.length - 1; i++) {
+      let objectURL = URL.createObjectURL(event.target.files[i]);
+      this.uploadUrls.push(objectURL);
+      let reader = new FileReader();
+      reader.onload = (e: any) => {
+        //console.log(e.target.result);
+        this.urls.push(e.target.result);
+      };
+      reader.readAsDataURL(this.files[i]);
+      var selectedFile = event.target.files[i];
+      this.fileList.push(selectedFile);
+      this.listOfFiles.push(selectedFile.name);
+    }
+    console.log(this.uploadUrls);
+  }
+
+  editReviews() {
+    console.log(this.editReviewsForm);
+    this.rating = this.editReviewsForm.value.rating;
+    this.review = this.editReviewsForm.value.review;
+    setTimeout(() => {
+      $('#editReviews_close').click();
+    }, 1000);
+  }
+
+  uploadGroupImages(event: any) {
+    this.groupFile = event.target.files[0];
+    let objectURL = URL.createObjectURL(event.target.files[0]);
+    console.log(objectURL);
+    this.groupImage = objectURL;
+  }
+  /* OPEN ADMIN BIO PREVIEW */
+  openPreview() {
+    let url =
+      this.origin + '/group-profile/' + this.uniqueName + '?displayClose=true';
+    console.log(url);
+    this.displayForm = false;
+    this.displaycloseButton = true;
+    this.displayIframe = true;
+    this.iframeUrl = url;
+    this.getIframPreview();
+    $('.preview_btn').prop('disabled', false);
+    $('.share_btn').prop('disabled', false);
+  }
+  /* GET IFRAME PREVIEW */
+  getIframPreview() {
+    let setDefaultSetting = setInterval(() => {
+      let iframe = document.getElementById('openIframe');
+      if (iframe == null) {
+        clearInterval(setDefaultSetting);
+        this.displayForm = true;
+        this.displayIframe = false;
+      }
+    }, 100);
   }
 }

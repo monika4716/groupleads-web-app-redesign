@@ -396,3 +396,7 @@ button[disabled] {
 .review-setting .p-rating .p-rating-icon.pi-star-fill {
   color: #ffc107 !important;
 }
+.reviews-image {
+  width: 45px !important;
+  border-radius: 50%;
+}
