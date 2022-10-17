@@ -310,8 +310,30 @@ input#lastName {
   background: gray !important;
 }
 #profile-image {
-  cursor: pointer;
+
   min-width: 68px;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.image1 {
+  position: relative;
+  top: 0;
+  left: 0;
+  border: 1px solid #000000;
+}
+
+.image2 {
+  cursor: pointer;
+  position: absolute;
+  top: 30px;
+  left: 42px;
+  border: 1px solid #000000;
+}
+
+#profile-image img {
+  border-radius: 50% !important;
 }
 .error {
   color: red !important;

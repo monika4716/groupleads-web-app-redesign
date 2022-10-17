@@ -35,9 +35,17 @@
                                     <div class="row user_section">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <div class="col-md-2 p-0 " data-bs-target="#image_UploadModel"
+                                                <!-- <div class="col-md-2 p-0 " data-bs-target="#image_UploadModel"
                                                     data-bs-toggle="modal" data-bs-backdrop="static" id="profile-image">
                                                     <img src="{{imageUrl}}" />
+
+                                                </div> -->
+
+                                                <div class="col-md-2 p-0 " id="profile-image">
+                                                    <img [src]="imageUrl | safe"  class="image1" />
+                                                    <img src="assets/images/edit.png" title="Upload image" class="image2" (click)="selectImage.click()">
+                                                    <input  type="file" accept="image/*" 
+                                                (change)="uploadImages($event)" style="display: none" #selectImage>
                                                 </div>
                                                 <div
                                                     class="col-md-10 d-flex align-items-center justify-content-center profile_right_sec">
@@ -260,11 +268,10 @@
     </div>
 
     <!-----------------image upload modal------------->
-    <div class="modal group_modal" id="image_UploadModel">
+    <!-- <div class="modal group_modal" id="image_UploadModel">
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Upload Profile Image</h4>
                     <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
@@ -281,7 +288,7 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
     <!------------------publish bio modal--------------->
 
     <p-dialog [(visible)]="displayBasic" [modal]="true" [style]="{width: '45vw'}">

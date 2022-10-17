@@ -252,18 +252,18 @@ export class AdminBioComponent implements OnInit {
     console.log(this.countryCode);
   }
 
-  imageUploader(event: any) {
-    console.log(event);
-    var reader = new FileReader();
-    //console.log(reader);
-    reader.readAsDataURL(event.files[0]);
-    reader.onload = (_event) => {
-      this.imageUrl = reader.result;
-    };
+  // imageUploader(event: any) {
+  //   console.log(event);
+  //   var reader = new FileReader();
+  //   //console.log(reader);
+  //   reader.readAsDataURL(event.files[0]);
+  //   reader.onload = (_event) => {
+  //     this.imageUrl = reader.result;
+  //   };
 
-    this.imageData = event.files[0];
-    console.log(this.imageData);
-  }
+  //   this.imageData = event.files[0];
+  //   console.log(this.imageData);
+  // }
 
   public get htmlProperty(): SafeHtml {
     return this.DOMSR.bypassSecurityTrustHtml(this.fields);
@@ -657,5 +657,17 @@ export class AdminBioComponent implements OnInit {
       this.messageButton = 0;
     }
     console.log(this.messageButton);
+  }
+
+  uploadImages1(event:any){
+    console.log(event)
+  }
+  uploadImages(event: any) {
+    this.imageData = event.target.files[0];
+    let objectURL = URL.createObjectURL(event.target.files[0]);
+    console.log(objectURL);
+    this.imageUrl = objectURL;
+
+    console.log(this.imageData);
   }
 }
