@@ -23,6 +23,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   topics: any = [];
   reviews: any = [];
   conversations: any = [];
+  user: any;
   path: any = '';
   adminName: any = '';
   adminlocation: any = '';
@@ -38,28 +39,67 @@ export class GroupProfilePreviewComponent implements OnInit {
   linkedInShare: any = '';
   model_text: any = 'Copy';
   groupImage: any = 'assets/images/profile_banner.png';
+  overviewStorage: any;
+  topicStorage: any;
+  conversationStorage: any;
+  reviewSettingStorage: any;
+  previewEnable: boolean = false;
+  manageProfileStorage: any;
+  selectedLocation: any = 0;
+  selectedCategory: any = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private route: Router
   ) {}
 
   ngOnInit(): void {
     this.origin = location.origin;
-    this.spinner.show();
-    this.groupSlug = this.activatedRoute.snapshot.paramMap.get('slug');
+    this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
+    console.log(this.previewEnable);
+    if (this.previewEnable) {
+      this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+      this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+      console.log(this.manageProfileStorage);
 
-    this.apiService.getGroupManage().subscribe((response) => {
-      console.log(response);
-      if (
-        response.hasOwnProperty('groupProfile') &&
-        response.hasOwnProperty('GroupCategories') &&
-        response.hasOwnProperty('path')
-      ) {
-        this.getGroupProfilePreview();
-      }
-    });
+      this.showPreviewDetails(this.manageProfileStorage);
+    } else {
+      this.spinner.show();
+      this.groupSlug = this.activatedRoute.snapshot.paramMap.get('slug');
+      //this.getGroupProfilePreview();
+    }
+  }
+
+  showPreviewDetails(response: any) {
+    console.log(response);
+    let adminImageUrl = response.adminImageUrl;
+    let groupImageUrl = response.groupImageUrl;
+    let groupCategories = response.groupCategories;
+    let groupDetails = response.groupDetails;
+    let linkedDetails = groupDetails.linked_fb_group;
+    this.reviews = groupDetails.group_reviews;
+    this.conversations = groupDetails.group_conversation_images;
+    this.user = groupDetails.user;
+
+    this.groupName = linkedDetails.group_name;
+    console.log(this.groupName);
+    // this.selectedLocation = groupDetails.location_id;
+    // this.selectedCategory = groupDetails.category_id;
+    // this.setCategoryNamr(this.selectedCategory, groupCategories);
+    // this.setLocationValue(this.selectedLocation);
+    // this.createdProfile = groupDetails.created_at;
+    // this.about = groupDetails.description;
+    // this.topics = groupDetails.topic;
+    // this.conversations = response.profileImages;
+    // this.path = response.path;
+    // this.facebookGroupLink =
+    //   'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
+
+    // let adminDetails = response.adminDetails;
+    // this.showAdmins(adminDetails);
+    // this.setSocialLink();
   }
 
   getGroupProfilePreview() {
@@ -75,10 +115,10 @@ export class GroupProfilePreviewComponent implements OnInit {
           this.reviews = response.profileReviews;
 
           this.groupName = groupDetails.group_name;
-          let selectedLocation = groupDetails.location_id;
-          let selectedCategory = groupDetails.category_id;
-          this.setCategoryNamr(selectedCategory, groupCategories);
-          this.setLocationValue(selectedLocation);
+          this.selectedLocation = groupDetails.location_id;
+          this.selectedCategory = groupDetails.category_id;
+          this.setCategoryNamr(this.selectedCategory, groupCategories);
+          this.setLocationValue(this.selectedLocation);
           this.createdProfile = groupDetails.created_at;
           this.about = groupDetails.description;
           this.topics = groupDetails.topic.split(',');
@@ -108,6 +148,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   showAdmins(admin: any) {
+    console.log(admin);
     this.adminName = this.capitalizeFirstLetter(admin.name);
 
     if (admin.id != null) {

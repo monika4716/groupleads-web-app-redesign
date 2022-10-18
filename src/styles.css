@@ -310,7 +310,6 @@ input#lastName {
   background: gray !important;
 }
 #profile-image {
-
   min-width: 68px;
   position: relative;
   top: 0;
@@ -318,18 +317,21 @@ input#lastName {
 }
 
 .image1 {
+  min-width: 65px !important;
+  min-height: 65px !important;
+  border: solid 1px gray;
   position: relative;
   top: 0;
   left: 0;
-  border: 1px solid #000000;
 }
 
 .image2 {
   cursor: pointer;
   position: absolute;
-  top: 30px;
-  left: 42px;
-  border: 1px solid #000000;
+  top: 41px;
+  left: 46px;
+  border: 1px solid gray;
+  width: 20px !important;
 }
 
 #profile-image img {
@@ -384,12 +386,22 @@ button[disabled] {
 }
 .upload-image {
   position: relative !important;
+  text-align: center;
+}
+.conversation-review-image {
+  max-width: 480px !important;
+  border: 1px solid gray !important;
+  min-width: 480px !important;
+  max-height: 300px;
+  min-height: 300px;
+  object-fit: cover;
 }
 .upload-image span {
   position: absolute !important;
-  right: 78px !important;
-  top: 20px !important;
+  right: 10px !important;
+  top: 26px !important;
   border: 2px solid #3c61ad !important;
+  width: 25px;
 }
 .limitTextHeight {
   height: 115px;
@@ -413,12 +425,32 @@ button[disabled] {
 .admin-imag {
   border-radius: 52px !important;
   width: 50px !important;
+  border: 2px solid #80808047 !important;
+  min-width: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  max-width: 50px !important;
 }
 
 .review-setting .p-rating .p-rating-icon.pi-star-fill {
   color: #ffc107 !important;
 }
+.review-rating img {
+  margin-bottom: 5px;
+  margin-right: 2px;
+}
 .reviews-image {
   width: 45px !important;
+  border-radius: 50%;
+  border: 2px solid #80808047 !important;
+  min-width: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  max-width: 50px !important;
+}
+.preview-image {
+  border: 2px solid #80808059;
+  min-width: 70px !important;
+  min-height: 70px !important;
   border-radius: 50%;
 }

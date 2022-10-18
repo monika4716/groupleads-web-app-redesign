@@ -42,10 +42,11 @@
                                                 </div> -->
 
                                                 <div class="col-md-2 p-0 " id="profile-image">
-                                                    <img [src]="imageUrl | safe"  class="image1" />
-                                                    <img src="assets/images/edit.png" title="Upload image" class="image2" (click)="selectImage.click()">
-                                                    <input  type="file" accept="image/*" 
-                                                (change)="uploadImages($event)" style="display: none" #selectImage>
+                                                    <img [src]="imageUrl | safe" class="image1" />
+                                                    <img src="assets/images/editImage.png" title="Upload image"
+                                                        class="image2" (click)="selectImage.click()">
+                                                    <input type="file" accept="image/*" (change)="uploadImages($event)"
+                                                        style="display: none" #selectImage>
                                                 </div>
                                                 <div
                                                     class="col-md-10 d-flex align-items-center justify-content-center profile_right_sec">

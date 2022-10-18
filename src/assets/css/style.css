@@ -965,8 +965,8 @@ li.p-ripple.p-element.p-dropdown-item {
   font-size: 16px;
   line-height: 24px;
   color: #ffffff;
-  width: 30px;
-  height: 30px;
+  /* width: 30px;
+  height: 30px; */
   text-align: center;
 }
 .profile_page .profile_right_sec {

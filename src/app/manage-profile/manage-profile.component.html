@@ -177,9 +177,10 @@
                                 </div>
 
                                 <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-primary btn-block review_btn"
-                                        data-bs-toggle="modal" data-bs-backdrop="static"
-                                        data-bs-target="#write_review_Modal"><img src="assets/images/star_white.png " />
+                                    <button type="button" [disabled]="writeReview"
+                                        class="btn btn-primary btn-block review_btn" data-bs-toggle="modal"
+                                        data-bs-backdrop="static" data-bs-target="#write_review_Modal"><img
+                                            src="assets/images/star_white.png " />
                                         Write A Review</button>
                                 </div>
                                 <div class="review_sec">
@@ -217,9 +218,9 @@
                                         <h5>Be the first to leave a review.</h5>
                                     </div>
                                     <div class="col-md-12 d-grid admin_sec">
-                                        <button type="button" class="btn btn-primary btn-block review_btn"
-                                            data-bs-toggle="modal" data-bs-backdrop="static"
-                                            data-bs-target="#write_review_Modal"><img
+                                        <button type="button" [disabled]="writeReview"
+                                            class="btn btn-primary btn-block review_btn" data-bs-toggle="modal"
+                                            data-bs-backdrop="static" data-bs-target="#write_review_Modal"><img
                                                 src="assets/images/star_white.png " /> Write A Review</button>
                                     </div>
                                 </div>
@@ -320,19 +321,21 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h5>Show Topics on page</h5>
+
                             </div>
                             <div
                                 class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
-                                <p-inputSwitch formControlName="isTopic" [(ngModel)]="isTopic"></p-inputSwitch>
-                                <!-- <label class="switch">
-                                    <input type="checkbox" checked>
+
+                                <label class="switch">
+                                    <input type="checkbox" formControlName="isTopic" [(ngModel)]="isTopic">
                                     <span class="slider round"></span>
-                                </label> -->
+                                </label>
                             </div>
                         </div>
                     </div>
                     <div class="mb-3 mt-4">
-                        <label for="topic" class="form-label">Popular Topics</label>
+                        <label for="topic" class="form-label">Popular Topics</label><br>
+                        <h5>Press enter for multiple topic</h5>
                         <!-- <input type="text" class="form-control" id="email" placeholder="Enter email" name="topic"> -->
                         <p-chips [(ngModel)]="topics" class="topics" formControlName="topics" separator=",">
                         </p-chips>
@@ -405,34 +408,38 @@
 <div class="modal group_modal" id="review_settings_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Review Settings</h4>
-                <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
-                        src="assets/images/Cancel.png" /></button>
-            </div>
-            <div class="modal-body edit_modal">
-                <div class="col-md-12 mt-2">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h5>Show member reviews on page </h5>
-                        </div>
-                        <div
-                            class="col-md-4 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                            </label>
+            <form [formGroup]="editReviewSettingForm" (ngSubmit)="editReviewSetting()">
+                <div class="modal-header">
+                    <h4 class="modal-title">Review Settings</h4>
+                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body edit_modal">
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5>Show member reviews on page </h5>
+                            </div>
+                            <div
+                                class="col-md-4 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
+
+                                <label class="switch">
+                                    <input type="checkbox" formControlName="isReview" [(ngModel)]="isReview" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
+                    <div class="mb-3 mt-4">
+                        <button type="button" class="btn btn-outline-primary btn-block all_review_btn"><img
+                                src="assets/images/review_star.png" /> See All Reviews</button>
+                    </div>
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-block select_group_btn">Change
+                            Settings</button>
+                    </div>
                 </div>
-                <div class="mb-3 mt-4">
-                    <button type="button" class="btn btn-outline-primary btn-block all_review_btn"><img
-                            src="assets/images/review_star.png" /> See All Reviews</button>
-                </div>
-                <div class="col-md-12 d-grid mt-4">
-                    <button type="button" class="btn btn-primary btn-block select_group_btn">Change Settings</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -544,22 +551,23 @@
                             </div>
                             <div
                                 class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
-                                <p-inputSwitch formControlName="isConversations" [(ngModel)]="isConversations">
-                                </p-inputSwitch>
-                                <!-- <label class="switch">
-                                    <input type="checkbox" checked>
+                                <label class="switch">
+                                    <input type="checkbox" formControlName="isConversations"
+                                        [(ngModel)]="isConversations">
                                     <span class="slider round"></span>
-                                </label> -->
+                                </label>
                             </div>
                         </div>
                         <div class="upload-image" *ngFor="let image of uploadUrls; let index = index">
-                            <img [src]="image | safe" class="rounded mb-3 mt-4"><span mat-icon-button
-                                (click)="removePreviousFile(index)"><img src="assets/images/Cancel.png"></span>
+                            <img [src]="image | safe" class="rounded mb-3 mt-4 conversation-review-image"><span
+                                mat-icon-button (click)="removePreviousFile(index)"><img
+                                    src="assets/images/Cancel.png"></span>
                         </div>
-                        <div class="upload-image" *ngFor="let url of urls; let index = index">
+                        <!-- <div class="upload-image" *ngFor="let url of urls; let index = index">
                             <img [src]="url" class="rounded mb-3 mt-4"><span mat-icon-button
-                                (click)="removeSelectedFile(index)"><img src="assets/images/Cancel.png"></span>
-                        </div>
+                                (click)="removeSelectedFile(index)"><img class="cancel-image"
+                                    src="assets/images/Cancel.png"></span>
+                        </div> -->
                         <div class="upload_ss">
                             <img src="assets/images/upload_ss_1.png" (click)="selectImage.click()" />
                             <input #imageInput type="file" accept="image/*" multiple (change)="uploadImages($event)"

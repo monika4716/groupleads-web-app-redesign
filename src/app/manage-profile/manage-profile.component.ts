@@ -10,6 +10,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-manage-profile',
@@ -66,9 +67,11 @@ export class ManageProfileComponent implements OnInit {
   editOverViewForm: FormGroup;
   editTopicsForm: FormGroup;
   editConversationsForm: FormGroup;
+  editReviewSettingForm: FormGroup;
   editReviewsForm: FormGroup;
-  isTopic: boolean = false;
-  isConversations: boolean = false;
+  isTopic: boolean = true;
+  isConversations: boolean = true;
+  isReview: boolean = true;
   removeImage: any = [];
   urls = new Array<string>();
   fileList: File[] = [];
@@ -82,6 +85,13 @@ export class ManageProfileComponent implements OnInit {
   imageData: any = '';
   displayForm: boolean = true;
   displaycloseButton: boolean = false;
+  writeReview: boolean = true;
+  overviewStorage: any = {};
+  topicStorage: any = {};
+  conversationStorage: any = {};
+  reviewSettingStorage: any = {};
+
+  manageProfileStorage: any = {};
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -107,6 +117,9 @@ export class ManageProfileComponent implements OnInit {
     this.editReviewsForm = this.fb.group({
       rating: [''],
       review: ['', Validators.required],
+    });
+    this.editReviewSettingForm = this.fb.group({
+      isReview: [''],
     });
 
     this.responsiveOptions = [
@@ -162,6 +175,12 @@ export class ManageProfileComponent implements OnInit {
         this.spinner.hide();
         if (response.status == 200) {
           this.apiService.updateGroupManage(response);
+
+          localStorage.setItem(
+            'manageProfileStorage',
+            JSON.stringify(response)
+          );
+
           let groupDetails = response.groupDetails;
           this.conversationImageUrl = response.groupImageUrl;
           this.adminImageUrl = response.adminImageUrl;
@@ -211,6 +230,11 @@ export class ManageProfileComponent implements OnInit {
 
           this.averageRating = this.calculateAverageReview();
           this.setSocialLink();
+
+          this.apiService.getGroupManage().subscribe((response) => {
+            console.log('get Group Manage ');
+            console.log(response);
+          });
         }
       });
   }
@@ -319,6 +343,25 @@ export class ManageProfileComponent implements OnInit {
     this.description = this.editOverViewForm.value.description;
     this.selectedCategory = this.editOverViewForm.value.category;
     this.selectedLocation = this.editOverViewForm.value.location;
+
+    // set the updated value in manageProfileStorage storage //
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+
+    this.manageProfileStorage.groupDetails.description = this.description;
+    this.manageProfileStorage.groupDetails.category_id = parseInt(
+      this.selectedCategory
+    );
+    this.manageProfileStorage.groupDetails.location_id = this.selectedLocation;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
+
+    // end  the updated value in manageProfileStorage storage //
+
     this.setLocationValue(this.selectedLocation);
     this.setCategoryName(this.selectedCategory, this.groupCategories);
 
@@ -330,21 +373,57 @@ export class ManageProfileComponent implements OnInit {
     console.log(this.editTopicsForm);
     this.isTopic = this.editTopicsForm.value.isTopic;
     this.topics = this.editTopicsForm.value.topics;
+
+    // set the updated value in manageProfileStorage storage //
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+
+    this.manageProfileStorage.groupDetails.is_topics = this.isTopic;
+    this.manageProfileStorage.groupDetails.topic = this.topics;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
+
+    //end set storage
+
     setTimeout(() => {
       $('#editTopics_cancel').click();
     }, 500);
   }
   editConversations() {
     console.log(this.files);
-    console.log(this.editConversationsForm.value.isConversations);
-    this.isConversations = this.editConversationsForm.value.isConversations;
+    // console.log(this.editConversationsForm);
+
+    // set the updated value in manageProfileStorage storage //
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+
+    this.manageProfileStorage.groupDetails.is_conversations =
+      this.editConversationsForm.value.isConversations;
+    this.manageProfileStorage.groupDetails.group_conversation_images =
+      this.uploadUrls;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
+
+    // end  update storage
     setTimeout(() => {
       $('#editConversations_cancel').click();
       console.log(this.urls);
     }, 1000);
   }
+
+  editReviewSetting() {
+    console.log(this.editReviewSettingForm.value);
+    this.isReview = this.editReviewSettingForm.value.isReview;
+  }
   removePreviousFile(i: any) {
-    console.log(i);
     this.removeImage.push(this.conversations[i]);
     this.uploadUrls.splice(i, 1);
   }
@@ -367,7 +446,6 @@ export class ManageProfileComponent implements OnInit {
       this.uploadUrls.push(objectURL);
       let reader = new FileReader();
       reader.onload = (e: any) => {
-        //console.log(e.target.result);
         this.urls.push(e.target.result);
       };
       reader.readAsDataURL(this.files[i]);
@@ -392,11 +470,24 @@ export class ManageProfileComponent implements OnInit {
     let objectURL = URL.createObjectURL(event.target.files[0]);
     console.log(objectURL);
     this.groupImage = objectURL;
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+
+    this.manageProfileStorage.groupDetails.image = this.groupImage;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
   }
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
     let url =
-      this.origin + '/group-profile/' + this.uniqueName + '?displayClose=true';
+      this.origin +
+      '/group-profile/' +
+      this.uniqueName +
+      '?displayClose=true&preview=true';
     console.log(url);
     this.displayForm = false;
     this.displaycloseButton = true;
