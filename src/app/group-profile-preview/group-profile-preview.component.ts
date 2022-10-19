@@ -4,6 +4,13 @@ import { ApiService } from '../api.service';
 import { countriesObject } from '../../assets/json/countries';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as $ from 'jquery';
+import {
+  FormGroup,
+  FormControl,
+  FormArray,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-group-profile-preview',
@@ -12,7 +19,7 @@ import * as $ from 'jquery';
 })
 export class GroupProfilePreviewComponent implements OnInit {
   origin: any;
-  groupSlug: any;
+  uniqueName: any;
   groupName: any = '';
   public locationList: any = countriesObject;
   location: any = '';
@@ -47,13 +54,32 @@ export class GroupProfilePreviewComponent implements OnInit {
   manageProfileStorage: any;
   selectedLocation: any = 0;
   selectedCategory: any = 0;
+  conversationsImage: any = [];
+  adminImageUrl: any = '';
+  groupImageUrl: any = '';
+  conversationImageUrl: any = '';
+  averageRating: any = 0;
+  editReviewsForm: FormGroup;
+  rating: any = 0;
+  review: any = '';
+  editReviewSettingForm: FormGroup;
+  isReview: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
-    private route: Router
-  ) {}
+    private route: Router,
+    private fb: FormBuilder
+  ) {
+    this.editReviewsForm = this.fb.group({
+      rating: [''],
+      review: ['', Validators.required],
+    });
+    this.editReviewSettingForm = this.fb.group({
+      isReview: [''],
+    });
+  }
 
   ngOnInit(): void {
     this.origin = location.origin;
@@ -67,45 +93,101 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.showPreviewDetails(this.manageProfileStorage);
     } else {
       this.spinner.show();
-      this.groupSlug = this.activatedRoute.snapshot.paramMap.get('slug');
+      this.uniqueName = this.activatedRoute.snapshot.paramMap.get('slug');
       //this.getGroupProfilePreview();
     }
   }
 
   showPreviewDetails(response: any) {
     console.log(response);
-    let adminImageUrl = response.adminImageUrl;
-    let groupImageUrl = response.groupImageUrl;
+    this.adminImageUrl = response.adminImageUrl;
+    this.conversationImageUrl = response.conversationImageURl;
+    this.groupImageUrl = response.groupImageUrl;
     let groupCategories = response.groupCategories;
     let groupDetails = response.groupDetails;
+    let adminDetails = groupDetails.admin_bio[0];
     let linkedDetails = groupDetails.linked_fb_group;
     this.reviews = groupDetails.group_reviews;
     this.conversations = groupDetails.group_conversation_images;
-    this.user = groupDetails.user;
+    this.user = groupDetails.user[0];
 
     this.groupName = linkedDetails.group_name;
     console.log(this.groupName);
-    // this.selectedLocation = groupDetails.location_id;
-    // this.selectedCategory = groupDetails.category_id;
-    // this.setCategoryNamr(this.selectedCategory, groupCategories);
-    // this.setLocationValue(this.selectedLocation);
-    // this.createdProfile = groupDetails.created_at;
-    // this.about = groupDetails.description;
-    // this.topics = groupDetails.topic;
-    // this.conversations = response.profileImages;
-    // this.path = response.path;
-    // this.facebookGroupLink =
-    //   'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
+    this.selectedLocation = groupDetails.location_id;
+    console.log(this.selectedLocation);
+    this.selectedCategory = groupDetails.category_id;
+    console.log(this.selectedCategory);
+    console.log(groupCategories);
 
-    // let adminDetails = response.adminDetails;
-    // this.showAdmins(adminDetails);
-    // this.setSocialLink();
+    this.setCategoryNamr(this.selectedCategory, groupCategories);
+    this.setLocationValue(this.selectedLocation);
+    this.createdProfile = groupDetails.created_at;
+    this.about = groupDetails.description;
+    this.topics = groupDetails.topic;
+    if (!Array.isArray(this.topics)) {
+      this.topics = this.topics.split(' ');
+    }
+
+    //this.conversations = response.profileImages;
+    // console.log(this.conversations);
+
+    for (let i = 0; i < this.conversations.length; i++) {
+      if (this.conversations[i].image) {
+        console.log(this.conversations[i].image);
+        let image =
+          this.conversationImageUrl + '/' + this.conversations[i].image;
+        this.conversationsImage.push(image);
+      }
+    }
+    if (this.conversationsImage.length == 0) {
+      this.conversationsImage = this.conversations;
+    }
+
+    if (groupDetails.image) {
+      this.groupImage = groupDetails.image;
+    }
+
+    // this.path = response.path;
+    this.facebookGroupLink =
+      'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
+
+    this.showAdmins(adminDetails);
+    this.setSocialLink();
+    this.averageRating = this.calculateAverageReview();
+  }
+
+  calculateAverageReview() {
+    let totalRating = this.reviews.length * 5;
+    let maxNumberOfStars = 0;
+    for (let i = 0; i < this.reviews.length; i++) {
+      maxNumberOfStars = parseInt(this.reviews[i].star) + maxNumberOfStars;
+    }
+    let likePercentageStars = (5 / totalRating) * maxNumberOfStars;
+    return likePercentageStars;
+  }
+
+  editReviews() {
+    console.log(this.editReviewsForm);
+    this.rating = this.editReviewsForm.value.rating;
+    this.review = this.editReviewsForm.value.review;
+    setTimeout(() => {
+      $('#editReviews_close').click();
+    }, 1000);
+  }
+  editReviewSetting() {
+    console.log(this.editReviewSettingForm.value);
+    this.isReview = this.editReviewSettingForm.value.isReview;
+  }
+
+  get r() {
+    //console.log(this.overViewForm.controls);
+    return this.editReviewsForm.controls;
   }
 
   getGroupProfilePreview() {
-    console.log(this.groupSlug);
+    console.log(this.uniqueName);
     this.apiService
-      .getGroupProfilePreview(this.groupSlug)
+      .getGroupProfilePreview(this.uniqueName)
       .subscribe((response: any) => {
         if (response.status == 200) {
           console.log(response);
@@ -124,12 +206,14 @@ export class GroupProfilePreviewComponent implements OnInit {
           this.topics = groupDetails.topic.split(',');
           this.conversations = response.profileImages;
           this.path = response.path;
+          this.uniqueName = groupDetails.unique_name.toLowerCase();
           this.facebookGroupLink =
             'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
 
           console.log(this.conversations);
 
           let adminDetails = response.adminDetails;
+
           this.showAdmins(adminDetails);
           this.setSocialLink();
         }
@@ -149,7 +233,8 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   showAdmins(admin: any) {
     console.log(admin);
-    this.adminName = this.capitalizeFirstLetter(admin.name);
+    console.log(this.user);
+    this.adminName = this.capitalizeFirstLetter(this.user.name);
 
     if (admin.id != null) {
       let index = this.locationList.findIndex(
@@ -159,7 +244,7 @@ export class GroupProfilePreviewComponent implements OnInit {
 
       this.adminlocation = selectedCountry.name;
       this.countryFlag = selectedCountry.image;
-      this.adminImage = admin.image;
+      this.adminImage = this.adminImageUrl + admin.image;
       this.adminSlug = this.origin + '/profile/' + admin.adminSlug;
       this.showAdminBio = true;
     }
@@ -184,7 +269,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   setSocialLink() {
-    let url = this.origin + '/group-profile/' + this.groupSlug;
+    let url = this.origin + '/group-profile/' + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
     this.instagramShare = '';
@@ -196,7 +281,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   copyGroupProfileModel(slug: any) {
-    let profileSlug = this.origin + '/group-profile/' + this.groupSlug;
+    let profileSlug = this.origin + '/group-profile/' + this.uniqueName;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(

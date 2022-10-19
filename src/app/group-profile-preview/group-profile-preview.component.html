@@ -22,14 +22,15 @@
                         <div class="col-md-12">
                             <div class="row manage_profile_banner_review">
                                 <div class="col-md-6">
-                                    <a href="#" class="btn btn-primary total_review_btn">
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <img src="assets/images/star_white_fill.png" />
-                                        <span class="total_reviews">0 reviews</span>
-                                    </a>
+                                    <div class="row">
+                                        <div class="col-md-3 pr-0 rating review-setting">
+                                            <p-rating [ngModel]="averageRating" [readonly]="true" [cancel]="false">
+                                            </p-rating>
+                                        </div>
+                                        <div class="col-md-4 pl-0 review-write">
+                                            <span class="total_reviews">{{reviews.length}} reviews</span>
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div class="col-md-6 d-flex align-items-end justify-content-end profile_banner_cols">
@@ -120,62 +121,19 @@
                                         <h3>Top Conversations</h3>
                                     </div>
                                 </div>
-                                <p-carousel [value]="conversations" styleClass="custom-carousel" [numVisible]="3"
+                                <p-carousel [value]="conversationsImage" styleClass="custom-carousel" [numVisible]="3"
                                     [numScroll]="1" [circular]="true" [autoplayInterval]="3000">
                                     <ng-template let-conversation pTemplate="item">
                                         <div class="conversation-item">
                                             <div class="conversation-item-content">
                                                 <div class="mb-3">
-                                                    <img src="{{path}}/{{conversation.image}}"
-                                                        [alt]="conversation.image" class="conversation-image" />
+                                                    <img [src]="conversation |safe" [alt]="conversation"
+                                                        class="conversation-image" />
                                                 </div>
                                             </div>
                                         </div>
                                     </ng-template>
                                 </p-carousel>
-                                <!-- <div class="owl-carousel owl-theme mt-4 text-center top_conversations">
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="card">
-                                            <div class="top_cols">
-                                                <img src="assets/images/slider_1.png">
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div> -->
                             </div>
                         </div>
                         <!-- <div class="card" id="key_stats">
@@ -206,94 +164,69 @@
 
                     </div>
                     <div class="col-md-4 pl-0 right_sec">
-                        <div class="card bio_tab no_reviews" *ngIf="reviews.length == 0">
+                        <div class="card bio_tab reviews" *ngIf="reviews.length > 0 else elseBlock">
                             <div class="card-body">
                                 <h3>Reviews</h3>
-                                <div class="col-md-12 text-center">
-                                    <img src="assets/images/no_reviews.png" />
-                                    <h3>No Reviews Yet!</h3>
-                                    <h5>Be the first to leave a review.</h5>
+                                <div class="col-md-12 text-center reviews">
+
+                                    <span class="review-rating"><img
+                                            src="assets/images/star_white_fill.png " />{{averageRating}}</span>
+                                    <!-- <img src="assets/images/review.png" /> -->
                                 </div>
-                                <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-primary btn-block review_btn"><img
-                                            src="assets/images/star_white.png " /> Write A Review</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card bio_tab reviews" *ngIf="reviews.length > 0">
-                            <div class="card-body">
-                                <h3>Reviews</h3>
                                 <div class="col-md-12 text-center">
-                                    <img src="assets/images/review.png" />
-                                    <h5>based on 64 reviews</h5>
+                                    <h5>based on {{reviews.length}} reviews</h5>
                                 </div>
 
                                 <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-primary btn-block review_btn"><img
-                                            src="assets/images/star_white.png " /> Write A Review</button>
+                                    <button type="button" class="btn btn-primary btn-block review_btn"
+                                        data-bs-toggle="modal" data-bs-backdrop="static"
+                                        data-bs-target="#write_review_Modal"><img src="assets/images/star_white.png " />
+                                        Write A Review</button>
                                 </div>
                                 <div class="review_sec">
-                                    <div class="col-md-12 d-grid admin_sec">
-                                        <div class="d-flex">
+                                    <div class="col-md-12 d-grid admin_sec" *ngFor="let review of reviews">
+                                        <div class="d-flex review-setting">
                                             <div class="user_profile">
-                                                <h2 class="name"><img src="assets/images/user.png" /> Alex Jordan</h2>
+                                                <h2 class="name"><img class="reviews-image"
+                                                        src="assets/images/default.jpg" /> {{review.name}}
+                                                </h2>
                                             </div>
-                                            <div class="review_star">
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star_blank.png" />
-                                            </div>
+                                            <p-rating [(ngModel)]="review.star" [cancel]="false" [readonly]="true">
+                                            </p-rating>
                                         </div>
-                                        <p>This group is so informative.. I always learn a lot from them and I’m
-                                            grateful for the support they’ve given me so far to take my photography
-                                            career to the next level.</p>
-                                        <h6 class="days">3 days ago</h6>
+                                        <p>{{review.description}}</p>
+                                        <h6 class="days">{{review.created_at | date: 'MMMM dd, yyyy'}}</h6>
                                     </div>
-                                    <div class="col-md-12 d-grid admin_sec">
-                                        <div class="d-flex">
-                                            <div class="user_profile">
-                                                <h2 class="name"><img src="assets/images/user.png" /> Alex Jordan</h2>
-                                            </div>
-                                            <div class="review_star">
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star_blank.png" />
-                                            </div>
-                                        </div>
-                                        <p>This group is so informative.. I always learn a lot from them and I’m
-                                            grateful for the support they’ve given me so far to take my photography
-                                            career to the next level.</p>
-                                        <h6 class="days">3 days ago</h6>
-                                    </div>
-                                    <div class="col-md-12 d-grid admin_sec">
-                                        <div class="d-flex">
-                                            <div class="user_profile">
-                                                <h2 class="name"><img src="assets/images/user.png" /> Alex Jordan</h2>
-                                            </div>
-                                            <div class="review_star">
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star.png" />
-                                                <img src="assets/images/star_blank.png" />
-                                            </div>
-                                        </div>
-                                        <p>This group is so informative.. I always learn a lot from them and I’m
-                                            grateful for the support they’ve given me so far to take my photography
-                                            career to the next level.</p>
-                                        <h6 class="days">3 days ago</h6>
-                                    </div>
+
                                 </div>
                                 <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-outline-primary btn-block">See All
+                                    <button type="button" class="btn btn-outline-primary btn-block"
+                                        data-bs-toggle="modal" data-bs-backdrop="static"
+                                        data-bs-target="#review_settings_Modal">See All
                                         Reviews</button>
                                 </div>
                             </div>
                         </div>
+                        <ng-template #elseBlock>
+                            <div class="card bio_tab no_reviews">
+                                <div class="card-body">
+                                    <h3>Reviews</h3>
+                                    <div class="col-md-12 text-center">
+                                        <img src="assets/images/no_reviews.png" />
+                                        <h3>No Reviews Yet!</h3>
+                                        <h5>Be the first to leave a review.</h5>
+                                    </div>
+                                    <div class="col-md-12 d-grid admin_sec">
+                                        <button type="button" class="btn btn-primary btn-block review_btn"
+                                            data-bs-toggle="modal" data-bs-backdrop="static"
+                                            data-bs-target="#write_review_Modal"><img
+                                                src="assets/images/star_white.png " /> Write A Review</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+
+
                         <div class="card">
                             <div class="card-body">
                                 <div class="col-md-12 p-0">
@@ -370,8 +303,8 @@
                     <h4 class="modal-title">Group Profile Published Successfully</h4>
                     <p>Share to start getting noticed</p>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{groupSlug}}">
-                        <span class="input-group-text" (click)="copyGroupProfileModel(groupSlug)">{{model_text}}</span>
+                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                        <span class="input-group-text" (click)="copyGroupProfileModel(uniqueName)">{{model_text}}</span>
                     </div>
                     <h6><span class="border_left"></span>Share with<span class="border_right"></span></h6>
                     <ul class="social_icons">
@@ -411,12 +344,94 @@
                     </ul>
 
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{groupSlug}}">
+                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
                         <span type="button" class="input-group-text"
-                            (click)="copyGroupProfileModel(groupSlug)">{{model_text}}</span>
+                            (click)="copyGroupProfileModel(uniqueName)">{{model_text}}</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------write review modal--------------->
+<div class="modal group_modal" id="write_review_Modal" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Write A Review</h4>
+                <button type="button" data-bs-dismiss="modal" id="editReviews_close" class="cancel_btn"><img
+                        src="assets/images/Cancel.png" /></button>
+            </div>
+            <div class="modal-body edit_modal">
+                <form [formGroup]="editReviewsForm" (ngSubmit)="editReviews()">
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Leave a rating</h5>
+                            </div>
+                            <div
+                                class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end review-setting">
+                                <p-rating [(ngModel)]="rating" formControlName="rating" [cancel]="false">
+                                </p-rating>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 mt-4">
+                        <label for="topic" class="form-label">Review <span class="required">*</span></label>
+                        <input type="text" class="form-control" formControlName="review" id="review"
+                            placeholder="Write a review..." name="review">
+                        <div *ngIf="r['review'].touched && r['review'].invalid" class="alert alert-danger">
+                            <div *ngIf="r['review'].errors && r['review'].errors['required']">
+                                Review is
+                                required.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="submit" [disabled]="editReviewsForm.invalid"
+                            class="btn btn-primary btn-block select_group_btn">Leave Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!---------------------review settings modal--------------->
+<div class="modal group_modal" id="review_settings_Modal" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form [formGroup]="editReviewSettingForm" (ngSubmit)="editReviewSetting()">
+                <div class="modal-header">
+                    <h4 class="modal-title">Review Settings</h4>
+                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                            src="assets/images/Cancel.png" /></button>
+                </div>
+                <div class="modal-body edit_modal">
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5>Show member reviews on page </h5>
+                            </div>
+                            <div
+                                class="col-md-4 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
+
+                                <label class="switch">
+                                    <input type="checkbox" formControlName="isReview" [(ngModel)]="isReview" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 mt-4">
+                        <button type="button" class="btn btn-outline-primary btn-block all_review_btn"><img
+                                src="assets/images/review_star.png" /> See All Reviews</button>
+                    </div>
+                    <div class="col-md-12 d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-block select_group_btn">Change
+                            Settings</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

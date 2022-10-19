@@ -21,7 +21,6 @@ export class ManageProfileComponent implements OnInit {
   displayIframe: boolean = false;
   iframeUrl: any = '';
   origin: any;
-  groupSlug: any;
   groupId: any;
   id: any;
   token: any;
@@ -77,10 +76,10 @@ export class ManageProfileComponent implements OnInit {
   fileList: File[] = [];
   listOfFiles: any[] = [];
   files: any = [];
-  uploadUrls = new Array<string>();
+  //uploadUrls = new Array<string>();
+  uploadUrls: any = [];
   groupFile: any = [];
   groupImage: any = 'assets/images/profile_banner.png';
-
   displayReviewModel: boolean = false;
   imageData: any = '';
   displayForm: boolean = true;
@@ -90,7 +89,6 @@ export class ManageProfileComponent implements OnInit {
   topicStorage: any = {};
   conversationStorage: any = {};
   reviewSettingStorage: any = {};
-
   manageProfileStorage: any = {};
 
   constructor(
@@ -162,7 +160,6 @@ export class ManageProfileComponent implements OnInit {
     return this.editOverViewForm.controls;
   }
   get r() {
-    //console.log(this.overViewForm.controls);
     return this.editReviewsForm.controls;
   }
 
@@ -172,27 +169,22 @@ export class ManageProfileComponent implements OnInit {
       .subscribe((response: any) => {
         console.log(response);
 
-        this.spinner.hide();
         if (response.status == 200) {
           this.apiService.updateGroupManage(response);
-
           localStorage.setItem(
             'manageProfileStorage',
             JSON.stringify(response)
           );
 
           let groupDetails = response.groupDetails;
-          this.conversationImageUrl = response.groupImageUrl;
+          this.conversationImageUrl = response.conversationImageURl;
           this.adminImageUrl = response.adminImageUrl;
           this.adminBio = groupDetails.admin_bio;
           this.user = groupDetails.user;
-
           this.conversations = groupDetails.group_conversation_images;
-          for (var i = 0; i <= this.conversations.length - 1; i++) {
-            let imageUrl =
-              this.conversationImageUrl + '/' + this.conversations[i].image;
-            this.uploadUrls.push(imageUrl);
-          }
+
+          this.showImage();
+
           if (this.user.length > 0) {
             this.user = this.user[0];
             this.adminName = this.capitalizeFirstLetter(this.user.name);
@@ -204,17 +196,7 @@ export class ManageProfileComponent implements OnInit {
           }
           this.groupReview = groupDetails.group_reviews;
 
-          // this.previousImage = groupDetails.group_conversation_images;
           this.linkedGroup = groupDetails.linked_fb_group;
-          console.log(this.uploadUrls);
-          console.log(this.adminBio);
-          console.log(this.user);
-          console.log(this.groupReview);
-          console.log(this.conversations);
-          console.log(this.linkedGroup);
-          console.log(this.conversationImageUrl);
-          console.log(this.adminImageUrl);
-
           this.categoryId = groupDetails.category_id;
           this.setCategoryName(this.categoryId, this.groupCategories);
           this.description = groupDetails.description;
@@ -227,16 +209,26 @@ export class ManageProfileComponent implements OnInit {
           this.uniqueName = groupDetails.unique_name.toLowerCase();
           this.userId = groupDetails.user_id;
           this.created = groupDetails.created_at;
-
           this.averageRating = this.calculateAverageReview();
           this.setSocialLink();
-
           this.apiService.getGroupManage().subscribe((response) => {
             console.log('get Group Manage ');
             console.log(response);
           });
+          this.spinner.hide();
+        } else {
+          this.spinner.hide();
         }
       });
+  }
+
+  showImage() {
+    for (var i = 0; i <= this.conversations.length - 1; i++) {
+      console.log(this.conversations[i]);
+      let id = this.conversations[i].id;
+      let image = this.conversationImageUrl + this.conversations[i].image;
+      this.uploadUrls.push({ id: id, image: image });
+    }
   }
 
   setCategoryName(id: any, groupCategories: any) {
@@ -423,9 +415,20 @@ export class ManageProfileComponent implements OnInit {
     console.log(this.editReviewSettingForm.value);
     this.isReview = this.editReviewSettingForm.value.isReview;
   }
-  removePreviousFile(i: any) {
-    this.removeImage.push(this.conversations[i]);
+  removePreviousFile(i: any, id: any) {
+    if (this.conversations[i] != undefined) {
+      this.removeImage.push(this.conversations[i]);
+    } else {
+      console.log(id);
+      //id = parseInt(id) - 1;
+      this.fileList.splice(id, 1);
+    }
+
+    // console.log(this.removeImage);
+    // console.log(this.uploadUrls);
     this.uploadUrls.splice(i, 1);
+    console.log(this.uploadUrls);
+    console.log(this.fileList);
   }
   removeSelectedFile(index: any) {
     this.urls.splice(index, 1);
@@ -439,11 +442,12 @@ export class ManageProfileComponent implements OnInit {
     console.log(this.urls); // show image encrypt image code
   }
   uploadImages(event: any) {
-    console.log(event.target.files);
+    // console.log(event.target.files);
     this.files = event.target.files;
     for (var i = 0; i <= this.files.length - 1; i++) {
       let objectURL = URL.createObjectURL(event.target.files[i]);
-      this.uploadUrls.push(objectURL);
+      console.log(i);
+      this.uploadUrls.push({ id: i, image: objectURL });
       let reader = new FileReader();
       reader.onload = (e: any) => {
         this.urls.push(e.target.result);
@@ -454,6 +458,7 @@ export class ManageProfileComponent implements OnInit {
       this.listOfFiles.push(selectedFile.name);
     }
     console.log(this.uploadUrls);
+    console.log(this.fileList);
   }
 
   editReviews() {

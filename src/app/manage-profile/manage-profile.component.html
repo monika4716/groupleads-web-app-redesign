@@ -140,10 +140,6 @@
                                             data-bs-backdrop="static" data-bs-target="#edit_conversation_Modal" />
                                     </div>
                                 </div>
-
-                                <!-- <p-carousel [value]="uploadUrls" styleClass="custom-carousel"
-                                    [responsiveOptions]="responsiveOptions" [numVisible]="3" [numScroll]="3"
-                                    [circular]="true" [autoplayInterval]="3000"> -->
                                 <p-carousel [value]="uploadUrls" styleClass="custom-carousel" [numVisible]="3"
                                     [numScroll]="1" [circular]="true" [autoplayInterval]="3000"
                                     [responsiveOptions]="responsiveOptions">
@@ -151,7 +147,7 @@
                                         <div class="conversation-item">
                                             <div class="conversation-item-content">
                                                 <div class="mb-3" id="image-conversations">
-                                                    <img [src]="conversation |safe" [alt]="conversation"
+                                                    <img [src]="conversation.image |safe" [alt]="conversation"
                                                         class="conversation-image" />
                                                 </div>
                                             </div>
@@ -170,7 +166,6 @@
 
                                     <span class="review-rating"><img
                                             src="assets/images/star_white_fill.png " />{{averageRating}}</span>
-                                    <!-- <img src="assets/images/review.png" /> -->
                                 </div>
                                 <div class="col-md-12 text-center">
                                     <h5>based on {{groupReview.length}} reviews</h5>
@@ -559,8 +554,8 @@
                             </div>
                         </div>
                         <div class="upload-image" *ngFor="let image of uploadUrls; let index = index">
-                            <img [src]="image | safe" class="rounded mb-3 mt-4 conversation-review-image"><span
-                                mat-icon-button (click)="removePreviousFile(index)"><img
+                            <img [src]="image.image | safe" class="rounded mb-3 mt-4 conversation-review-image"><span
+                                mat-icon-button id="{{image.id}}" (click)="removePreviousFile(index,id)"><img
                                     src="assets/images/Cancel.png"></span>
                         </div>
                         <!-- <div class="upload-image" *ngFor="let url of urls; let index = index">
