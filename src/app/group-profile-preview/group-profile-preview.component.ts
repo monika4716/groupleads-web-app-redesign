@@ -64,6 +64,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   review: any = '';
   editReviewSettingForm: FormGroup;
   isReview: boolean = true;
+  disableWriteReviewBtn: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -86,6 +87,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
     console.log(this.previewEnable);
     if (this.previewEnable) {
+      this.disableWriteReviewBtn = true;
       this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
       this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
       console.log(this.manageProfileStorage);
@@ -93,6 +95,7 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.showPreviewDetails(this.manageProfileStorage);
     } else {
       this.spinner.show();
+      this.disableWriteReviewBtn = false;
       this.uniqueName = this.activatedRoute.snapshot.paramMap.get('slug');
       //this.getGroupProfilePreview();
     }
@@ -110,16 +113,10 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.reviews = groupDetails.group_reviews;
     this.conversations = groupDetails.group_conversation_images;
     this.user = groupDetails.user[0];
-
     this.groupName = linkedDetails.group_name;
-    console.log(this.groupName);
     this.selectedLocation = groupDetails.location_id;
-    console.log(this.selectedLocation);
     this.selectedCategory = groupDetails.category_id;
-    console.log(this.selectedCategory);
-    console.log(groupCategories);
-
-    this.setCategoryNamr(this.selectedCategory, groupCategories);
+    this.setCategoryName(this.selectedCategory, groupCategories);
     this.setLocationValue(this.selectedLocation);
     this.createdProfile = groupDetails.created_at;
     this.about = groupDetails.description;
@@ -127,33 +124,36 @@ export class GroupProfilePreviewComponent implements OnInit {
     if (!Array.isArray(this.topics)) {
       this.topics = this.topics.split(' ');
     }
-
-    //this.conversations = response.profileImages;
-    // console.log(this.conversations);
-
-    for (let i = 0; i < this.conversations.length; i++) {
-      if (this.conversations[i].image) {
-        console.log(this.conversations[i].image);
-        let image =
-          this.conversationImageUrl + '/' + this.conversations[i].image;
-        this.conversationsImage.push(image);
-      }
-    }
+    this.showConversationImage();
     if (this.conversationsImage.length == 0) {
       this.conversationsImage = this.conversations;
     }
-
     if (groupDetails.image) {
       this.groupImage = groupDetails.image;
     }
-
-    // this.path = response.path;
     this.facebookGroupLink =
       'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
 
     this.showAdmins(adminDetails);
     this.setSocialLink();
     this.averageRating = this.calculateAverageReview();
+  }
+
+  showConversationImage() {
+    this.conversationsImage = [];
+    console.log(this.conversations);
+    for (let i = 0; i < this.conversations.length; i++) {
+      if (this.conversations[i].image) {
+        if (this.conversations[i].image.indexOf('http') < 0) {
+          let image =
+            this.conversationImageUrl + '/' + this.conversations[i].image;
+          this.conversationsImage.push(image);
+        } else {
+          let image = this.conversations[i].image;
+          this.conversationsImage.push(image);
+        }
+      }
+    }
   }
 
   calculateAverageReview() {
@@ -180,7 +180,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   get r() {
-    //console.log(this.overViewForm.controls);
     return this.editReviewsForm.controls;
   }
 
@@ -193,13 +192,11 @@ export class GroupProfilePreviewComponent implements OnInit {
           console.log(response);
           let groupDetails = response.groupDetails;
           let groupCategories = response.groupCategories;
-
           this.reviews = response.profileReviews;
-
           this.groupName = groupDetails.group_name;
           this.selectedLocation = groupDetails.location_id;
           this.selectedCategory = groupDetails.category_id;
-          this.setCategoryNamr(this.selectedCategory, groupCategories);
+          this.setCategoryName(this.selectedCategory, groupCategories);
           this.setLocationValue(this.selectedLocation);
           this.createdProfile = groupDetails.created_at;
           this.about = groupDetails.description;
@@ -209,11 +206,7 @@ export class GroupProfilePreviewComponent implements OnInit {
           this.uniqueName = groupDetails.unique_name.toLowerCase();
           this.facebookGroupLink =
             'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
-
-          console.log(this.conversations);
-
           let adminDetails = response.adminDetails;
-
           this.showAdmins(adminDetails);
           this.setSocialLink();
         }
@@ -225,17 +218,16 @@ export class GroupProfilePreviewComponent implements OnInit {
     let selectedCountry = this.locationList[index];
     this.location = selectedCountry.name;
   }
-  setCategoryNamr(id: any, groupCategories: any) {
+  setCategoryName(id: any, groupCategories: any) {
     let index = groupCategories.findIndex((x: any) => x.id === id);
     let categoryIndex = groupCategories[index];
     this.category = categoryIndex.name;
   }
 
   showAdmins(admin: any) {
-    console.log(admin);
-    console.log(this.user);
+    //console.log(admin);
+    //console.log(this.user);
     this.adminName = this.capitalizeFirstLetter(this.user.name);
-
     if (admin.id != null) {
       let index = this.locationList.findIndex(
         (x: any) => x.code === admin.location
@@ -245,7 +237,7 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.adminlocation = selectedCountry.name;
       this.countryFlag = selectedCountry.image;
       this.adminImage = this.adminImageUrl + admin.image;
-      this.adminSlug = this.origin + '/profile/' + admin.adminSlug;
+      this.adminSlug = this.origin + '/profile/' + admin.user_name;
       this.showAdminBio = true;
     }
   }

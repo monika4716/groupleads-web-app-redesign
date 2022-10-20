@@ -456,3 +456,11 @@ button[disabled] {
   min-height: 70px !important;
   border-radius: 50%;
 }
+.btn:disabled {
+  border-color: unset !important;
+}
+
+.all-review-btn:hover {
+  border-color: #3c61ad !important;
+  color: #3c61ad !important;
+}

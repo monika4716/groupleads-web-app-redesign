@@ -39,7 +39,7 @@ export class ManageProfileComponent implements OnInit {
   groupCreated: any = '';
   conversationImageUrl = '';
   adminImageUrl = '';
-  conversations: any = [];
+  conversationImages: any = [];
   adminImage = 'assets/images/default.jpg';
   groupCategories: any = [];
   categoryId: any = '';
@@ -144,14 +144,13 @@ export class ManageProfileComponent implements OnInit {
     this.origin = location.origin;
     this.spinner.show();
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log(params);
       this.groupId = params['group_id'];
       if (params['id']) {
         this.id = params['id'];
       }
     });
-    console.log(this.id);
-    console.log(this.groupId);
+    console.log('id', this.id);
+    console.log('group-id', this.groupId);
     this.getManageProfileDetails();
   }
 
@@ -181,9 +180,7 @@ export class ManageProfileComponent implements OnInit {
           this.adminImageUrl = response.adminImageUrl;
           this.adminBio = groupDetails.admin_bio;
           this.user = groupDetails.user;
-          this.conversations = groupDetails.group_conversation_images;
-
-          this.showImage();
+          this.conversationImages = groupDetails.group_conversation_images;
 
           if (this.user.length > 0) {
             this.user = this.user[0];
@@ -211,24 +208,12 @@ export class ManageProfileComponent implements OnInit {
           this.created = groupDetails.created_at;
           this.averageRating = this.calculateAverageReview();
           this.setSocialLink();
-          this.apiService.getGroupManage().subscribe((response) => {
-            console.log('get Group Manage ');
-            console.log(response);
-          });
+          this.showConversationImages();
           this.spinner.hide();
         } else {
           this.spinner.hide();
         }
       });
-  }
-
-  showImage() {
-    for (var i = 0; i <= this.conversations.length - 1; i++) {
-      console.log(this.conversations[i]);
-      let id = this.conversations[i].id;
-      let image = this.conversationImageUrl + this.conversations[i].image;
-      this.uploadUrls.push({ id: id, image: image });
-    }
   }
 
   setCategoryName(id: any, groupCategories: any) {
@@ -253,7 +238,6 @@ export class ManageProfileComponent implements OnInit {
   }
 
   showAdmins(admin: any) {
-    console.log(admin);
     if (admin.id != null) {
       let index = this.locationList.findIndex(
         (x: any) => x.code === admin.location
@@ -361,8 +345,9 @@ export class ManageProfileComponent implements OnInit {
       $('#edit_overview_close').click();
     }, 500);
   }
+
   editTopics() {
-    console.log(this.editTopicsForm);
+    //console.log(this.editTopicsForm);
     this.isTopic = this.editTopicsForm.value.isTopic;
     this.topics = this.editTopicsForm.value.topics;
 
@@ -385,12 +370,16 @@ export class ManageProfileComponent implements OnInit {
       $('#editTopics_cancel').click();
     }, 500);
   }
+
+  editReviewSetting() {
+    console.log(this.editReviewSettingForm.value);
+    this.isReview = this.editReviewSettingForm.value.isReview;
+  }
+
+  // Edit upload and remove Conversation Image //
+
   editConversations() {
-    console.log(this.files);
-    // console.log(this.editConversationsForm);
-
     // set the updated value in manageProfileStorage storage //
-
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
 
@@ -411,43 +400,24 @@ export class ManageProfileComponent implements OnInit {
     }, 1000);
   }
 
-  editReviewSetting() {
-    console.log(this.editReviewSettingForm.value);
-    this.isReview = this.editReviewSettingForm.value.isReview;
-  }
-  removePreviousFile(i: any, id: any) {
-    if (this.conversations[i] != undefined) {
-      this.removeImage.push(this.conversations[i]);
-    } else {
-      console.log(id);
-      //id = parseInt(id) - 1;
-      this.fileList.splice(id, 1);
+  showConversationImages() {
+    for (var i = 0; i <= this.conversationImages.length - 1; i++) {
+      let id = this.conversationImages[i].id;
+      let image = this.conversationImageUrl + this.conversationImages[i].image;
+      this.uploadUrls.push({ id: id, image: image });
     }
-
-    // console.log(this.removeImage);
-    // console.log(this.uploadUrls);
-    this.uploadUrls.splice(i, 1);
-    console.log(this.uploadUrls);
-    console.log(this.fileList);
   }
-  removeSelectedFile(index: any) {
-    this.urls.splice(index, 1);
-    // Delete the item from fileNames list
-    this.listOfFiles.splice(index, 1);
-    // delete file from FileList
-    this.fileList.splice(index, 1);
 
-    console.log(this.listOfFiles); // name of files
-    console.log(this.fileList); //array of files
-    console.log(this.urls); // show image encrypt image code
-  }
   uploadImages(event: any) {
-    // console.log(event.target.files);
     this.files = event.target.files;
     for (var i = 0; i <= this.files.length - 1; i++) {
       let objectURL = URL.createObjectURL(event.target.files[i]);
-      console.log(i);
-      this.uploadUrls.push({ id: i, image: objectURL });
+      let id = Math.floor(10000 + Math.random() * 90000);
+      this.uploadUrls.push({
+        id: id,
+        image: objectURL,
+        name: event.target.files[i].name,
+      });
       let reader = new FileReader();
       reader.onload = (e: any) => {
         this.urls.push(e.target.result);
@@ -457,12 +427,24 @@ export class ManageProfileComponent implements OnInit {
       this.fileList.push(selectedFile);
       this.listOfFiles.push(selectedFile.name);
     }
+  }
+
+  removePreviousFile(i: any, id: any) {
+    let uploadUrlIndex = this.uploadUrls.findIndex((x: any) => x.id == id);
+    let fileListIndex = this.fileList.findIndex(
+      (x: any) => x.name == this.uploadUrls[uploadUrlIndex].name
+    );
+    this.uploadUrls.splice(uploadUrlIndex, 1);
+    if (fileListIndex >= 0) {
+      this.fileList.splice(fileListIndex, 1);
+    }
     console.log(this.uploadUrls);
     console.log(this.fileList);
   }
 
+  // End Edit upload and remove Conversation Image//
+
   editReviews() {
-    console.log(this.editReviewsForm);
     this.rating = this.editReviewsForm.value.rating;
     this.review = this.editReviewsForm.value.review;
     setTimeout(() => {

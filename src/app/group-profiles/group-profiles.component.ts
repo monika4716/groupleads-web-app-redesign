@@ -35,17 +35,16 @@ export class GroupProfilesComponent implements OnInit {
         if (response.hasOwnProperty('groupProfile')) {
           this.groupProfiles = response.groupProfile;
           this.spinner.hide();
-          console.log(this.groupProfiles);
         }
       }
     });
   }
 
+  //---------------GET GROUPS DETAILS------------------//
+
   getGroupDetails() {
     this.token = localStorage.getItem('token');
-    console.log(this.token);
     this.apiService.getGroupDetails(this.token).subscribe((response: any) => {
-      console.log(response);
       if (response.status == 200) {
         this.groupProfiles = response.groupProfile;
         this.apiService.updateGroupProfile(response);

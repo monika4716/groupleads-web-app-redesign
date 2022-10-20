@@ -145,7 +145,7 @@ export class ApiService {
 
   //GROUPS DETAILS WITH PROFILE / OBSERVABLE
   getGroupProfile(): Observable<any> {
-    console.log(this.groupProfiles);
+    // console.log(this.groupProfiles);
     return this.groupProfiles.asObservable();
   }
 
@@ -159,7 +159,7 @@ export class ApiService {
   }
   // GET GROUPS DETAILS
   getGroupDetails(token: any) {
-    console.log(token);
+    // console.log(token);
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Accept', 'application/json');
     headers = headers.append('Authorization', 'Bearer ' + token);
@@ -210,22 +210,26 @@ export class ApiService {
   // VALIDATE UNIQUE GROUP NAME
   GroupUniqueNameExistsValidator(
     token: any,
-    uniqueName: any
+    uniqueName: any,
+    groupProfileId: any
   ): AsyncValidatorFn {
     return (control: AbstractControl) => {
-      return this.checkUniqueNameNotTaken(token, control.value).pipe(
-        map((res) => (res ? { uniqueNameExists: true } : null))
-      );
+      return this.checkUniqueNameNotTaken(
+        token,
+        control.value,
+        groupProfileId
+      ).pipe(map((res) => (res ? { uniqueNameExists: true } : null)));
     };
   }
 
   // CHECK UNIQUE NAME FOR GROUP PROFILE SLUG
-  checkUniqueNameNotTaken(token: any, uniqueName: string) {
+  checkUniqueNameNotTaken(token: any, uniqueName: string, groupProfileId: any) {
+    let slug = uniqueName + '_' + groupProfileId;
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Accept', 'application/json');
     headers = headers.append('Authorization', 'Bearer ' + token);
     return this.httpClient.get(
-      this.API_URL + 'check-unique-groupname/' + uniqueName,
+      this.API_URL + 'check-unique-groupname/' + slug,
       {
         headers: headers,
       }
@@ -252,7 +256,6 @@ export class ApiService {
   }
 
   getGroupManage(): Observable<any> {
-    console.log(this.groupManage);
     return this.groupManage.asObservable();
   }
 

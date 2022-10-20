@@ -194,7 +194,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-outline-primary btn-block"
+                                    <button type="button" class="btn btn-outline-primary btn-block all-review-btn"
                                         data-bs-toggle="modal" data-bs-backdrop="static"
                                         data-bs-target="#review_settings_Modal">See All
                                         Reviews</button>
@@ -555,7 +555,7 @@
                         </div>
                         <div class="upload-image" *ngFor="let image of uploadUrls; let index = index">
                             <img [src]="image.image | safe" class="rounded mb-3 mt-4 conversation-review-image"><span
-                                mat-icon-button id="{{image.id}}" (click)="removePreviousFile(index,id)"><img
+                                mat-icon-button (click)="removePreviousFile(index,image.id)"><img
                                     src="assets/images/Cancel.png"></span>
                         </div>
                         <!-- <div class="upload-image" *ngFor="let url of urls; let index = index">

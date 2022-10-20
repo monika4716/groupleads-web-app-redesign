@@ -58,8 +58,9 @@
                                         class=" btn-outline-primary btn-block group_admin message-btn"><img
                                             src="assets/images/sms-tracking.png " /> Message Group Admin</button> -->
                                 </div>
-                                <div class="col-md-5"><button type="button"
-                                        class="btn btn-primary btn-block review_btn"><img
+                                <div class="col-md-5"><button type="button" [disabled]="disableWriteReviewBtn"
+                                        class="btn btn-primary btn-block review_btn" data-bs-toggle="modal"
+                                        data-bs-backdrop="static" data-bs-target="#write_review_Modal"><img
                                             src="assets/images/star_white.png " /> Write A Review</button></div>
                             </div>
                         </div>
@@ -178,9 +179,10 @@
                                 </div>
 
                                 <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-primary btn-block review_btn"
-                                        data-bs-toggle="modal" data-bs-backdrop="static"
-                                        data-bs-target="#write_review_Modal"><img src="assets/images/star_white.png " />
+                                    <button type="button" [disabled]="disableWriteReviewBtn"
+                                        class="btn btn-primary btn-block review_btn" data-bs-toggle="modal"
+                                        data-bs-backdrop="static" data-bs-target="#write_review_Modal"><img
+                                            src="assets/images/star_white.png " />
                                         Write A Review</button>
                                 </div>
                                 <div class="review_sec">
@@ -200,7 +202,7 @@
 
                                 </div>
                                 <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-outline-primary btn-block"
+                                    <button type="button" class="btn btn-outline-primary btn-block all-review-btn"
                                         data-bs-toggle="modal" data-bs-backdrop="static"
                                         data-bs-target="#review_settings_Modal">See All
                                         Reviews</button>
@@ -217,9 +219,9 @@
                                         <h5>Be the first to leave a review.</h5>
                                     </div>
                                     <div class="col-md-12 d-grid admin_sec">
-                                        <button type="button" class="btn btn-primary btn-block review_btn"
-                                            data-bs-toggle="modal" data-bs-backdrop="static"
-                                            data-bs-target="#write_review_Modal"><img
+                                        <button type="button" [disabled]="disableWriteReviewBtn"
+                                            class="btn btn-primary btn-block review_btn" data-bs-toggle="modal"
+                                            data-bs-backdrop="static" data-bs-target="#write_review_Modal"><img
                                                 src="assets/images/star_white.png " /> Write A Review</button>
                                     </div>
                                 </div>

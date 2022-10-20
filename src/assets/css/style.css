@@ -1817,29 +1817,29 @@ input:checked + .slider:before {
   color: #757575;
 }
 .all_review_btn {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 20px;
-  background: transparent;
-  border: 2px solid #3c61ad;
-  border-radius: 4px;
-  color: #3c61ad;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+  line-height: 20px !important;
+  background: transparent !important;
+  border: 2px solid #3c61ad !important;
+  border-radius: 4px !important;
+  color: #3c61ad !important;
 }
 .all_review_btn:hover {
-  background: transparent;
-  border: 2px solid #3c61ad;
-  border-radius: 4px;
-  color: #3c61ad;
+  background: transparent !important;
+  border: 2px solid #3c61ad !important;
+  border-radius: 4px !important;
+  color: #3c61ad !important;
 }
 .all_review_btn.btn-check:active + .btn-outline-primary,
 .all_review_btn.btn-check:checked + .btn-outline-primary,
 .all_review_btn.btn-outline-primary.active,
 .all_review_btn.btn-outline-primary.dropdown-toggle.show,
 .all_review_btn.btn-outline-primary:active {
-  background: transparent;
-  border: 2px solid #3c61ad;
-  color: #3c61ad;
+  background: transparent !important;
+  border: 2px solid #3c61ad !important;
+  color: #3c61ad !important;
 }
 .manage_profile h4 {
   font-style: normal;

@@ -28,7 +28,7 @@ export class GroupProfileCreateComponent implements OnInit {
   groupProfiles: any = [];
   groupId: any;
   fbGroupId: any;
-  groupProfileId: any = '';
+  groupProfileId: any = 0;
   groupProfile: any = [];
   groupDetails: any;
   groupOverview: any;
@@ -85,6 +85,14 @@ export class GroupProfileCreateComponent implements OnInit {
   ) {
     var token = localStorage.getItem('token');
     this.origin = location.origin;
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      console.log(params);
+      this.groupId = params['group_id'];
+      if (params['id']) {
+        this.groupProfileId = params['id'];
+      }
+    });
     this.overViewForm = this.fb.group({
       description: ['', Validators.required],
       category: ['', Validators.required],
@@ -96,7 +104,8 @@ export class GroupProfileCreateComponent implements OnInit {
           asyncValidators: [
             this.apiService.GroupUniqueNameExistsValidator(
               token,
-              this.uniqueName
+              this.uniqueName,
+              this.groupProfileId
             ),
           ],
           updateOn: 'blur',
@@ -119,24 +128,18 @@ export class GroupProfileCreateComponent implements OnInit {
     this.token = token;
     this.urls = [];
     this.href = this.router.url;
-    this.activatedRoute.queryParams.subscribe((params) => {
-      console.log(params);
-      this.groupId = params['group_id'];
-      if (params['id']) {
-        this.groupProfileId = params['id'];
-      }
-    });
 
     this.apiService.getGroupProfile().subscribe((response) => {
-      console.log(response);
       if (
         response.hasOwnProperty('groupProfile') &&
         response.hasOwnProperty('GroupCategories') &&
-        response.hasOwnProperty('path')
+        response.hasOwnProperty('conversationImageURl')
       ) {
+        console.log('call ovserable');
+        console.log(response);
         this.groupProfile = response.groupProfile;
         this.groupCategories = response.GroupCategories;
-        this.imagePath = response.path;
+        this.imagePath = response.conversationImageURl;
         let found = this.groupProfile.findIndex((value: any) => {
           return value.id == this.groupId;
         });
@@ -156,11 +159,11 @@ export class GroupProfileCreateComponent implements OnInit {
 
         console.log(this.groupProfile[found]);
 
-        if (this.groupProfileId != '') {
+        if (this.groupProfileId != 0) {
           this.getProfileImages();
         }
       } else {
-        //console.log(response);
+        console.log('call api');
         this.getGroupDetails();
       }
     });
@@ -205,9 +208,9 @@ export class GroupProfileCreateComponent implements OnInit {
       .getGProfileImages(token, this.groupProfileId)
       .subscribe((response: any) => {
         if (response.status == 200) {
-          console.log(response.profileImages);
+          console.log(response);
           this.previousImage = response.profileImages;
-          console.log(this.previousImage);
+          // console.log(this.previousImage);
         }
       });
   }
@@ -215,12 +218,13 @@ export class GroupProfileCreateComponent implements OnInit {
   getGroupDetails() {
     this.spinner.show();
     var token = localStorage.getItem('token');
+
     this.apiService
       .getParticularGroupProfile(this.groupId, token, this.groupProfileId)
       .subscribe((response: any) => {
         // console.log(response.groupProfileDetail);
         if (response.status == 200) {
-          this.imagePath = response.path;
+          this.imagePath = response.conversationImageURl;
           this.groupCategories = response.GroupCategories;
           this.groupDetails = response.groupProfileDetail;
           this.fbGroupId = this.groupDetails.fb_group_id;
@@ -232,9 +236,6 @@ export class GroupProfileCreateComponent implements OnInit {
             this.previewFlag = true;
             this.setProfileValues();
           }
-
-          // console.log(this.groupDetails);
-
           let url = '';
           this.setSocialLink(url);
         }
