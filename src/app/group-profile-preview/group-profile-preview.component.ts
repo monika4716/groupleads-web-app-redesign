@@ -121,8 +121,14 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.createdProfile = groupDetails.created_at;
     this.about = groupDetails.description;
     this.topics = groupDetails.topic;
+    this.uniqueName = groupDetails.unique_name;
+    console.log(this.topics);
     if (!Array.isArray(this.topics)) {
-      this.topics = this.topics.split(' ');
+      if (this.topics.indexOf(',') > 0) {
+        this.topics = this.topics.split(',');
+      } else {
+        this.topics = this.topics.split(' ');
+      }
     }
     this.showConversationImage();
     if (this.conversationsImage.length == 0) {
@@ -132,7 +138,7 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.groupImage = groupDetails.image;
     }
     this.facebookGroupLink =
-      'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
+      'https://www.facebook.com/groups/' + linkedDetails.fb_group_id;
 
     this.showAdmins(adminDetails);
     this.setSocialLink();
@@ -261,6 +267,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   setSocialLink() {
+    console.log(this.uniqueName);
     let url = this.origin + '/group-profile/' + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);

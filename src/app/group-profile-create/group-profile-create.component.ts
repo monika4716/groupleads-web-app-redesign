@@ -75,6 +75,14 @@ export class GroupProfileCreateComponent implements OnInit {
   displayIframe: boolean = false;
   iframeUrl: any = '';
   status: any = 0;
+  conversationImageUrl: any = '';
+  adminImageUrl: any = '';
+  conversationImages: any = [];
+  user: any = [];
+  adminBio: any = [];
+  linkedFbGroup: any = [];
+  uploadUrls: any = [];
+
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -92,6 +100,7 @@ export class GroupProfileCreateComponent implements OnInit {
       if (params['id']) {
         this.groupProfileId = params['id'];
       }
+      console.log(this.groupProfileId);
     });
     this.overViewForm = this.fb.group({
       description: ['', Validators.required],
@@ -129,44 +138,50 @@ export class GroupProfileCreateComponent implements OnInit {
     this.urls = [];
     this.href = this.router.url;
 
-    this.apiService.getGroupProfile().subscribe((response) => {
-      if (
-        response.hasOwnProperty('groupProfile') &&
-        response.hasOwnProperty('GroupCategories') &&
-        response.hasOwnProperty('conversationImageURl')
-      ) {
-        console.log('call ovserable');
+    if (this.groupProfileId == 0) {
+      this.apiService.getGroupProfile().subscribe((response) => {
         console.log(response);
-        this.groupProfile = response.groupProfile;
-        this.groupCategories = response.GroupCategories;
-        this.imagePath = response.conversationImageURl;
-        let found = this.groupProfile.findIndex((value: any) => {
-          return value.id == this.groupId;
-        });
+        if (
+          response.hasOwnProperty('groupProfile') &&
+          response.hasOwnProperty('GroupCategories') &&
+          response.hasOwnProperty('conversationImageURl')
+        ) {
+          console.log('call ovserable');
+          console.log(response);
+          this.groupProfile = response.groupProfile;
+          this.groupCategories = response.GroupCategories;
+          this.imagePath = response.conversationImageURl;
+          let found = this.groupProfile.findIndex((value: any) => {
+            return value.id == this.groupId;
+          });
 
-        if (found > -1) {
-          this.groupName = this.groupProfile[found].group_name;
-          console.log(this.groupName);
-          this.fbGroupId = this.groupProfile[found].fb_group_id;
-          this.groupDetails = this.groupProfile[found];
-          if (this.groupDetails.group_profile_id != null) {
-            this.previewFlag = true;
-            this.setProfileValues();
+          if (found > -1) {
+            this.groupName = this.groupProfile[found].group_name;
+            console.log(this.groupName);
+            this.fbGroupId = this.groupProfile[found].fb_group_id;
+            this.groupDetails = this.groupProfile[found];
+            if (this.groupDetails.group_profile_id != null) {
+              this.previewFlag = true;
+              this.setProfileValues();
+            }
+            let url = '';
+            this.setSocialLink(url);
           }
-          let url = '';
-          this.setSocialLink(url);
-        }
 
-        console.log(this.groupProfile[found]);
+          console.log(this.groupProfile[found]);
 
-        if (this.groupProfileId != 0) {
-          this.getProfileImages();
+          if (this.groupProfileId != 0) {
+            this.getProfileImages();
+          }
+        } else {
+          console.log('call api');
+          this.getGroupDetails();
         }
-      } else {
-        console.log('call api');
-        this.getGroupDetails();
-      }
-    });
+      });
+    } else {
+      console.log('call api');
+      this.getGroupDetails();
+    }
 
     this.items = [
       {
@@ -218,23 +233,62 @@ export class GroupProfileCreateComponent implements OnInit {
   getGroupDetails() {
     this.spinner.show();
     var token = localStorage.getItem('token');
+    console.log(this.groupProfileId);
 
     this.apiService
       .getParticularGroupProfile(this.groupId, token, this.groupProfileId)
       .subscribe((response: any) => {
-        // console.log(response.groupProfileDetail);
+        console.log(response);
         if (response.status == 200) {
-          this.imagePath = response.conversationImageURl;
-          this.groupCategories = response.GroupCategories;
-          this.groupDetails = response.groupProfileDetail;
-          this.fbGroupId = this.groupDetails.fb_group_id;
-          this.previousImage = response.profileImages;
+          localStorage.setItem(
+            'manageProfileStorage',
+            JSON.stringify(response)
+          );
 
-          this.groupName = this.groupDetails.group_name;
+          let groupDetails = response.groupDetails;
+          this.conversationImageUrl = response.conversationImageURl;
+          this.adminImageUrl = response.adminImageUrl;
+          this.adminBio = groupDetails.admin_bio;
+          this.user = groupDetails.user;
 
-          if (this.groupDetails.group_profile_id != null) {
+          this.groupCategories = response.groupCategories;
+          if (groupDetails.linked_fb_group != undefined) {
+            this.linkedFbGroup = groupDetails.linked_fb_group;
+            this.groupName = this.linkedFbGroup.group_name;
+          } else {
+            this.groupName = groupDetails.group_name;
+          }
+
+          // this.fbGroupId = this.groupDetails.fb_group_id;
+          // this.previousImage = response.profileImages;
+
+          if (groupDetails.description) {
+            this.description = groupDetails.description;
+          }
+          if (groupDetails.category_id) {
+            this.selectedCategory = groupDetails.category_id;
+          }
+          if (groupDetails.location_id) {
+            this.selectedLocation = groupDetails.location_id;
+          }
+          if (groupDetails.unique_name) {
+            this.uniqueName = groupDetails.unique_name;
+          }
+          if (groupDetails.topic) {
+            this.topic = groupDetails.topic.split(',');
+          }
+
+          if (groupDetails.group_profile_id != null) {
             this.previewFlag = true;
             this.setProfileValues();
+          }
+
+          if (
+            groupDetails.group_conversation_images != undefined &&
+            groupDetails.group_conversation_images.length > 0
+          ) {
+            this.conversationImages = groupDetails.group_conversation_images;
+            this.showConversationImages();
           }
           let url = '';
           this.setSocialLink(url);
@@ -243,6 +297,13 @@ export class GroupProfileCreateComponent implements OnInit {
       });
   }
 
+  showConversationImages() {
+    for (var i = 0; i <= this.conversationImages.length - 1; i++) {
+      let id = this.conversationImages[i].id;
+      let image = this.conversationImageUrl + this.conversationImages[i].image;
+      this.uploadUrls.push({ id: id, image: image });
+    }
+  }
   setProfileValues() {
     console.log(this.groupDetails);
     console.log(this.imagePath);
@@ -279,6 +340,7 @@ export class GroupProfileCreateComponent implements OnInit {
     }
     if (this.overViewForm.value.uniqueName != undefined) {
       this.uniqueName = this.overViewForm.value.uniqueName;
+      this.uniqueName = this.uniqueName.replace(/\s/g, '');
     }
     this.activeStepIndex = 1;
   }
@@ -302,7 +364,7 @@ export class GroupProfileCreateComponent implements OnInit {
     }
   }
 
-  removePreviousFile(index: any) {
+  removePreviousFile(index: any, id: any) {
     this.removeImage.push(this.previousImage[index]);
     this.previousImage.splice(index, 1);
   }
@@ -405,8 +467,8 @@ export class GroupProfileCreateComponent implements OnInit {
       encodeURIComponent(url);
   }
 
-  copyGroupProfileModel(slug: any) {
-    let profileSlug = this.origin + '/group-profile/' + slug;
+  copyGroupProfileModel(uniqueName: any) {
+    let profileSlug = this.origin + '/group-profile/' + uniqueName;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(
@@ -427,8 +489,12 @@ export class GroupProfileCreateComponent implements OnInit {
 
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
+    console.log(this.uniqueName);
     let url =
-      this.origin + '/group-profile/' + this.slug + '?displayClose=true';
+      this.origin +
+      '/group-profile/' +
+      this.uniqueName +
+      '?displayClose=true&preview=true';
     console.log(url);
     this.displayForm = false;
     this.displaycloseButton = true;

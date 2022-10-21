@@ -182,9 +182,9 @@
                                                 Help brands see what you do.</p>
 
                                             <div class="upload-image"
-                                                *ngFor="let image of previousImage; let index = index">
-                                                <img [src]="imagePath+'/'+image.image" class="rounded mb-3 mt-4"><span
-                                                    mat-icon-button (click)="removePreviousFile(index)"><img
+                                                *ngFor="let image of uploadUrls; let index = index">
+                                                <img [src]="image.image" class="rounded mb-3 mt-4"><span mat-icon-button
+                                                    (click)="removePreviousFile(index,image.id)"><img
                                                         src="assets/images/Cancel.png"></span>
                                             </div>
 
@@ -233,7 +233,7 @@
                                                     <div class="card groups_section">
                                                         <div class="card-body create_profile_section">
                                                             <div class="col-md-12">
-                                                                <h4>{{groupDetails.group_name}}</h4>
+                                                                <h4>{{groupName}}</h4>
                                                                 <!-- <ul
                                                                         class="d-flex align-items-center justify-content-center">
                                                                         <li><img src="assets/images/public.png">Public
@@ -248,9 +248,7 @@
                                                                     class="btn btn-outline-primary preview_btn bio_btn"><img
                                                                         src="assets/images/eye.png">Preview
                                                                     Bio</a> -->
-                                                                <button type="button"
-                                                                    [disabled]="previewFlag ? null: true"
-                                                                    (click)="openPreview()"
+                                                                <button type="button" (click)="openPreview()"
                                                                     class="btn btn-outline-primary preview_btn bio_btn"><img
                                                                         src="assets/images/eye.png">Preview
                                                                     Bio</button>
@@ -306,8 +304,9 @@
             <p>Share to start getting noticed</p>
             <div class="input-group">
                 <input type="text" class="form-control" [disabled]="showAddProfileBtn"
-                    placeholder="{{origin}}/group-profile/{{slug}}">
-                <span type="button" (click)="copyGroupProfileModel(slug)" class="input-group-text">{{model_text}}</span>
+                    placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                <span type="button" (click)="copyGroupProfileModel(uniqueName)"
+                    class="input-group-text">{{model_text}}</span>
             </div>
             <h6><span class="border_left"></span>Share with<span class="border_right"></span>
             </h6>
