@@ -17,6 +17,8 @@ import * as $ from 'jquery';
 
 import { StepsModule } from 'primeng/steps';
 import { MenuItem } from 'primeng/api';
+import { group } from '@angular/animations';
+import { splitNsName } from '@angular/compiler';
 
 @Component({
   selector: 'app-group-profile-create',
@@ -82,6 +84,12 @@ export class GroupProfileCreateComponent implements OnInit {
   adminBio: any = [];
   linkedFbGroup: any = [];
   uploadUrls: any = [];
+  groupImageUrl: any = '';
+  groupReviews: any = [];
+  manageProfileStorage: any = {};
+  publishGroup: any = {};
+  publishimages: any = [];
+  image: any = {};
 
   constructor(
     private router: Router,
@@ -93,6 +101,9 @@ export class GroupProfileCreateComponent implements OnInit {
   ) {
     var token = localStorage.getItem('token');
     this.origin = location.origin;
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    console.log(this.manageProfileStorage);
 
     this.activatedRoute.queryParams.subscribe((params) => {
       console.log(params);
@@ -225,7 +236,7 @@ export class GroupProfileCreateComponent implements OnInit {
         if (response.status == 200) {
           console.log(response);
           this.previousImage = response.profileImages;
-          // console.log(this.previousImage);
+          console.log(this.previousImage);
         }
       });
   }
@@ -247,20 +258,28 @@ export class GroupProfileCreateComponent implements OnInit {
 
           let groupDetails = response.groupDetails;
           this.conversationImageUrl = response.conversationImageURl;
+          if (groupDetails.admin_bio != undefined) {
+            this.adminBio = groupDetails.admin_bio[0];
+          }
           this.adminImageUrl = response.adminImageUrl;
-          this.adminBio = groupDetails.admin_bio;
-          this.user = groupDetails.user;
+          if (groupDetails.user != undefined) {
+            this.user = groupDetails.user[0];
+          }
 
-          this.groupCategories = response.groupCategories;
+          this.groupImageUrl = response.groupImageUrl;
           if (groupDetails.linked_fb_group != undefined) {
             this.linkedFbGroup = groupDetails.linked_fb_group;
+          }
+          this.groupReviews = groupDetails.group_reviews;
+          this.groupCategories = response.groupCategories;
+
+          if (groupDetails.linked_fb_group != undefined) {
+            this.linkedFbGroup = groupDetails.linked_fb_group;
+            this.fbGroupId = this.linkedFbGroup.fb_group_id;
             this.groupName = this.linkedFbGroup.group_name;
           } else {
             this.groupName = groupDetails.group_name;
           }
-
-          // this.fbGroupId = this.groupDetails.fb_group_id;
-          // this.previousImage = response.profileImages;
 
           if (groupDetails.description) {
             this.description = groupDetails.description;
@@ -302,6 +321,7 @@ export class GroupProfileCreateComponent implements OnInit {
       let id = this.conversationImages[i].id;
       let image = this.conversationImageUrl + this.conversationImages[i].image;
       this.uploadUrls.push({ id: id, image: image });
+      console.log(this.uploadUrls);
     }
   }
   setProfileValues() {
@@ -343,16 +363,53 @@ export class GroupProfileCreateComponent implements OnInit {
       this.uniqueName = this.uniqueName.replace(/\s/g, '');
     }
     this.activeStepIndex = 1;
+
+    // set the updated value in manageProfileStorage storage //
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+
+    this.manageProfileStorage.groupDetails.description = this.description;
+    this.manageProfileStorage.groupDetails.category_id = parseInt(
+      this.selectedCategory
+    );
+    this.manageProfileStorage.groupDetails.location_id = this.selectedLocation;
+    // this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
+
+    // end  the updated value in manageProfileStorage storage //
   }
   validateStep2() {
     console.log(this.popularTopicForm);
     this.activeStepIndex = 2;
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+    this.manageProfileStorage.groupDetails.is_topics = true;
+    this.manageProfileStorage.groupDetails.topic =
+      this.popularTopicForm.value.topic;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
   }
 
   uploadImages(event: any) {
-    console.log(event.target.files);
+    //console.log(event.target.files);
     this.files = event.target.files;
     for (var i = 0; i <= this.files.length - 1; i++) {
+      let objectURL = URL.createObjectURL(event.target.files[i]);
+      let id = Math.floor(10000 + Math.random() * 90000);
+      this.uploadUrls.push({
+        id: id,
+        image: objectURL,
+        name: event.target.files[i].name,
+      });
       let reader = new FileReader();
       reader.onload = (e: any) => {
         this.urls.push(e.target.result);
@@ -360,30 +417,47 @@ export class GroupProfileCreateComponent implements OnInit {
       reader.readAsDataURL(this.files[i]);
       var selectedFile = event.target.files[i];
       this.fileList.push(selectedFile);
+      console.log(this.fileList);
       this.listOfFiles.push(selectedFile.name);
     }
   }
+  removePreviousFile(i: any, id: any) {
+    let uploadUrlIndex = this.uploadUrls.findIndex((x: any) => x.id == id);
+    let fileListIndex = this.fileList.findIndex(
+      (x: any) => x.name == this.uploadUrls[uploadUrlIndex].name
+    );
+    //CREATE PERVIOUS IMAGES ARRAY TO REMOVE IMAGES FROM DATABASE
+    if (
+      this.uploadUrls[uploadUrlIndex].image.indexOf('/conversationImages/') > 0
+    ) {
+      let imageArray = this.uploadUrls[uploadUrlIndex].image.split(
+        '/conversationImages/'
+      );
 
-  removePreviousFile(index: any, id: any) {
-    this.removeImage.push(this.previousImage[index]);
-    this.previousImage.splice(index, 1);
-  }
+      this.image.id = id;
+      this.image.image = imageArray[1];
+      this.removeImage.push(this.image);
+    }
+    this.uploadUrls.splice(uploadUrlIndex, 1);
 
-  removeSelectedFile(index: any) {
-    this.urls.splice(index, 1);
-    // Delete the item from fileNames list
-    this.listOfFiles.splice(index, 1);
-    // delete file from FileList
-    this.fileList.splice(index, 1);
-
-    console.log(this.listOfFiles); // name of files
-    console.log(this.fileList); //array of files
-    console.log(this.urls); // show image encrypt image code
+    if (fileListIndex >= 0) {
+      this.fileList.splice(fileListIndex, 1);
+    }
+    console.log(this.uploadUrls);
+    console.log(this.fileList);
+    console.log(this.removeImage);
   }
 
   validateStep3() {
     console.log(this.files);
     this.activeStepIndex = 3;
+    this.manageProfileStorage.groupDetails.group_conversation_images =
+      this.uploadUrls;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
   }
   validateStep4() {
     let publish = true;
@@ -408,6 +482,7 @@ export class GroupProfileCreateComponent implements OnInit {
     }
 
     console.log(this.selectedLocation);
+
     const formData: FormData = new FormData();
     formData.append('categoryId', this.selectedCategory);
     formData.append('description', this.description);
@@ -419,8 +494,8 @@ export class GroupProfileCreateComponent implements OnInit {
     formData.append('status', this.status);
 
     let imagesArray = this.fileList;
-
     for (let image of imagesArray) {
+      console.log(image);
       formData.append('images[]', image);
     }
     formData.append('group_id', this.groupId);
@@ -489,6 +564,7 @@ export class GroupProfileCreateComponent implements OnInit {
 
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
+    this.setPublishGroupStorage();
     console.log(this.uniqueName);
     let url =
       this.origin +
@@ -515,5 +591,31 @@ export class GroupProfileCreateComponent implements OnInit {
         this.displayIframe = false;
       }
     }, 100);
+  }
+
+  setPublishGroupStorage() {
+    console.log(this.fileList);
+    let status: any = 1;
+    let imagesArray = this.fileList;
+
+    for (let image of imagesArray) {
+      console.log(image);
+      this.publishimages.push(image);
+    }
+    console.log(this.publishimages);
+    console.log(JSON.stringify(this.publishimages));
+    // create storage to publish form from preview publish button
+    this.publishGroup.categoryId = this.selectedCategory;
+    this.publishGroup.description = this.description;
+    this.publishGroup.locationId = this.selectedLocation;
+    this.publishGroup.uniqueName = this.uniqueName;
+    this.publishGroup.topic = this.topic;
+    this.publishGroup.removeImage = JSON.stringify(this.removeImage);
+    this.publishGroup.profile_id = this.groupProfileId;
+    // this.publishGroup.images = JSON.stringify(this.publishimages);
+    this.publishGroup.group_id = this.groupId;
+    this.publishGroup.fb_group_id = this.fbGroupId;
+    localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
+    //end
   }
 }

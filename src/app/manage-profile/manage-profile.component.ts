@@ -163,6 +163,8 @@ export class ManageProfileComponent implements OnInit {
   }
 
   getManageProfileDetails() {
+    console.log(this.id);
+    console.log(this.groupId);
     this.apiService
       .getManageProfileDetails(this.id, this.groupId, this.token)
       .subscribe((response: any) => {

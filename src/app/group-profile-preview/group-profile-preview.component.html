@@ -9,8 +9,10 @@
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
                 <button type="button" class="btn btn-outline-primary preview_btn bio_btn" (click)="closePreview()">Close
                     Preview</button>
-                <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
-                    data-bs-target="#profile_publish_Modal">Publish Profile</button>
+                <!-- <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
+                    data-bs-target="#profile_publish_Modal">Publish Profile</button> -->
+                <button type="button" class="btn btn-primary share_btn bio_btn" (click)="publishProfile()">Publish
+                    Profile</button>
             </div>
         </div>
     </div>
@@ -437,3 +439,31 @@
         </div>
     </div>
 </div>
+
+<!-- group publish profile -->
+
+<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '45vw'}">
+    <div class="modal-body publish_modal text-center">
+        <div class="col-md-12">
+            <img src="assets/images/success.png" class="success" />
+            <h4 class="modal-title">Bio Published Successfully</h4>
+            <p>Share to start getting noticed</p>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                <span type="button" (click)="copyGroupProfileModel(uniqueName)"
+                    class="input-group-text">{{model_text}}</span>
+            </div>
+            <h6><span class="border_left"></span>Share with<span class="border_right"></span>
+            </h6>
+            <ul class="social_icons">
+                <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+            </ul>
+
+        </div>
+
+
+    </div>
+</p-dialog>

@@ -65,6 +65,11 @@ export class GroupProfilePreviewComponent implements OnInit {
   editReviewSettingForm: FormGroup;
   isReview: boolean = true;
   disableWriteReviewBtn: boolean = false;
+  status: any = 0;
+  token: any;
+  publishGroup: any = {};
+  adminDetails: any = {};
+  displayPublishModel: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -83,6 +88,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.token = localStorage.getItem('token');
     this.origin = location.origin;
     this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
     console.log(this.previewEnable);
@@ -108,12 +114,22 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.groupImageUrl = response.groupImageUrl;
     let groupCategories = response.groupCategories;
     let groupDetails = response.groupDetails;
-    let adminDetails = groupDetails.admin_bio[0];
+    if (groupDetails.admin_bio) {
+      this.adminDetails = groupDetails.admin_bio[0];
+    }
+    if (groupDetails.user) {
+      this.user = groupDetails.user[0];
+    }
+
     let linkedDetails = groupDetails.linked_fb_group;
     this.reviews = groupDetails.group_reviews;
     this.conversations = groupDetails.group_conversation_images;
-    this.user = groupDetails.user[0];
-    this.groupName = linkedDetails.group_name;
+    if (linkedDetails != undefined) {
+      this.groupName = linkedDetails.group_name;
+    } else {
+      this.groupName = groupDetails.group_name;
+    }
+
     this.selectedLocation = groupDetails.location_id;
     this.selectedCategory = groupDetails.category_id;
     this.setCategoryName(this.selectedCategory, groupCategories);
@@ -140,7 +156,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.facebookGroupLink =
       'https://www.facebook.com/groups/' + linkedDetails.fb_group_id;
 
-    this.showAdmins(adminDetails);
+    this.showAdmins(this.adminDetails);
     this.setSocialLink();
     this.averageRating = this.calculateAverageReview();
   }
@@ -212,8 +228,8 @@ export class GroupProfilePreviewComponent implements OnInit {
           this.uniqueName = groupDetails.unique_name.toLowerCase();
           this.facebookGroupLink =
             'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
-          let adminDetails = response.adminDetails;
-          this.showAdmins(adminDetails);
+          this.adminDetails = response.adminDetails;
+          this.showAdmins(this.adminDetails);
           this.setSocialLink();
         }
       });
@@ -306,5 +322,46 @@ export class GroupProfilePreviewComponent implements OnInit {
       console.log(iframe.parentNode);
       iframe.parentNode.removeChild(iframe);
     }
+  }
+
+  publishProfile() {
+    let publish = true;
+    this.saveGroupProfile(publish);
+  }
+
+  saveGroupProfile(publish: any) {
+    this.status = 1;
+    this.publishGroup = localStorage.getItem('publishGroup');
+    this.publishGroup = JSON.parse(this.publishGroup);
+
+    const formData: FormData = new FormData();
+    formData.append('categoryId', this.publishGroup.categoryId);
+    formData.append('description', this.publishGroup.description);
+    formData.append('locationId', this.publishGroup.locationId);
+    formData.append('uniqueName', this.publishGroup.uniqueName);
+    formData.append('topic', this.publishGroup.topic);
+    formData.append(
+      'removeImage',
+      JSON.stringify(this.publishGroup.removeImage)
+    );
+    formData.append('profile_id', this.publishGroup.profile_id);
+    formData.append('status', this.status);
+
+    // let imagesArray = this.fileList;
+    // for (let image of imagesArray) {
+    //   formData.append('images[]', image);
+    // }
+    formData.append('group_id', this.publishGroup.group_id);
+    formData.append('fb_group_id', this.publishGroup.fb_group_id);
+    this.apiService
+      .saveGroupProfile(this.token, formData)
+      .subscribe((response: any) => {
+        console.log(response);
+        if (response.status == 200) {
+          if (publish) {
+            this.displayPublishModel = true;
+          }
+        }
+      });
   }
 }

@@ -250,7 +250,11 @@ export class ApiService {
     headers = headers.append('Accept', 'application/json');
     headers = headers.append('Authorization', 'Bearer ' + token);
     return this.httpClient.get(
-      this.API_URL + 'app-get-manage-profile?group_id=' + id + '&id=' + id,
+      this.API_URL +
+        'app-get-manage-profile?group_id=' +
+        group_id +
+        '&id=' +
+        id,
       { headers: headers }
     );
   }
@@ -266,5 +270,14 @@ export class ApiService {
   getGroupManageValue() {
     console.log(this.groupManage.value);
     return this.groupManage.value;
+  }
+
+  refreshToken(token: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.get(this.API_URL + 'app-refresh-token', {
+      headers: headers,
+    });
   }
 }
