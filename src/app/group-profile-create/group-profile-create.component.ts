@@ -369,17 +369,40 @@ export class GroupProfileCreateComponent implements OnInit {
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
 
-    this.manageProfileStorage.groupDetails.description = this.description;
-    this.manageProfileStorage.groupDetails.category_id = parseInt(
-      this.selectedCategory
-    );
-    this.manageProfileStorage.groupDetails.location_id = this.selectedLocation;
-    // this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
+    console.log(this.manageProfileStorage);
 
-    localStorage.setItem(
-      'manageProfileStorage',
-      JSON.stringify(this.manageProfileStorage)
-    );
+    if(this.manageProfileStorage != null && this.manageProfileStorage != undefined){
+      this.manageProfileStorage.groupDetails.description = this.description;
+      this.manageProfileStorage.groupDetails.category_id = parseInt(
+        this.selectedCategory
+      );
+      this.manageProfileStorage.groupDetails.location_id = this.selectedLocation;
+      // this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
+  
+      localStorage.setItem(
+        'manageProfileStorage',
+        JSON.stringify(this.manageProfileStorage)
+      );
+
+    }
+    // else{
+    //   this.manageProfileStorage ={};
+    //   this.manageProfileStorage.groupDetails.description = this.description;
+    //   this.manageProfileStorage.groupDetails.category_id = parseInt(
+    //     this.selectedCategory
+    //   );
+    //   this.manageProfileStorage.groupDetails.location_id = this.selectedLocation;
+    //   this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
+
+    //   console.log(this.manageProfileStorage);
+  
+    //   localStorage.setItem(
+    //     'manageProfileStorage',
+    //     JSON.stringify(this.manageProfileStorage)
+    //   );
+    // }
+
+
 
     // end  the updated value in manageProfileStorage storage //
   }

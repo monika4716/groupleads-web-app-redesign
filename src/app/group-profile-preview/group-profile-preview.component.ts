@@ -126,8 +126,12 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.conversations = groupDetails.group_conversation_images;
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
+      this.facebookGroupLink =
+      'https://www.facebook.com/groups/' + linkedDetails.fb_group_id;
     } else {
       this.groupName = groupDetails.group_name;
+      this.facebookGroupLink =
+      'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
     }
 
     this.selectedLocation = groupDetails.location_id;
@@ -153,8 +157,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     if (groupDetails.image) {
       this.groupImage = groupDetails.image;
     }
-    this.facebookGroupLink =
-      'https://www.facebook.com/groups/' + linkedDetails.fb_group_id;
+
 
     this.showAdmins(this.adminDetails);
     this.setSocialLink();
