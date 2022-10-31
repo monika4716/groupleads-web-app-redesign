@@ -18,7 +18,8 @@ import * as $ from 'jquery';
 import { StepsModule } from 'primeng/steps';
 import { MenuItem } from 'primeng/api';
 import { group } from '@angular/animations';
-import { splitNsName } from '@angular/compiler';
+import { ConditionalExpr, splitNsName } from '@angular/compiler';
+import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 @Component({
   selector: 'app-group-profile-create',
@@ -90,6 +91,7 @@ export class GroupProfileCreateComponent implements OnInit {
   publishGroup: any = {};
   publishimages: any = [];
   image: any = {};
+  isCopyDisable: boolean = false;
 
   constructor(
     private router: Router,
@@ -149,50 +151,52 @@ export class GroupProfileCreateComponent implements OnInit {
     this.urls = [];
     this.href = this.router.url;
 
-    if (this.groupProfileId == 0) {
-      this.apiService.getGroupProfile().subscribe((response) => {
-        console.log(response);
-        if (
-          response.hasOwnProperty('groupProfile') &&
-          response.hasOwnProperty('GroupCategories') &&
-          response.hasOwnProperty('conversationImageURl')
-        ) {
-          console.log('call ovserable');
-          console.log(response);
-          this.groupProfile = response.groupProfile;
-          this.groupCategories = response.GroupCategories;
-          this.imagePath = response.conversationImageURl;
-          let found = this.groupProfile.findIndex((value: any) => {
-            return value.id == this.groupId;
-          });
+    // if (this.groupProfileId == 0) {
+    //   this.apiService.getGroupProfile().subscribe((response) => {
+    //     console.log(response);
+    //     if (
+    //       response.hasOwnProperty('groupProfile') &&
+    //       response.hasOwnProperty('GroupCategories') &&
+    //       response.hasOwnProperty('conversationImageURl')
+    //     ) {
+    //       console.log('call ovserable');
+    //       console.log(response);
+    //       this.groupProfile = response.groupProfile;
+    //       this.groupCategories = response.GroupCategories;
+    //       this.imagePath = response.conversationImageURl;
+    //       let found = this.groupProfile.findIndex((value: any) => {
+    //         return value.id == this.groupId;
+    //       });
 
-          if (found > -1) {
-            this.groupName = this.groupProfile[found].group_name;
-            console.log(this.groupName);
-            this.fbGroupId = this.groupProfile[found].fb_group_id;
-            this.groupDetails = this.groupProfile[found];
-            if (this.groupDetails.group_profile_id != null) {
-              this.previewFlag = true;
-              this.setProfileValues();
-            }
-            let url = '';
-            this.setSocialLink(url);
-          }
+    //       if (found > -1) {
+    //         this.groupName = this.groupProfile[found].group_name;
+    //         console.log(this.groupName);
+    //         this.fbGroupId = this.groupProfile[found].fb_group_id;
+    //         this.groupDetails = this.groupProfile[found];
+    //         if (this.groupDetails.group_profile_id != null) {
+    //           this.previewFlag = true;
+    //           this.setProfileValues();
+    //         }
+    //         let url = '';
+    //         this.setSocialLink(url);
+    //       }
 
-          console.log(this.groupProfile[found]);
+    //       console.log(this.groupProfile[found]);
 
-          if (this.groupProfileId != 0) {
-            this.getProfileImages();
-          }
-        } else {
-          console.log('call api');
-          this.getGroupDetails();
-        }
-      });
-    } else {
-      console.log('call api');
-      this.getGroupDetails();
-    }
+    //       if (this.groupProfileId != 0) {
+    //         this.getProfileImages();
+    //       }
+    //     } else {
+    //       console.log('call api');
+    //       this.getGroupDetails();
+    //     }
+    //     console.log('call api');
+    //       this.getGroupDetails();
+    //   });
+    // } else {
+    console.log('call api');
+    this.getGroupDetails();
+    // }
 
     this.items = [
       {
@@ -279,6 +283,7 @@ export class GroupProfileCreateComponent implements OnInit {
             this.groupName = this.linkedFbGroup.group_name;
           } else {
             this.groupName = groupDetails.group_name;
+            this.fbGroupId = groupDetails.fb_group_id;
           }
 
           if (groupDetails.description) {
@@ -361,6 +366,7 @@ export class GroupProfileCreateComponent implements OnInit {
     if (this.overViewForm.value.uniqueName != undefined) {
       this.uniqueName = this.overViewForm.value.uniqueName;
       this.uniqueName = this.uniqueName.replace(/\s/g, '');
+      console.log(this.uniqueName);
     }
     this.activeStepIndex = 1;
 
@@ -371,38 +377,27 @@ export class GroupProfileCreateComponent implements OnInit {
 
     console.log(this.manageProfileStorage);
 
-    if(this.manageProfileStorage != null && this.manageProfileStorage != undefined){
+    if (
+      this.manageProfileStorage != null &&
+      this.manageProfileStorage != undefined
+    ) {
       this.manageProfileStorage.groupDetails.description = this.description;
       this.manageProfileStorage.groupDetails.category_id = parseInt(
         this.selectedCategory
       );
-      this.manageProfileStorage.groupDetails.location_id = this.selectedLocation;
-      // this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
-  
+      this.manageProfileStorage.groupDetails.location_id =
+        this.selectedLocation;
+
+      if (this.groupProfileId == 0) {
+        this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
+        this.manageProfileStorage.isShareShow = false;
+      }
+
       localStorage.setItem(
         'manageProfileStorage',
         JSON.stringify(this.manageProfileStorage)
       );
-
     }
-    // else{
-    //   this.manageProfileStorage ={};
-    //   this.manageProfileStorage.groupDetails.description = this.description;
-    //   this.manageProfileStorage.groupDetails.category_id = parseInt(
-    //     this.selectedCategory
-    //   );
-    //   this.manageProfileStorage.groupDetails.location_id = this.selectedLocation;
-    //   this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
-
-    //   console.log(this.manageProfileStorage);
-  
-    //   localStorage.setItem(
-    //     'manageProfileStorage',
-    //     JSON.stringify(this.manageProfileStorage)
-    //   );
-    // }
-
-
 
     // end  the updated value in manageProfileStorage storage //
   }
@@ -495,6 +490,7 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   saveGroupProfile(publish: any) {
+    console.log(this.status);
     console.log(publish);
     this.selectedCategory = this.overViewForm.value.category;
     this.description = this.overViewForm.value.description;

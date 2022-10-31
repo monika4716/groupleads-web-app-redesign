@@ -575,7 +575,7 @@ p {
 }
 .card-body .input-group-text,
 .publish_modal .input-group-text {
-  background: #3c61ad !important;
+  background: #3c61ad;
   border-radius: 8px !important;
   border-top-left-radius: 8px !important;
   border-bottom-left-radius: 8px !important;
@@ -584,13 +584,13 @@ p {
   font-size: 17px !important;
   line-height: 30px !important;
   position: absolute !important;
-  cursor: pointer !important;
+  cursor: pointer;
   right: 12px !important;
   top: 6px !important;
   padding: 3px 10px !important;
   z-index: 99 !important;
   border: none !important;
-  color: #ffffff !important;
+  color: #ffffff;
 }
 .bio_tab .card-body {
   padding: 25px 21px 35px 20px !important;

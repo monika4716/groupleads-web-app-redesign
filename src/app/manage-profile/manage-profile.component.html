@@ -14,8 +14,12 @@
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
                 <button type="button" class="btn btn-outline-primary preview_btn bio_btn" (click)="openPreview()">Peview
                     Profile</button>
-                <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
-                    data-bs-backdrop="static" data-bs-target="#profile_publish_Modal">Publish Profile</button>
+
+                <button type="button" class="btn btn-primary share_btn bio_btn" (click)="publishProfile()">Publish
+                    Profile</button>
+
+                <!-- <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
+                    data-bs-backdrop="static" data-bs-target="#profile_publish_Modal">Publish Profile</button> -->
             </div>
         </div>
     </div>
@@ -301,6 +305,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 <!---------------------edit topics modal--------------->
 <div class="modal group_modal" id="edit_topics_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">

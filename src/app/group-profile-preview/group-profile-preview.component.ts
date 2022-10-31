@@ -24,7 +24,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   public locationList: any = countriesObject;
   location: any = '';
   category: any = '';
-  createdProfile: any = '';
+  createdProfile: any = new Date();
   about: any = '';
   public isSeeMore: boolean = true;
   topics: any = [];
@@ -70,6 +70,8 @@ export class GroupProfilePreviewComponent implements OnInit {
   publishGroup: any = {};
   adminDetails: any = {};
   displayPublishModel: boolean = false;
+  isShareShow: boolean = true;
+  disableButton: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -92,21 +94,22 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.origin = location.origin;
     this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
     console.log(this.previewEnable);
-    if (this.previewEnable) {
+    if (this.previewEnable != undefined && this.previewEnable) {
       this.disableWriteReviewBtn = true;
       this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
       this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
       console.log(this.manageProfileStorage);
-
       this.showPreviewDetails(this.manageProfileStorage);
     } else {
       this.spinner.show();
       this.disableWriteReviewBtn = false;
       this.uniqueName = this.activatedRoute.snapshot.paramMap.get('slug');
-      //this.getGroupProfilePreview();
+      console.log(this.uniqueName);
+      this.disableButton = false;
+      this.getGroupProfilePreview();
     }
   }
-
+  //SHOW PREVIEW DETAILS
   showPreviewDetails(response: any) {
     console.log(response);
     this.adminImageUrl = response.adminImageUrl;
@@ -122,23 +125,24 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
 
     let linkedDetails = groupDetails.linked_fb_group;
-    this.reviews = groupDetails.group_reviews;
+
     this.conversations = groupDetails.group_conversation_images;
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
       this.facebookGroupLink =
-      'https://www.facebook.com/groups/' + linkedDetails.fb_group_id;
+        'https://www.facebook.com/groups/' + linkedDetails.fb_group_id;
+      this.createdProfile = groupDetails.created_at;
     } else {
       this.groupName = groupDetails.group_name;
       this.facebookGroupLink =
-      'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
+        'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
     }
 
     this.selectedLocation = groupDetails.location_id;
     this.selectedCategory = groupDetails.category_id;
     this.setCategoryName(this.selectedCategory, groupCategories);
     this.setLocationValue(this.selectedLocation);
-    this.createdProfile = groupDetails.created_at;
+
     this.about = groupDetails.description;
     this.topics = groupDetails.topic;
     this.uniqueName = groupDetails.unique_name;
@@ -154,16 +158,28 @@ export class GroupProfilePreviewComponent implements OnInit {
     if (this.conversationsImage.length == 0) {
       this.conversationsImage = this.conversations;
     }
+
+    console.log(groupDetails.image);
     if (groupDetails.image) {
       this.groupImage = groupDetails.image;
     }
 
-
     this.showAdmins(this.adminDetails);
     this.setSocialLink();
-    this.averageRating = this.calculateAverageReview();
-  }
+    if (
+      groupDetails.group_reviews != undefined &&
+      groupDetails.group_reviews != null
+    ) {
+      this.reviews = groupDetails.group_reviews;
+      this.averageRating = this.calculateAverageReview();
+    }
 
+    if (response.isShareShow != undefined && response.isShareShow != null) {
+      this.isShareShow = response.isShareShow;
+      console.log(this.isShareShow);
+    }
+  }
+  //SHOW CONVERSATION IMAGES
   showConversationImage() {
     this.conversationsImage = [];
     console.log(this.conversations);
@@ -180,7 +196,7 @@ export class GroupProfilePreviewComponent implements OnInit {
       }
     }
   }
-
+  // GET AVERAGE REVIEW
   calculateAverageReview() {
     let totalRating = this.reviews.length * 5;
     let maxNumberOfStars = 0;
@@ -190,7 +206,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     let likePercentageStars = (5 / totalRating) * maxNumberOfStars;
     return likePercentageStars;
   }
-
+  // EDIT REVIEWS
   editReviews() {
     console.log(this.editReviewsForm);
     this.rating = this.editReviewsForm.value.rating;
@@ -199,6 +215,7 @@ export class GroupProfilePreviewComponent implements OnInit {
       $('#editReviews_close').click();
     }, 1000);
   }
+  //EDIT REVIEW SETTING
   editReviewSetting() {
     console.log(this.editReviewSettingForm.value);
     this.isReview = this.editReviewSettingForm.value.isReview;
@@ -207,51 +224,35 @@ export class GroupProfilePreviewComponent implements OnInit {
   get r() {
     return this.editReviewsForm.controls;
   }
-
+  // GET DETAILS BY SLUG AND SHOW PREVIEW
   getGroupProfilePreview() {
-    console.log(this.uniqueName);
     this.apiService
       .getGroupProfilePreview(this.uniqueName)
       .subscribe((response: any) => {
         if (response.status == 200) {
-          console.log(response);
-          let groupDetails = response.groupDetails;
-          let groupCategories = response.groupCategories;
-          this.reviews = response.profileReviews;
-          this.groupName = groupDetails.group_name;
-          this.selectedLocation = groupDetails.location_id;
-          this.selectedCategory = groupDetails.category_id;
-          this.setCategoryName(this.selectedCategory, groupCategories);
-          this.setLocationValue(this.selectedLocation);
-          this.createdProfile = groupDetails.created_at;
-          this.about = groupDetails.description;
-          this.topics = groupDetails.topic.split(',');
-          this.conversations = response.profileImages;
-          this.path = response.path;
-          this.uniqueName = groupDetails.unique_name.toLowerCase();
-          this.facebookGroupLink =
-            'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
-          this.adminDetails = response.adminDetails;
-          this.showAdmins(this.adminDetails);
-          this.setSocialLink();
+          this.showPreviewDetails(response);
         }
       });
   }
+
+  //SET LOCATION VALUE
 
   setLocationValue(location: any) {
     let index = this.locationList.findIndex((x: any) => x.code === location);
     let selectedCountry = this.locationList[index];
     this.location = selectedCountry.name;
   }
+
+  //SET Category NAME
   setCategoryName(id: any, groupCategories: any) {
     let index = groupCategories.findIndex((x: any) => x.id === id);
     let categoryIndex = groupCategories[index];
     this.category = categoryIndex.name;
   }
-
+  // SHOW ADMIN
   showAdmins(admin: any) {
-    //console.log(admin);
-    //console.log(this.user);
+    console.log(admin);
+    console.log(this.user);
     this.adminName = this.capitalizeFirstLetter(this.user.name);
     if (admin.id != null) {
       let index = this.locationList.findIndex(
@@ -261,6 +262,7 @@ export class GroupProfilePreviewComponent implements OnInit {
 
       this.adminlocation = selectedCountry.name;
       this.countryFlag = selectedCountry.image;
+
       this.adminImage = this.adminImageUrl + admin.image;
       this.adminSlug = this.origin + '/profile/' + admin.user_name;
       this.showAdminBio = true;

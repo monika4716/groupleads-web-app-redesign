@@ -90,6 +90,9 @@ export class ManageProfileComponent implements OnInit {
   conversationStorage: any = {};
   reviewSettingStorage: any = {};
   manageProfileStorage: any = {};
+  publishimages: any = [];
+  publishGroup: any = {};
+  displayPublishModel: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -472,6 +475,7 @@ export class ManageProfileComponent implements OnInit {
   }
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
+    this.setPublishGroupStorage();
     let url =
       this.origin +
       '/group-profile/' +
@@ -496,5 +500,72 @@ export class ManageProfileComponent implements OnInit {
         this.displayIframe = false;
       }
     }, 100);
+  }
+
+  setPublishGroupStorage() {
+    console.log(this.fileList);
+    let status: any = 1;
+    let imagesArray = this.fileList;
+
+    for (let image of imagesArray) {
+      console.log(image);
+      this.publishimages.push(image);
+    }
+    console.log(this.publishimages);
+    console.log(JSON.stringify(this.publishimages));
+    // create storage to publish form from preview publish button
+    this.publishGroup.categoryId = this.selectedCategory;
+    this.publishGroup.description = this.description;
+    this.publishGroup.locationId = this.selectedLocation;
+    this.publishGroup.uniqueName = this.uniqueName;
+    this.publishGroup.topic = this.topics;
+    this.publishGroup.removeImage = JSON.stringify(this.removeImage);
+    this.publishGroup.profile_id = this.id;
+    // this.publishGroup.images = JSON.stringify(this.publishimages);
+    this.publishGroup.group_id = this.groupId;
+    this.publishGroup.fb_group_id = this.facebookGroupId;
+    localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
+    //end
+  }
+
+  publishProfile() {
+    let publish = true;
+    this.saveGroupProfile(publish);
+  }
+
+  saveGroupProfile(publish: any) {
+    this.status = 1;
+    this.publishGroup = localStorage.getItem('publishGroup');
+    this.publishGroup = JSON.parse(this.publishGroup);
+
+    const formData: FormData = new FormData();
+    formData.append('categoryId', this.publishGroup.categoryId);
+    formData.append('description', this.publishGroup.description);
+    formData.append('locationId', this.publishGroup.locationId);
+    formData.append('uniqueName', this.publishGroup.uniqueName);
+    formData.append('topic', this.publishGroup.topic);
+    formData.append(
+      'removeImage',
+      JSON.stringify(this.publishGroup.removeImage)
+    );
+    formData.append('profile_id', this.publishGroup.profile_id);
+    formData.append('status', this.status);
+
+    // let imagesArray = this.fileList;
+    // for (let image of imagesArray) {
+    //   formData.append('images[]', image);
+    // }
+    formData.append('group_id', this.publishGroup.group_id);
+    formData.append('fb_group_id', this.publishGroup.fb_group_id);
+    this.apiService
+      .saveGroupProfile(this.token, formData)
+      .subscribe((response: any) => {
+        console.log(response);
+        if (response.status == 200) {
+          if (publish) {
+            this.displayPublishModel = true;
+          }
+        }
+      });
   }
 }

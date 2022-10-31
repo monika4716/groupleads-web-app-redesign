@@ -102,8 +102,10 @@
                                                 class="required">*</span>
                                         </p>
                                         <div>
-                                            <input type="text" class="form-control" formControlName="uniqueName"
-                                                required="required" [ngModel]="uniqueName" placeholder="danedwards">
+                                            <input type="text" class="form-control"
+                                                (keydown.space)="$event.preventDefault();" formControlName="uniqueName"
+                                                required="required" [ngModel]="uniqueName"
+                                                placeholder="Enter your name (in lower case)">
 
                                             <div *ngIf="o['uniqueName'].touched && o['uniqueName'].invalid"
                                                 class="alert alert-danger">

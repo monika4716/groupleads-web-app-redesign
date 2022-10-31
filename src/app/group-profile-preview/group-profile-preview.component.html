@@ -7,11 +7,13 @@
                 <img src="assets/images/logo.png" />
             </div>
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
-                <button type="button" class="btn btn-outline-primary preview_btn bio_btn" (click)="closePreview()">Close
+                <button *ngIf="disableButton" type="button" class="btn btn-outline-primary preview_btn bio_btn"
+                    (click)="closePreview()">Close
                     Preview</button>
                 <!-- <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
                     data-bs-target="#profile_publish_Modal">Publish Profile</button> -->
-                <button type="button" class="btn btn-primary share_btn bio_btn" (click)="publishProfile()">Publish
+                <button *ngIf="disableButton" type="button" class="btn btn-primary share_btn bio_btn"
+                    (click)="publishProfile()">Publish
                     Profile</button>
             </div>
         </div>
@@ -36,8 +38,10 @@
 
                                 </div>
                                 <div class="col-md-6 d-flex align-items-end justify-content-end profile_banner_cols">
-                                    <a data-bs-toggle="modal" data-bs-target="#profile_share_Modal"
+                                    <a *ngIf="isShareShow" data-bs-toggle="modal" data-bs-target="#profile_share_Modal"
                                         class="btn btn-primary share"><img src="assets/images/share.png" /></a>
+                                    <a *ngIf="!isShareShow" title="Please publish first" class="btn btn-primary share">
+                                        <img src="assets/images/share.png" /></a>
                                     <a target="_blank" href="{{facebookGroupLink}}" class="btn btn-primary"><img
                                             src="assets/images/export_white.png" />
                                         View Facebook Group</a>
