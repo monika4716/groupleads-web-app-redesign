@@ -91,6 +91,7 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
+    console.log(this.token);
     this.origin = location.origin;
     this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
     console.log(this.previewEnable);

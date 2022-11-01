@@ -102,10 +102,14 @@
                                                 class="required">*</span>
                                         </p>
                                         <div>
-                                            <input type="text" class="form-control"
+                                            <input type="text" class="form-control" id="uniqueName"
+                                                (keyup)="createUniqueGroupSlug($event)" formControlName="uniqueName"
+                                                required="required" value="" [ngModel]="uniqueName"
+                                                placeholder="Enter unique group name">
+                                            <!-- <input type="text" class="form-control" 
                                                 (keydown.space)="$event.preventDefault();" formControlName="uniqueName"
                                                 required="required" [ngModel]="uniqueName"
-                                                placeholder="Enter your name (in lower case)">
+                                                placeholder="Enter your name (in lower case)"> -->
 
                                             <div *ngIf="o['uniqueName'].touched && o['uniqueName'].invalid"
                                                 class="alert alert-danger">

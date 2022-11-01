@@ -365,7 +365,7 @@ export class GroupProfileCreateComponent implements OnInit {
     }
     if (this.overViewForm.value.uniqueName != undefined) {
       this.uniqueName = this.overViewForm.value.uniqueName;
-      this.uniqueName = this.uniqueName.replace(/\s/g, '');
+      // this.uniqueName = this.uniqueName.replace(/\s/g, '');
       console.log(this.uniqueName);
     }
     this.activeStepIndex = 1;
@@ -636,5 +636,13 @@ export class GroupProfileCreateComponent implements OnInit {
     this.publishGroup.fb_group_id = this.fbGroupId;
     localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
     //end
+  }
+
+  createUniqueGroupSlug(x: any) {
+    //remove special char num and change space into hyphen//
+    this.uniqueName = x.target.value
+      .replace(/[^a-zA-Z- ]/g, '')
+      .replace(/\s/g, '-')
+      .toLowerCase();
   }
 }

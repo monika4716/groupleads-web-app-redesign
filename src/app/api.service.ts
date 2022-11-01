@@ -280,4 +280,15 @@ export class ApiService {
       headers: headers,
     });
   }
+
+  updateManageProfile(token: any, parm: any) {
+    console.log(token);
+    console.log(parm);
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.post(this.API_URL + 'update-group-profile', parm, {
+      headers: headers,
+    });
+  }
 }

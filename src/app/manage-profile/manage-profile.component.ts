@@ -92,6 +92,7 @@ export class ManageProfileComponent implements OnInit {
   manageProfileStorage: any = {};
   publishimages: any = [];
   publishGroup: any = {};
+  image: any = {};
   displayPublishModel: boolean = false;
 
   constructor(
@@ -387,6 +388,8 @@ export class ManageProfileComponent implements OnInit {
     // set the updated value in manageProfileStorage storage //
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+    this.isConversations = this.editConversationsForm.value.isConversations;
+    console.log(this.isConversations);
 
     this.manageProfileStorage.groupDetails.is_conversations =
       this.editConversationsForm.value.isConversations;
@@ -436,13 +439,29 @@ export class ManageProfileComponent implements OnInit {
 
   removePreviousFile(i: any, id: any) {
     let uploadUrlIndex = this.uploadUrls.findIndex((x: any) => x.id == id);
+
+    console.log(uploadUrlIndex);
     let fileListIndex = this.fileList.findIndex(
       (x: any) => x.name == this.uploadUrls[uploadUrlIndex].name
     );
+
+    if (
+      this.uploadUrls[uploadUrlIndex].image.indexOf('/conversationImages/') > 0
+    ) {
+      let imageArray = this.uploadUrls[uploadUrlIndex].image.split(
+        '/conversationImages/'
+      );
+      console.log(imageArray);
+      this.image.id = id;
+      this.image.image = imageArray[1];
+      this.removeImage.push(this.image);
+    }
+
     this.uploadUrls.splice(uploadUrlIndex, 1);
     if (fileListIndex >= 0) {
       this.fileList.splice(fileListIndex, 1);
     }
+    console.log(this.removeImage);
     console.log(this.uploadUrls);
     console.log(this.fileList);
   }
@@ -503,6 +522,7 @@ export class ManageProfileComponent implements OnInit {
   }
 
   setPublishGroupStorage() {
+    console.log(this.isTopic);
     console.log(this.fileList);
     let status: any = 1;
     let imagesArray = this.fileList;
@@ -518,7 +538,9 @@ export class ManageProfileComponent implements OnInit {
     this.publishGroup.description = this.description;
     this.publishGroup.locationId = this.selectedLocation;
     this.publishGroup.uniqueName = this.uniqueName;
+    this.publishGroup.isTopic = this.isTopic;
     this.publishGroup.topic = this.topics;
+    this.publishGroup.isConversations = this.isConversations;
     this.publishGroup.removeImage = JSON.stringify(this.removeImage);
     this.publishGroup.profile_id = this.id;
     // this.publishGroup.images = JSON.stringify(this.publishimages);
@@ -530,35 +552,43 @@ export class ManageProfileComponent implements OnInit {
 
   publishProfile() {
     let publish = true;
-    this.saveGroupProfile(publish);
+    this.updateGroupProfile(publish);
   }
 
-  saveGroupProfile(publish: any) {
+  updateGroupProfile(publish: any) {
     this.status = 1;
     this.publishGroup = localStorage.getItem('publishGroup');
+
     this.publishGroup = JSON.parse(this.publishGroup);
+    console.log(this.publishGroup);
+
+    console.log(this.groupFile);
+    console.log(this.fileList);
+    console.log(this.removeImage);
 
     const formData: FormData = new FormData();
-    formData.append('categoryId', this.publishGroup.categoryId);
-    formData.append('description', this.publishGroup.description);
-    formData.append('locationId', this.publishGroup.locationId);
-    formData.append('uniqueName', this.publishGroup.uniqueName);
-    formData.append('topic', this.publishGroup.topic);
-    formData.append(
-      'removeImage',
-      JSON.stringify(this.publishGroup.removeImage)
-    );
-    formData.append('profile_id', this.publishGroup.profile_id);
-    formData.append('status', this.status);
+    formData.append('categoryId', this.selectedCategory);
+    formData.append('description', this.description);
+    formData.append('locationId', this.selectedLocation);
+    formData.append('uniqueName', this.uniqueName);
 
-    // let imagesArray = this.fileList;
-    // for (let image of imagesArray) {
-    //   formData.append('images[]', image);
-    // }
-    formData.append('group_id', this.publishGroup.group_id);
-    formData.append('fb_group_id', this.publishGroup.fb_group_id);
+    formData.append('isTopic', this.isTopic.toString());
+    formData.append('topic', this.topics);
+    formData.append('isConversations', this.isConversations.toString());
+    formData.append('removeImage', JSON.stringify(this.removeImage));
+    formData.append('profile_id', this.id);
+    formData.append('status', this.status);
+    formData.append('groupImage', this.groupFile);
+
+    let imagesArray = this.fileList;
+    for (let image of imagesArray) {
+      formData.append('images[]', image);
+    }
+    formData.append('group_id', this.groupId);
+    formData.append('fb_group_id', this.facebookGroupId);
+
     this.apiService
-      .saveGroupProfile(this.token, formData)
+      .updateManageProfile(this.token, formData)
       .subscribe((response: any) => {
         console.log(response);
         if (response.status == 200) {
