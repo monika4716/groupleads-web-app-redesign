@@ -464,3 +464,7 @@ button[disabled] {
   border-color: #3c61ad !important;
   color: #3c61ad !important;
 }
+.hide-scroll {
+  overflow-y: hidden;
+  overflow-x: hidden;
+}

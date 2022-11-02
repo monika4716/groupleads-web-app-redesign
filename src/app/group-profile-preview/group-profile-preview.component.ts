@@ -31,7 +31,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   reviews: any = [];
   conversations: any = [];
   user: any;
-  path: any = '';
   adminName: any = '';
   adminlocation: any = '';
   countryFlag: any = '';
@@ -39,17 +38,12 @@ export class GroupProfilePreviewComponent implements OnInit {
   adminSlug: any = '';
   showAdminBio: boolean = false;
   facebookGroupLink: any = '';
-
   facebookShare: any = '';
   instagramShare: any = '';
   twitterShare: any = '';
   linkedInShare: any = '';
   model_text: any = 'Copy';
   groupImage: any = 'assets/images/profile_banner.png';
-  overviewStorage: any;
-  topicStorage: any;
-  conversationStorage: any;
-  reviewSettingStorage: any;
   previewEnable: boolean = false;
   manageProfileStorage: any;
   selectedLocation: any = 0;
@@ -64,6 +58,8 @@ export class GroupProfilePreviewComponent implements OnInit {
   review: any = '';
   editReviewSettingForm: FormGroup;
   isReview: boolean = true;
+  isTopic: boolean = true;
+  isConversations: boolean = true;
   disableWriteReviewBtn: boolean = false;
   status: any = 0;
   token: any;
@@ -71,7 +67,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   adminDetails: any = {};
   displayPublishModel: boolean = false;
   isShareShow: boolean = true;
-  disableButton: boolean = true;
+  showPublishButton: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -99,14 +95,16 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.disableWriteReviewBtn = true;
       this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
       this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
-      console.log(this.manageProfileStorage);
       this.showPreviewDetails(this.manageProfileStorage);
     } else {
       this.spinner.show();
       this.disableWriteReviewBtn = false;
       this.uniqueName = this.activatedRoute.snapshot.paramMap.get('slug');
       console.log(this.uniqueName);
-      this.disableButton = false;
+      this.showPublishButton = false;
+      if (this.token == null || this.token == undefined) {
+        this.disableWriteReviewBtn = false;
+      }
       this.getGroupProfilePreview();
     }
   }
@@ -126,8 +124,8 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
 
     let linkedDetails = groupDetails.linked_fb_group;
-
     this.conversations = groupDetails.group_conversation_images;
+
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
       this.facebookGroupLink =
@@ -139,6 +137,26 @@ export class GroupProfilePreviewComponent implements OnInit {
         'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
     }
 
+    this.isReview = groupDetails.is_reviews;
+    if (groupDetails.is_reviews == 0) {
+      this.isReview = false;
+    } else if (groupDetails.is_reviews == 1) {
+      this.isReview = true;
+    }
+    this.isTopic = groupDetails.is_topics;
+    if (groupDetails.is_topics == 0) {
+      this.isTopic = false;
+    } else if (groupDetails.is_topics == 1) {
+      this.isTopic = true;
+    }
+
+    this.isConversations = groupDetails.is_conversations;
+    if (groupDetails.is_conversations == 0) {
+      this.isConversations = false;
+    } else if (groupDetails.is_conversations == 1) {
+      this.isConversations = true;
+    }
+
     this.selectedLocation = groupDetails.location_id;
     this.selectedCategory = groupDetails.category_id;
     this.setCategoryName(this.selectedCategory, groupCategories);
@@ -147,7 +165,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.about = groupDetails.description;
     this.topics = groupDetails.topic;
     this.uniqueName = groupDetails.unique_name;
-    console.log(this.topics);
     if (!Array.isArray(this.topics)) {
       if (this.topics.indexOf(',') > 0) {
         this.topics = this.topics.split(',');
@@ -159,12 +176,9 @@ export class GroupProfilePreviewComponent implements OnInit {
     if (this.conversationsImage.length == 0) {
       this.conversationsImage = this.conversations;
     }
-
-    console.log(groupDetails.image);
-    if (groupDetails.image) {
-      this.groupImage = groupDetails.image;
+    if (groupDetails.image != '' && groupDetails.image != undefined) {
+      this.groupImage = this.groupImageUrl + '/' + groupDetails.image;
     }
-
     this.showAdmins(this.adminDetails);
     this.setSocialLink();
     if (
@@ -174,11 +188,10 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.reviews = groupDetails.group_reviews;
       this.averageRating = this.calculateAverageReview();
     }
-
     if (response.isShareShow != undefined && response.isShareShow != null) {
       this.isShareShow = response.isShareShow;
-      console.log(this.isShareShow);
     }
+    this.spinner.hide();
   }
   //SHOW CONVERSATION IMAGES
   showConversationImage() {
@@ -322,12 +335,16 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   closePreview() {
-    console.log('here');
+    let body = window.parent.document.getElementsByTagName('body');
+    if (body[0]) {
+      body[0].removeAttribute('class');
+    }
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
       console.log(iframe.parentNode);
       iframe.parentNode.removeChild(iframe);
     }
+    $('body').removeClass('hide-scroll');
   }
 
   publishProfile() {
@@ -340,12 +357,20 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.publishGroup = localStorage.getItem('publishGroup');
     this.publishGroup = JSON.parse(this.publishGroup);
 
+    console.log(this.publishGroup);
+
     const formData: FormData = new FormData();
     formData.append('categoryId', this.publishGroup.categoryId);
     formData.append('description', this.publishGroup.description);
     formData.append('locationId', this.publishGroup.locationId);
     formData.append('uniqueName', this.publishGroup.uniqueName);
     formData.append('topic', this.publishGroup.topic);
+    formData.append('isTopic', this.publishGroup.isTopic.toString());
+    formData.append(
+      'isConversations',
+      this.publishGroup.isConversations.toString()
+    );
+    formData.append('isReview', this.publishGroup.isReview.toString());
     formData.append(
       'removeImage',
       JSON.stringify(this.publishGroup.removeImage)

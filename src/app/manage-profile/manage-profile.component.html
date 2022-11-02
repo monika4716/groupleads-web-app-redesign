@@ -1,4 +1,4 @@
-<div class="section" *ngIf="displayForm">
+<div class="section" id="manage-create" *ngIf="displayForm">
     <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7" type="ball-scale-multiple"
         [fullScreen]="true">
         <p style="color: white"> Loading... </p>
@@ -414,7 +414,7 @@
             <form [formGroup]="editReviewSettingForm" (ngSubmit)="editReviewSetting()">
                 <div class="modal-header">
                     <h4 class="modal-title">Review Settings</h4>
-                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
+                    <button id="editReviewSetting_cancel" type="button" data-bs-dismiss="modal" class="cancel_btn"><img
                             src="assets/images/Cancel.png" /></button>
                 </div>
                 <div class="modal-body edit_modal">
@@ -677,5 +677,33 @@
         </div>
     </div>
 </div>
+
+<!-- group publish profile -->
+
+<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '45vw'}">
+    <div class="modal-body publish_modal text-center">
+        <div class="col-md-12">
+            <img src="assets/images/success.png" class="success" />
+            <h4 class="modal-title">Group Profile Published Successfully</h4>
+            <p>Share to start getting noticed</p>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                <span type="button" (click)="copyGroupProfileModel(uniqueName)"
+                    class="input-group-text">{{model_text}}</span>
+            </div>
+            <h6><span class="border_left"></span>Share with<span class="border_right"></span>
+            </h6>
+            <ul class="social_icons">
+                <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+            </ul>
+
+        </div>
+
+
+    </div>
+</p-dialog>
 
 <iframe *ngIf="displayIframe" height="640px" width="100%" [src]="iframeUrl | safe" id="openIframe"></iframe>

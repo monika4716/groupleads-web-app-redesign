@@ -26,6 +26,7 @@ export class ManageProfileComponent implements OnInit {
   token: any;
   adminBio: any = [];
   groupImages: any = '';
+  previousGroupImage: any = '';
   groupReview: any = [];
   linkedGroup: any = [];
   selectedCategory: any = 0;
@@ -167,8 +168,9 @@ export class ManageProfileComponent implements OnInit {
   }
 
   getManageProfileDetails() {
-    console.log(this.id);
-    console.log(this.groupId);
+    //console.log(this.id);
+    //console.log(this.groupId);
+
     this.apiService
       .getManageProfileDetails(this.id, this.groupId, this.token)
       .subscribe((response: any) => {
@@ -188,6 +190,9 @@ export class ManageProfileComponent implements OnInit {
           this.user = groupDetails.user;
           this.conversationImages = groupDetails.group_conversation_images;
 
+          this.groupReview = groupDetails.group_reviews;
+          console.log(this.groupReview);
+
           if (this.user.length > 0) {
             this.user = this.user[0];
             this.adminName = this.capitalizeFirstLetter(this.user.name);
@@ -197,13 +202,29 @@ export class ManageProfileComponent implements OnInit {
             this.adminBio = this.adminBio[0];
             this.showAdmins(this.adminBio);
           }
-          this.groupReview = groupDetails.group_reviews;
+          this.isReview = true;
+          if (groupDetails.is_reviews == 0) {
+            this.isReview = false;
+          }
+          this.isConversations = true;
+          if (groupDetails.is_conversations == 0) {
+            this.isConversations = false;
+          }
+          this.isTopic = true;
+          if (groupDetails.is_topics == 0) {
+            this.isTopic = false;
+          }
 
           this.linkedGroup = groupDetails.linked_fb_group;
           this.categoryId = groupDetails.category_id;
           this.setCategoryName(this.categoryId, this.groupCategories);
           this.description = groupDetails.description;
           this.facebookGroupId = groupDetails.fb_group_id;
+          if (groupDetails.image != '') {
+            this.groupImage = response.groupImageUrl + '/' + groupDetails.image;
+          }
+
+          this.previousGroupImage = groupDetails.image;
           this.id = groupDetails.id;
           this.selectedLocation = groupDetails.location_id;
           this.setLocationValue(this.selectedLocation);
@@ -215,7 +236,9 @@ export class ManageProfileComponent implements OnInit {
           this.averageRating = this.calculateAverageReview();
           this.setSocialLink();
           this.showConversationImages();
-          this.spinner.hide();
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 2000);
         } else {
           this.spinner.hide();
         }
@@ -380,6 +403,19 @@ export class ManageProfileComponent implements OnInit {
   editReviewSetting() {
     console.log(this.editReviewSettingForm.value);
     this.isReview = this.editReviewSettingForm.value.isReview;
+
+    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+
+    this.manageProfileStorage.groupDetails.is_reviews = this.isReview;
+
+    localStorage.setItem(
+      'manageProfileStorage',
+      JSON.stringify(this.manageProfileStorage)
+    );
+    setTimeout(() => {
+      $('#editReviewSetting_cancel').click();
+    }, 1000);
   }
 
   // Edit upload and remove Conversation Image //
@@ -494,6 +530,7 @@ export class ManageProfileComponent implements OnInit {
   }
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
+    $('#manage-create').closest('body').addClass('hide-scroll');
     this.setPublishGroupStorage();
     let url =
       this.origin +
@@ -541,6 +578,7 @@ export class ManageProfileComponent implements OnInit {
     this.publishGroup.isTopic = this.isTopic;
     this.publishGroup.topic = this.topics;
     this.publishGroup.isConversations = this.isConversations;
+    this.publishGroup.isReview = this.isReview;
     this.publishGroup.removeImage = JSON.stringify(this.removeImage);
     this.publishGroup.profile_id = this.id;
     // this.publishGroup.images = JSON.stringify(this.publishimages);
@@ -551,39 +589,31 @@ export class ManageProfileComponent implements OnInit {
   }
 
   publishProfile() {
-    let publish = true;
-    this.updateGroupProfile(publish);
+    this.updateGroupProfile();
   }
 
-  updateGroupProfile(publish: any) {
-    this.status = 1;
-    this.publishGroup = localStorage.getItem('publishGroup');
-
-    this.publishGroup = JSON.parse(this.publishGroup);
-    console.log(this.publishGroup);
-
-    console.log(this.groupFile);
-    console.log(this.fileList);
-    console.log(this.removeImage);
-
+  updateGroupProfile() {
     const formData: FormData = new FormData();
     formData.append('categoryId', this.selectedCategory);
     formData.append('description', this.description);
     formData.append('locationId', this.selectedLocation);
     formData.append('uniqueName', this.uniqueName);
-
     formData.append('isTopic', this.isTopic.toString());
     formData.append('topic', this.topics);
     formData.append('isConversations', this.isConversations.toString());
     formData.append('removeImage', JSON.stringify(this.removeImage));
     formData.append('profile_id', this.id);
+    this.status = 1;
     formData.append('status', this.status);
+    formData.append('isReview', this.isReview.toString());
+    formData.append('previousGroupImage', this.previousGroupImage);
     formData.append('groupImage', this.groupFile);
 
     let imagesArray = this.fileList;
     for (let image of imagesArray) {
       formData.append('images[]', image);
     }
+
     formData.append('group_id', this.groupId);
     formData.append('fb_group_id', this.facebookGroupId);
 
@@ -592,9 +622,7 @@ export class ManageProfileComponent implements OnInit {
       .subscribe((response: any) => {
         console.log(response);
         if (response.status == 200) {
-          if (publish) {
-            this.displayPublishModel = true;
-          }
+          this.displayPublishModel = true;
         }
       });
   }

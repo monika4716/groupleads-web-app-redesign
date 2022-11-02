@@ -1,6 +1,6 @@
 <div class="open-sidebar">
     <div class="container-fluid">
-        <div *ngIf="displayForm" class="row">
+        <div *ngIf="displayForm" id="profile-create" class="row">
             <app-sidebar></app-sidebar>
             <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
                 type="ball-scale-multiple" [fullScreen]="true">
@@ -307,7 +307,7 @@
     <div class="modal-body publish_modal text-center">
         <div class="col-md-12">
             <img src="assets/images/success.png" class="success" />
-            <h4 class="modal-title">Bio Published Successfully</h4>
+            <h4 class="modal-title">Group Profile Published Successfully</h4>
             <p>Share to start getting noticed</p>
             <div class="input-group">
                 <input type="text" class="form-control" [disabled]="showAddProfileBtn"

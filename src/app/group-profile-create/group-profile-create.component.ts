@@ -388,7 +388,7 @@ export class GroupProfileCreateComponent implements OnInit {
       this.manageProfileStorage.groupDetails.location_id =
         this.selectedLocation;
 
-      if (this.groupProfileId == 0) {
+      if (this.groupProfileId == 0 || this.status == 0) {
         this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
         this.manageProfileStorage.isShareShow = false;
       }
@@ -471,6 +471,10 @@ export class GroupProfileCreateComponent implements OnInit {
     this.activeStepIndex = 3;
     this.manageProfileStorage.groupDetails.group_conversation_images =
       this.uploadUrls;
+    this.manageProfileStorage.groupDetails.is_conversations = true;
+    this.manageProfileStorage.groupDetails.group_reviews = [];
+    this.manageProfileStorage.groupDetails.image = '';
+    this.manageProfileStorage.groupDetails.created_at = new Date();
 
     localStorage.setItem(
       'manageProfileStorage',
@@ -583,6 +587,7 @@ export class GroupProfileCreateComponent implements OnInit {
 
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
+    //$('#profile-create').closest('body').addClass('hide-scroll');
     this.setPublishGroupStorage();
     console.log(this.uniqueName);
     let url =

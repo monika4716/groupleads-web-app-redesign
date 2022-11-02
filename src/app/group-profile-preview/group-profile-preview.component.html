@@ -1,4 +1,8 @@
 <div class="section">
+    <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7" type="ball-scale-multiple"
+        [fullScreen]="true">
+        <p style="color: white"> Loading... </p>
+    </ngx-spinner>
 
     <div class="container-fluid admin_bio_list">
 
@@ -7,12 +11,12 @@
                 <img src="assets/images/logo.png" />
             </div>
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
-                <button *ngIf="disableButton" type="button" class="btn btn-outline-primary preview_btn bio_btn"
+                <button *ngIf="showPublishButton" type="button" class="btn btn-outline-primary preview_btn bio_btn"
                     (click)="closePreview()">Close
                     Preview</button>
                 <!-- <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
                     data-bs-target="#profile_publish_Modal">Publish Profile</button> -->
-                <button *ngIf="disableButton" type="button" class="btn btn-primary share_btn bio_btn"
+                <button *ngIf="showPublishButton" type="button" class="btn btn-primary share_btn bio_btn"
                     (click)="publishProfile()">Publish
                     Profile</button>
             </div>
@@ -112,7 +116,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="card" id="topics">
+                        <div class="card" *ngIf="isTopic && topics.length > 0" id="topics">
                             <div class="card-body">
                                 <h3>Topics</h3>
                                 <div class="topics_name">
@@ -121,7 +125,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card" id="conversations">
+                        <div class="card" *ngIf="isConversations  && conversationsImage.length >0" id="conversations">
                             <div class="card-body">
                                 <div class="d-flex top-conversation">
                                     <div class="heading">
@@ -191,7 +195,7 @@
                                             src="assets/images/star_white.png " />
                                         Write A Review</button>
                                 </div>
-                                <div class="review_sec">
+                                <div *ngIf="isReview" class="review_sec">
                                     <div class="col-md-12 d-grid admin_sec" *ngFor="let review of reviews">
                                         <div class="d-flex review-setting">
                                             <div class="user_profile">
@@ -208,10 +212,10 @@
 
                                 </div>
                                 <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-outline-primary btn-block all-review-btn"
-                                        data-bs-toggle="modal" data-bs-backdrop="static"
-                                        data-bs-target="#review_settings_Modal">See All
-                                        Reviews</button>
+                                    <!-- <button *ngIf="showPublishButton" type="button"
+                                        class="btn btn-outline-primary btn-block all-review-btn" data-bs-toggle="modal"
+                                        data-bs-backdrop="static" data-bs-target="#review_settings_Modal">See All
+                                        Reviews</button> -->
                                 </div>
                             </div>
                         </div>
@@ -431,7 +435,8 @@
                         </div>
                     </div>
                     <div class="mb-3 mt-4">
-                        <button type="button" class="btn btn-outline-primary btn-block all_review_btn"><img
+                        <button *ngIf="showPublishButton" type="button"
+                            class="btn btn-outline-primary btn-block all_review_btn"><img
                                 src="assets/images/review_star.png" /> See All Reviews</button>
                     </div>
                     <div class="col-md-12 d-grid mt-4">
@@ -450,7 +455,7 @@
     <div class="modal-body publish_modal text-center">
         <div class="col-md-12">
             <img src="assets/images/success.png" class="success" />
-            <h4 class="modal-title">Bio Published Successfully</h4>
+            <h4 class="modal-title">Group Profile Published Successfully</h4>
             <p>Share to start getting noticed</p>
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
