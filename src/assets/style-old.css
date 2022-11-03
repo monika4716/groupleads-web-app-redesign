@@ -144,7 +144,6 @@ p {
 }
 .right_side .header {
   padding: 7px;
-  margin-left: 18px;
 }
 .header .side_icon {
   display: flex;
@@ -161,7 +160,7 @@ p {
 }
 .header,
 .section {
-  padding-left: 50px;
+  padding-left: 20px;
   padding-right: 18px;
 }
 .header .dropdown-menu img {
@@ -291,9 +290,6 @@ p {
   line-height: 36px;
   color: #222222;
 }
-._ngcontent-ugi-c113 h3 {
-  margin-left: 40px;
-}
 .about_left_sec {
   padding-left: 0px;
 }
@@ -369,7 +365,6 @@ p {
 }
 /**********************group list page*******************/
 .group_list_section {
-  padding: 25px;
   padding-left: 100px !important;
   padding-right: 100px !important;
 }
@@ -491,7 +486,7 @@ p {
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   background: #ffffff;
   border: 1px solid #bbbbbb;
-  /* box-shadow:  */
+  box-shadow: ;
   font-style: normal;
   font-weight: 500;
   font-size: 17px;
@@ -572,7 +567,6 @@ p {
   font-size: 15px !important;
   line-height: 24px !important;
   height: 48px !important;
-  margin-top: 15px;
 }
 .input-group
   > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
@@ -597,7 +591,6 @@ p {
   z-index: 99 !important;
   border: none !important;
   color: #ffffff;
-  margin-top: 14px;
 }
 .bio_tab .card-body {
   padding: 25px 21px 35px 20px !important;
@@ -620,7 +613,7 @@ p {
   color: #3C61AD;
 } */
 .bio_tab .btn-outline-primary:hover {
-  color: #3c61ad;
+  background: transparent !important;
 }
 .bio_tab .card-body .product,
 .group_modal .product {
@@ -635,7 +628,6 @@ p {
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
-  margin-left: 10px;
   color: #222222;
 }
 .bio_tab .card-body ul,
@@ -970,10 +962,8 @@ li.p-ripple.p-element.p-dropdown-item {
   border-radius: 50%;
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  margin-bottom: 5px;
-  margin-left: 7px;
-  /* line-height: 24px; */
+  font-size: 16px;
+  line-height: 24px;
   color: #ffffff;
   /* width: 30px;
   height: 30px; */
@@ -1111,10 +1101,10 @@ li.p-ripple.p-element.p-dropdown-item {
   margin-top: 13px;
 }
 .card-body .btn {
-  /* background: #3c61ad; */
+  background: #3c61ad;
   border-radius: 4px !important;
-  /* color: white; */
-  border: 2px solid #3c61ad;
+  color: white;
+  border: none;
 }
 .general_settings .btn {
   padding: 13px 22px !important;
@@ -1454,10 +1444,6 @@ input:checked + .slider:before {
 .groups_section img {
   max-width: 70% !important;
   margin-right: 10px;
-  margin-bottom: 10px;
-}
-.section_css {
-  margin-left: 15px;
 }
 .billing_acc_plan .current_plan {
   margin-left: 35px;
@@ -1671,8 +1657,6 @@ input:checked + .slider:before {
 }
 .card-body a {
   color: #3c61ad;
-  text-decoration: underline;
-  text-decoration-color: #3c61ad;
 }
 .topics_name {
   margin-top: 17px;
@@ -1797,7 +1781,7 @@ input:checked + .slider:before {
   background: #ffffff !important;
   padding: 12px 14px !important;
   color: #3c61ad !important;
-  /* margin-left: 10px !important; */
+  margin-left: 10px !important;
 }
 .total_review_btn {
   padding: 13px 11px !important;
@@ -1990,42 +1974,4 @@ input:checked + .slider:before {
   padding-right: 0px !important;
   background: rgba(60, 97, 173, 0.24);
   backdrop-filter: blur(12px);
-  height: 47px;
-  margin-top: -12px !important;
-}
-.slider.round:before {
-  border-radius: 50%;
-}
-#mySwitch {
-  background-color: #c6f9eb;
-  display: inline-block;
-  width: 46px;
-  height: 17px;
-  border: none;
-  border-radius: 34px;
-  margin-left: 940px;
-  margin-top: 36px;
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
-.a_css {
-  text-decoration: underline;
-  text-decoration-color: #3c61ad;
-}
-.p-readonly {
-  padding: 10px;
-}
-.review-image-upload {
-  width: 60px !important;
-}
-#review-image-show {
-  width: 100px;
-  margin: auto;
-  display: flex;
 }

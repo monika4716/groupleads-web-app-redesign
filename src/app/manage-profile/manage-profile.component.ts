@@ -100,7 +100,8 @@ export class ManageProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.editOverViewForm = this.fb.group({
       description: ['', Validators.required],
@@ -295,7 +296,8 @@ export class ManageProfileComponent implements OnInit {
     let totalRating = this.groupReview.length * 5;
     let maxNumberOfStars = 0;
     for (let i = 0; i < this.groupReview.length; i++) {
-      maxNumberOfStars = parseInt(this.groupReview[i].star) + maxNumberOfStars;
+      maxNumberOfStars =
+        parseInt(this.groupReview[i].rating) + maxNumberOfStars;
     }
     let likePercentageStars = (5 / totalRating) * maxNumberOfStars;
     return likePercentageStars;

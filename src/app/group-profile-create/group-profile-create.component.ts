@@ -530,6 +530,10 @@ export class GroupProfileCreateComponent implements OnInit {
         if (response.status == 200) {
           if (publish) {
             this.displayPublishModel = true;
+          } else {
+            setTimeout(() => {
+              this.router.navigate(['/', 'group-profiles']);
+            }, 100);
           }
           //show copy profile link popup
           // this.displayBasic = true;
@@ -641,6 +645,12 @@ export class GroupProfileCreateComponent implements OnInit {
     this.publishGroup.fb_group_id = this.fbGroupId;
     localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
     //end
+  }
+
+  closePublishModel() {
+    setTimeout(() => {
+      this.router.navigate(['/', 'group-profiles']);
+    }, 2000);
   }
 
   createUniqueGroupSlug(x: any) {

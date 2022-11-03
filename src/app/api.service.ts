@@ -291,4 +291,13 @@ export class ApiService {
       headers: headers,
     });
   }
+
+  saveReview(parm: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    // headers = headers.append('Authorization', 'Bearer ' + token);
+    return this.httpClient.post(this.API_URL + 'save-review', parm, {
+      headers: headers,
+    });
+  }
 }

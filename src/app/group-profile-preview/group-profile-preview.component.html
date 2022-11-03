@@ -1,4 +1,5 @@
 <div class="section">
+    <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
     <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7" type="ball-scale-multiple"
         [fullScreen]="true">
         <p style="color: white"> Loading... </p>
@@ -31,7 +32,7 @@
                             <div class="row manage_profile_banner_review">
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <div class="col-md-3 pr-0 rating review-setting">
+                                        <div class="col-md-4 pr-0 rating review-setting">
                                             <p-rating [ngModel]="averageRating" [readonly]="true" [cancel]="false">
                                             </p-rating>
                                         </div>
@@ -63,12 +64,12 @@
                                 </ul> -->
                             </div>
                             <div class="col-md-6 d-flex align-items-center">
-                                <div class="col-md-7">
+                                <div class="col-md-6">
                                     <!-- <button type="button"
                                         class=" btn-outline-primary btn-block group_admin message-btn"><img
                                             src="assets/images/sms-tracking.png " /> Message Group Admin</button> -->
                                 </div>
-                                <div class="col-md-5"><button type="button" [disabled]="disableWriteReviewBtn"
+                                <div class="col-md-6"><button type="button" [disabled]="disableWriteReviewBtn"
                                         class="btn btn-primary btn-block review_btn" data-bs-toggle="modal"
                                         data-bs-backdrop="static" data-bs-target="#write_review_Modal"><img
                                             src="assets/images/star_white.png " /> Write A Review</button></div>
@@ -195,18 +196,22 @@
                                             src="assets/images/star_white.png " />
                                         Write A Review</button>
                                 </div>
-                                <div *ngIf="isReview" class="review_sec">
+                                <div *ngIf="isReview" class="review_sec custom-scroll" style="height: 350px;">
                                     <div class="col-md-12 d-grid admin_sec" *ngFor="let review of reviews">
                                         <div class="d-flex review-setting">
                                             <div class="user_profile">
-                                                <h2 class="name"><img class="reviews-image"
-                                                        src="assets/images/default.jpg" /> {{review.name}}
+                                                <h2 class="name">
+                                                    <img *ngIf="review.image" class="reviews-image"
+                                                        [src]="reviewImagesUrl+review.image" />
+                                                    <img *ngIf="!review.image" class="reviews-image"
+                                                        src="assets/images/default.jpg" />
+                                                    {{review.name}}
                                                 </h2>
                                             </div>
-                                            <p-rating [(ngModel)]="review.star" [cancel]="false" [readonly]="true">
+                                            <p-rating [(ngModel)]="review.rating" [cancel]="false" [readonly]="true">
                                             </p-rating>
                                         </div>
-                                        <p>{{review.description}}</p>
+                                        <p>{{review.review}}</p>
                                         <h6 class="days">{{review.created_at | date: 'MMMM dd, yyyy'}}</h6>
                                     </div>
 
@@ -377,6 +382,7 @@
             </div>
             <div class="modal-body edit_modal">
                 <form [formGroup]="editReviewsForm" (ngSubmit)="editReviews()">
+                    <input type="hidden" formControlName="profileId" [(ngModel)]="id">
                     <div class="col-md-12 mt-2">
                         <div class="row">
                             <div class="col-md-6">
@@ -389,6 +395,26 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mb-3 mt-4">
+
+                        <img src="assets/images/upload.png" title="Upload image" class="review-image-upload"
+                            (click)="selectImage.click()">
+                        <input type="file" accept="image/*" (change)="uploadReviewImage($event)" style="display: none"
+                            #selectImage>
+                        <img *ngIf="reviewImageUrl" [src]="reviewImageUrl | safe" id="review-image-show" />
+
+                    </div>
+                    <div class="mb-3 mt-4">
+                        <label for="topic" class="form-label">Name <span class="required">*</span></label>
+                        <input type="text" class="form-control" formControlName="name" id="name"
+                            placeholder="Enter name" name="name">
+                        <div *ngIf="r['name'].touched && r['name'].invalid" class="alert alert-danger">
+                            <div *ngIf="r['name'].errors && r['name'].errors['required']">
+                                Name is
+                                required.</div>
+                        </div>
+                    </div>
+
                     <div class="mb-3 mt-4">
                         <label for="topic" class="form-label">Review <span class="required">*</span></label>
                         <input type="text" class="form-control" formControlName="review" id="review"

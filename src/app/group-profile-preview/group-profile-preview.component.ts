@@ -18,6 +18,7 @@ import {
   styleUrls: ['./group-profile-preview.component.css'],
 })
 export class GroupProfilePreviewComponent implements OnInit {
+  msgs: any;
   origin: any;
   uniqueName: any;
   groupName: any = '';
@@ -60,7 +61,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   isReview: boolean = true;
   isTopic: boolean = true;
   isConversations: boolean = true;
-  disableWriteReviewBtn: boolean = false;
+  disableWriteReviewBtn: boolean = true;
   status: any = 0;
   token: any;
   publishGroup: any = {};
@@ -68,7 +69,10 @@ export class GroupProfilePreviewComponent implements OnInit {
   displayPublishModel: boolean = false;
   isShareShow: boolean = true;
   showPublishButton: boolean = true;
-
+  id: any = '';
+  reviewImageUrl: any = '';
+  reviewImagesUrl: any = '';
+  reviewImage: any = '';
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -77,7 +81,9 @@ export class GroupProfilePreviewComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.editReviewsForm = this.fb.group({
-      rating: [''],
+      profileId: ['', Validators.required],
+      name: ['', Validators.required],
+      rating: ['', Validators.required],
       review: ['', Validators.required],
     });
     this.editReviewSettingForm = this.fb.group({
@@ -97,11 +103,12 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
       this.showPreviewDetails(this.manageProfileStorage);
     } else {
+      // this.disableWriteReviewBtn = false;
       this.spinner.show();
-      this.disableWriteReviewBtn = false;
       this.uniqueName = this.activatedRoute.snapshot.paramMap.get('slug');
       console.log(this.uniqueName);
       this.showPublishButton = false;
+      console.log(this.token);
       if (this.token == null || this.token == undefined) {
         this.disableWriteReviewBtn = false;
       }
@@ -112,6 +119,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   showPreviewDetails(response: any) {
     console.log(response);
     this.adminImageUrl = response.adminImageUrl;
+    this.reviewImagesUrl = response.reviewImageUrl;
     this.conversationImageUrl = response.conversationImageURl;
     this.groupImageUrl = response.groupImageUrl;
     let groupCategories = response.groupCategories;
@@ -125,6 +133,8 @@ export class GroupProfilePreviewComponent implements OnInit {
 
     let linkedDetails = groupDetails.linked_fb_group;
     this.conversations = groupDetails.group_conversation_images;
+    this.id = groupDetails.id;
+    console.log(this.id);
 
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
@@ -215,7 +225,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     let totalRating = this.reviews.length * 5;
     let maxNumberOfStars = 0;
     for (let i = 0; i < this.reviews.length; i++) {
-      maxNumberOfStars = parseInt(this.reviews[i].star) + maxNumberOfStars;
+      maxNumberOfStars = parseInt(this.reviews[i].rating) + maxNumberOfStars;
     }
     let likePercentageStars = (5 / totalRating) * maxNumberOfStars;
     return likePercentageStars;
@@ -225,11 +235,47 @@ export class GroupProfilePreviewComponent implements OnInit {
     console.log(this.editReviewsForm);
     this.rating = this.editReviewsForm.value.rating;
     this.review = this.editReviewsForm.value.review;
+
+    this.saveReviews(this.editReviewsForm);
     setTimeout(() => {
       $('#editReviews_close').click();
-    }, 1000);
+    }, 2000);
   }
   //EDIT REVIEW SETTING
+  saveReviews(reviewsForm: any) {
+    console.log(reviewsForm.value);
+
+    const formData: FormData = new FormData();
+    formData.append('name', reviewsForm.value.name);
+    formData.append('image', this.reviewImage);
+    formData.append('rating', reviewsForm.value.rating);
+    formData.append('review', reviewsForm.value.review);
+    formData.append('groupProfileId', reviewsForm.value.profileId);
+    this.apiService.saveReview(formData).subscribe((response: any) => {
+      console.log(response);
+      this.editReviewsForm.reset();
+      if (response.status == 200) {
+        this.msgs = [
+          {
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Review Submitted Successfully',
+          },
+        ];
+      } else {
+        this.msgs = [
+          {
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'Review Not Submited',
+          },
+        ];
+      }
+      setTimeout(() => {
+        this.msgs = [];
+      }, 2000);
+    });
+  }
   editReviewSetting() {
     console.log(this.editReviewSettingForm.value);
     this.isReview = this.editReviewSettingForm.value.isReview;
@@ -394,5 +440,15 @@ export class GroupProfilePreviewComponent implements OnInit {
           }
         }
       });
+  }
+
+  uploadReviewImage(event: any) {
+    console.log(event);
+    this.reviewImage = event.target.files[0];
+    let objectURL = URL.createObjectURL(event.target.files[0]);
+    console.log(objectURL);
+    this.reviewImageUrl = objectURL;
+    console.log(this.reviewImage);
+    console.log(this.reviewImageUrl);
   }
 }
