@@ -9,7 +9,7 @@
             <div class="col-md-10 right_side">
                 <div class="row header">
                     <div class="side_icon">
-                        <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                        <span class="sidenav" (click)="toggleSideBar()"><i class="fa fa-navicon"></i></span>
                     </div>
                     <div class="col-md-8 left_col">
                         <div class="d-flex">
@@ -19,11 +19,175 @@
                             </div>
                             <div class="leads_sec">
 
+
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-4 p-0">
                         <app-header-profile></app-header-profile>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <ul class="nav nav-tabs billing_tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#Account_Plan"><img
+                                    src="assets/images/coin_blue.png" class="blue"><img
+                                    src="assets/images/coin_grey.png" class="grey">Account Plan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#Payment_method"><img
+                                    src="assets/images/card_blue.png" class="blue"><img
+                                    src="assets/images/card_grey.png" class="grey">Payment Method</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content billing_acc_plan">
+                        <div id="Account_Plan" class=" tab-pane active">
+                            <div class="row section group_list_section">
+                                <div class="row bio_tab">
+                                    <div class="card groups_section">
+                                        <div class="card-body">
+                                            <div class="d-flex">
+                                                <div class="plan_card text-center">
+                                                    <h5>${{price}}</h5>
+                                                    <hr>
+                                                    <p>{{planDetail.plan_name}}</p>
+                                                    <p>{{type.replace('_', '') | titlecase}}</p>
+                                                    <div class="d-grid">
+                                                        <a *ngIf="showUpGradeBtn" [attr.href]="upgradeURL"
+                                                            target="_blank">
+                                                            <button type="button"
+                                                                class="btn btn-primary mt-4 btn-block">Change
+                                                                plan</button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="current_plan">
+                                                    <div class="row">
+                                                        <h5>Current Plan</h5>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6"
+                                                            *ngFor="let plan_Features of planFeatures;let i=index">
+                                                            <div class="d-flex" *ngIf="i < leftRowsCount">
+                                                                <div><img src="assets/images/blue-star.png"></div>
+                                                                <div>
+                                                                    <p>{{plan_Features}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6"
+                                                            *ngFor="let plan_Features of planFeatures;let i=index">
+                                                            <div class="d-flex" *ngIf="i >= leftRowsCount">
+                                                                <div><img src="assets/images/blue-star.png"></div>
+                                                                <div>
+                                                                    <p>{{plan_Features}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card groups_section" *ngIf="showUpGradeBtn">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-6 ">
+                                                            <div class="next_payment">
+                                                                <h5>{{expireDate}}</h5>
+                                                                <p>Next Payment</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 ">
+                                                            <div class="amount">
+                                                                <h5>${{price}}</h5>
+                                                                <p>Amount</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                                    <div class="billing_cycle">
+                                                        <a [attr.href]="upgradeURL" target="_blank"><button
+                                                                type="button"
+                                                                class="btn btn-primary change_billing button-dark">Change
+                                                                billing
+                                                                cycle</button></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card groups_section schedule_call">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-2 d-flex justify-content-center align-items-center">
+                                                    <div>
+                                                        <img src="assets/images/celender.png">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div>
+                                                        <h5>Schedule a 5 - 10 mins set up call via <span>Zoom</span>.
+                                                        </h5>
+                                                        <p>Get help with settng up and resolving technical difficulties
+                                                            from our experts by setting up a zoom call.</p>
+                                                        <a href="https://docs.groupleads.net/article/74-request-zoom-setup-call"
+                                                            target="_blank"><button>Schedule Call</button></a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Payment_method" class="tab-pane fade">
+                            <div class="row section group_list_section">
+                                <div class="row bio_tab">
+                                    <div class="card groups_section">
+                                        <div class="card-body c_body">
+                                            <div class="Payment_method">
+                                                <h4>Payment Method</h4>
+                                                <p>Update your billing details.</p>
+                                                <hr>
+                                                <div class="col-md-12 form_div">
+                                                    <div class="mb-3 mt-3">
+                                                        <label for="fname" class="form-label">Account Email<span
+                                                                class="required">*</span></label>
+                                                        <input type="text" readonly [value]="email" class="form-control"
+                                                            id="email" placeholder="Enter Email" name="name">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card groups_section">
+                                        <div class="card-body c_body">
+                                            <div class="billing_url mb-3 flex-box copy_snippet">
+                                                <h4>Billing URL</h4>
+                                                <p>Use the link below to change your payment method.</p>
+                                                <button type="button" class="btn btn-primary button-dark"
+                                                    (click)="copyUrl()"> <img src="assets/images/document-copy.png"
+                                                        [attr.href]="upgradeURL">
+                                                    {{buttonText}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

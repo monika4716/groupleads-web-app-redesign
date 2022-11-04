@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RoutingGuard } from './routing.guard';
 import { BillingComponent } from './billing/billing.component';
@@ -19,6 +20,10 @@ import { ManageProfileComponent } from './manage-profile/manage-profile.componen
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', redirectTo: '', pathMatch: 'full' },
+  {
+    path: 'forget-password',
+    component: ForgetPasswordComponent,
+  },
   {
     path: 'dashboard',
     component: DashboardComponent,
@@ -44,11 +49,11 @@ const routes: Routes = [
     path: 'profile/:slug',
     component: AdminBioPreviewComponent,
   },
-  {
-    path: 'group-plugin',
-    component: GroupPluginComponent,
-    canActivate: [RoutingGuard],
-  },
+  // {
+  //   path: 'group-plugin',
+  //   component: GroupPluginComponent,
+  //   canActivate: [RoutingGuard],
+  // },
   {
     path: 'plugin/create',
     component: GroupPluginCreateComponent,

@@ -659,8 +659,8 @@ export class AdminBioComponent implements OnInit {
     console.log(this.messageButton);
   }
 
-  uploadImages1(event:any){
-    console.log(event)
+  uploadImages1(event: any) {
+    console.log(event);
   }
   uploadImages(event: any) {
     this.imageData = event.target.files[0];
@@ -669,5 +669,13 @@ export class AdminBioComponent implements OnInit {
     this.imageUrl = objectURL;
 
     console.log(this.imageData);
+  }
+  createUniqueUserName(x: any) {
+    //remove special char num and change space into hyphen//
+    this.userName = x.target.value
+      .replace(/[^a-zA-Z- ]/g, '')
+      .replace(/\s/g, '-')
+      .replace(/[-]+/g, '-')
+      .toLowerCase();
   }
 }

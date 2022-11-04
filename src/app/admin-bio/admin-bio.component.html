@@ -42,9 +42,11 @@
                                                 </div> -->
 
                                                 <div class="col-md-2 p-0 " id="profile-image">
-                                                    <img [src]="imageUrl | safe" class="image1" />
-                                                    <img src="assets/images/editImage.png" title="Upload image"
-                                                        class="image2" (click)="selectImage.click()">
+                                                    <img [src]="imageUrl | safe" class="image1"
+                                                        (error)="imageUrl = 'assets/images/default.jpg'" />
+                                                    <img src="assets/images/editImage.png" pTooltip="Upload Image"
+                                                        tooltipPosition="bottom" class="image2"
+                                                        (click)="selectImage.click()">
                                                     <input type="file" accept="image/*" (change)="uploadImages($event)"
                                                         style="display: none" #selectImage>
                                                 </div>
@@ -111,7 +113,8 @@
                                     <p>Choose a unique username for your admin bio.</p>
                                     <div>
                                         <input type="text" formControlName="userName" name="userName"
-                                            [ngModel]="userName" class="form-control" placeholder="Enter Username">
+                                            [ngModel]="userName" class="form-control" placeholder="Enter Username"
+                                            (keyup)="createUniqueUserName($event)">
 
                                         <div *ngIf="f['userName'].touched && f['userName'].invalid"
                                             class="alert alert-danger">
@@ -205,12 +208,15 @@
                                                 <h5>Show message button in my bio</h5>
                                             </div>
                                             <div class="col-md-6 d-flex justify-content-end p-0">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" [(ngModel)]="isChecked"
-                                                        type="checkbox" id="mySwitch" name="isMessageButton"
-                                                        formControlName="isMessageButton" value="yes"
-                                                        (change)="onCheckboxChange($event)">
-                                                    <label class="form-check-label" for="mySwitch"></label>
+
+                                                <div
+                                                    class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
+                                                    <label class="switch">
+                                                        <input [(ngModel)]="isChecked" type="checkbox"
+                                                            formControlName="isMessageButton" name="isMessageButton"
+                                                            value="yes" (change)="onCheckboxChange($event)">
+                                                        <span class="slider round"></span>
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -249,8 +255,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-10 bio_left d-flex align-items-center justify-content-center">
-                                        <h4><img src="assets/images/1.png" /> Changes you make would be auto-saved as a
-                                            draft. Publish to make them live. </h4>
+                                        <h4><img src="assets/images/1.png" /> Publish to make them live. </h4>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center justify-content-center">
                                         <button type="submit" [disabled]="adminBioForm.invalid"

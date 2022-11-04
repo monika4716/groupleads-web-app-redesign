@@ -19,6 +19,7 @@ import { RatingModule } from 'primeng/rating';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,6 +45,7 @@ import { GroupPluginCreateComponent } from './group-plugin-create/group-plugin-c
 import { GroupProfileCreateComponent } from './group-profile-create/group-profile-create.component';
 import { GroupProfilePreviewComponent } from './group-profile-preview/group-profile-preview.component';
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { ManageProfileComponent } from './manage-profile/manage-profile.componen
     GroupProfileCreateComponent,
     GroupProfilePreviewComponent,
     ManageProfileComponent,
+    ForgetPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,6 +95,7 @@ import { ManageProfileComponent } from './manage-profile/manage-profile.componen
     InputSwitchModule,
     MessagesModule,
     MessageModule,
+    TooltipModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

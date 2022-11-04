@@ -1,4 +1,4 @@
-$(document).on(".header .fa", "click", function () {
-  alert("here");
-  $("body").toggleClass("open-sidebar");
-});
+// $(document).on(".header .fa", "click", function () {
+//   alert("here");
+//   $("body").toggleClass("open-sidebar");
+// });

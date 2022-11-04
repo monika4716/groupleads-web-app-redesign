@@ -45,7 +45,8 @@
                                 <div class="col-md-6 d-flex align-items-end justify-content-end profile_banner_cols">
                                     <a *ngIf="isShareShow" data-bs-toggle="modal" data-bs-target="#profile_share_Modal"
                                         class="btn btn-primary share"><img src="assets/images/share.png" /></a>
-                                    <a *ngIf="!isShareShow" title="Please publish first" class="btn btn-primary share">
+                                    <a *ngIf="!isShareShow" pTooltip="Please Publish Profile" tooltipPosition="bottom"
+                                        class="btn btn-primary share">
                                         <img src="assets/images/share.png" /></a>
                                     <a target="_blank" href="{{facebookGroupLink}}" class="btn btn-primary"><img
                                             src="assets/images/export_white.png" />
@@ -200,11 +201,12 @@
                                     <div class="col-md-12 d-grid admin_sec" *ngFor="let review of reviews">
                                         <div class="d-flex review-setting">
                                             <div class="user_profile">
+                                                <img *ngIf="review.image" class="reviews-image"
+                                                    [src]="reviewImagesUrl+review.image" />
+                                                <img *ngIf="!review.image" class="reviews-image"
+                                                    src="assets/images/default.jpg" />
                                                 <h2 class="name">
-                                                    <img *ngIf="review.image" class="reviews-image"
-                                                        [src]="reviewImagesUrl+review.image" />
-                                                    <img *ngIf="!review.image" class="reviews-image"
-                                                        src="assets/images/default.jpg" />
+
                                                     {{review.name}}
                                                 </h2>
                                             </div>
@@ -397,8 +399,8 @@
                     </div>
                     <div class="mb-3 mt-4">
 
-                        <img src="assets/images/upload.png" title="Upload image" class="review-image-upload"
-                            (click)="selectImage.click()">
+                        <img src="assets/images/upload.png" pTooltip="Upload Image" tooltipPosition="bottom"
+                            tooltipEvent="focus" class="review-image-upload" (click)="selectImage.click()">
                         <input type="file" accept="image/*" (change)="uploadReviewImage($event)" style="display: none"
                             #selectImage>
                         <img *ngIf="reviewImageUrl" [src]="reviewImageUrl | safe" id="review-image-show" />

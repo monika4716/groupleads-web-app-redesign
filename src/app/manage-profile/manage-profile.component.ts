@@ -95,6 +95,7 @@ export class ManageProfileComponent implements OnInit {
   publishGroup: any = {};
   image: any = {};
   displayPublishModel: boolean = false;
+  reviewImageUrl = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -187,6 +188,7 @@ export class ManageProfileComponent implements OnInit {
           let groupDetails = response.groupDetails;
           this.conversationImageUrl = response.conversationImageURl;
           this.adminImageUrl = response.adminImageUrl;
+          this.reviewImageUrl = response.reviewImageUrl;
           this.adminBio = groupDetails.admin_bio;
           this.user = groupDetails.user;
           this.conversationImages = groupDetails.group_conversation_images;
@@ -299,7 +301,7 @@ export class ManageProfileComponent implements OnInit {
       maxNumberOfStars =
         parseInt(this.groupReview[i].rating) + maxNumberOfStars;
     }
-    let likePercentageStars = (5 / totalRating) * maxNumberOfStars;
+    let likePercentageStars = Math.round((5 / totalRating) * maxNumberOfStars);
     return likePercentageStars;
   }
 

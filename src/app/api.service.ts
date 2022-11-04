@@ -26,6 +26,27 @@ export class ApiService {
     });
   }
 
+  forgetpassword(email: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    return this.httpClient.post(this.API_URL + 'app-forgot-password', email, {
+      headers: headers,
+    });
+  }
+
+  billingDetails(token: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+
+    headers = headers.append('Accept', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + token);
+
+    return this.httpClient.post(
+      this.API_URL + 'app-get-user-details',
+      {},
+      { headers: headers }
+    );
+  }
+
   updateGroupOverview(message: any) {
     this.groupOverview.next(message);
   }

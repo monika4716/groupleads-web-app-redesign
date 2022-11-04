@@ -5,7 +5,6 @@
     </ngx-spinner>
 
     <div class="container-fluid admin_bio_list">
-
         <div class="row pt-3">
             <div class="col-md-6 d-flex align-items-center">
                 <h4><a [routerLink]="['/group-profiles']"><img src="assets/images/arrow_left.png" /> Back to Group
@@ -14,12 +13,8 @@
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
                 <button type="button" class="btn btn-outline-primary preview_btn bio_btn" (click)="openPreview()">Peview
                     Profile</button>
-
                 <button type="button" class="btn btn-primary share_btn bio_btn" (click)="publishProfile()">Publish
                     Profile</button>
-
-                <!-- <button type="button" class="btn btn-primary share_btn bio_btn" data-bs-toggle="modal"
-                    data-bs-backdrop="static" data-bs-target="#profile_publish_Modal">Publish Profile</button> -->
             </div>
         </div>
     </div>
@@ -32,7 +27,7 @@
                             <div class="row manage_profile_banner_review">
                                 <div class="col-md-6 ">
                                     <div class="row">
-                                        <div class="col-md-3 pr-0 rating review-setting">
+                                        <div class="col-md-4 pr-0 rating review-setting">
                                             <p-rating [ngModel]="averageRating" [readonly]="true" [cancel]="false">
                                             </p-rating>
                                         </div>
@@ -182,18 +177,23 @@
                                             src="assets/images/star_white.png " />
                                         Write A Review</button>
                                 </div>
-                                <div class="review_sec">
+                                <div class="review_sec custom-scroll" style="height: 350px;">
                                     <div class="col-md-12 d-grid admin_sec" *ngFor="let review of groupReview">
                                         <div class="d-flex review-setting">
                                             <div class="user_profile">
-                                                <h2 class="name"><img class="reviews-image"
-                                                        src="assets/images/default.jpg" /> {{review.name}}
+                                                <img *ngIf="!review.image" class="reviews-image"
+                                                    src="assets/images/default.jpg" />
+                                                <img *ngIf="review.image" class="reviews-image"
+                                                    [src]="reviewImageUrl+review.image" />
+                                                <h2 class="name">
+
+                                                    {{review.name}}
                                                 </h2>
                                             </div>
                                             <p-rating [(ngModel)]="review.rating" [cancel]="false" [readonly]="true">
                                             </p-rating>
                                         </div>
-                                        <p>{{review.description}}</p>
+                                        <p>{{review.review}}</p>
                                         <h6 class="days">{{review.created_at | date: 'MMMM dd, yyyy'}}</h6>
                                     </div>
                                 </div>
@@ -279,7 +279,6 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <!-- <h4 class="modal-title">Add Social Profile</h4> -->
                 <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
                         src="assets/images/Cancel.png" /></button>
             </div>
@@ -306,9 +305,6 @@
     </div>
 </div>
 
-
-
-
 <!---------------------edit topics modal--------------->
 <div class="modal group_modal" id="edit_topics_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -328,7 +324,6 @@
                             </div>
                             <div
                                 class="col-md-6 form-check form-switch switch_btn d-flex align-items-end justify-content-end">
-
                                 <label class="switch">
                                     <input type="checkbox" formControlName="isTopic" [(ngModel)]="isTopic">
                                     <span class="slider round"></span>
@@ -339,7 +334,6 @@
                     <div class="mb-3 mt-4">
                         <label for="topic" class="form-label">Popular Topics</label><br>
                         <h5>Press enter for multiple topic</h5>
-                        <!-- <input type="text" class="form-control" id="email" placeholder="Enter email" name="topic"> -->
                         <p-chips [(ngModel)]="topics" class="topics" formControlName="topics" separator=",">
                         </p-chips>
                     </div>
@@ -352,6 +346,7 @@
         </div>
     </div>
 </div>
+
 <!---------------------edit overview modal--------------->
 <div class="modal group_modal" id="edit_overview_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -407,6 +402,7 @@
         </div>
     </div>
 </div>
+
 <!---------------------review settings modal--------------->
 <div class="modal group_modal" id="review_settings_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -446,6 +442,7 @@
         </div>
     </div>
 </div>
+
 <!---------------------edit stats modal--------------->
 <div class="modal group_modal" id="key_stats_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -505,6 +502,7 @@
         </div>
     </div>
 </div>
+
 <!---------------------edit admin modal--------------->
 <div class="modal group_modal" id="edit_admin_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -536,6 +534,7 @@
         </div>
     </div>
 </div>
+
 <!---------------------edit admin modal--------------->
 <div class="modal group_modal" id="edit_conversation_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -566,11 +565,6 @@
                                 mat-icon-button (click)="removePreviousFile(index,image.id)"><img
                                     src="assets/images/Cancel.png"></span>
                         </div>
-                        <!-- <div class="upload-image" *ngFor="let url of urls; let index = index">
-                            <img [src]="url" class="rounded mb-3 mt-4"><span mat-icon-button
-                                (click)="removeSelectedFile(index)"><img class="cancel-image"
-                                    src="assets/images/Cancel.png"></span>
-                        </div> -->
                         <div class="upload_ss">
                             <img src="assets/images/upload_ss_1.png" (click)="selectImage.click()" />
                             <input #imageInput type="file" accept="image/*" multiple (change)="uploadImages($event)"
@@ -586,6 +580,7 @@
         </div>
     </div>
 </div>
+
 <!---------------------write review modal--------------->
 <div class="modal group_modal" id="write_review_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -629,23 +624,7 @@
     </div>
 </div>
 
-
-<!-- <p-dialog header="Header" [(visible)]="displayReviewModel" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
-    [resizable]="false">
-    <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <ng-template pTemplate="footer">
-        <p-button icon="pi pi-check" (click)="displayModal=false" label="Ok" styleClass="p-button-text"></p-button>
-    </ng-template>
-</p-dialog> -->
-
-
 <!---------------------share group profile modal--------------->
-
 <div class="modal group_modal" id="profile_share_Modal" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -655,18 +634,15 @@
             </div>
             <div class="modal-body publish_modal text-center">
                 <div class="col-md-12">
-
                     <h4 class="modal-title">Share This Bio</h4>
                     <h6><span class="border_left"></span>Share with social media<span class="border_right"></span>
                     </h6>
-
                     <ul class="social_icons">
                         <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
                         <a href="javascript:void(0);"><img src="assets/images/Instagram.png" /></a>
                         <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
                         <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
                     </ul>
-
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
                         <span type="button" class="input-group-text"
@@ -679,7 +655,6 @@
 </div>
 
 <!-- group publish profile -->
-
 <p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '45vw'}">
     <div class="modal-body publish_modal text-center">
         <div class="col-md-12">
@@ -699,10 +674,7 @@
                 <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
                 <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
             </ul>
-
         </div>
-
-
     </div>
 </p-dialog>
 

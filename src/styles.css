@@ -468,3 +468,9 @@ button[disabled] {
   overflow-y: hidden;
   overflow-x: hidden;
 }
+.button-dark:hover,
+.button-dark {
+  background: #3c61ad !important;
+  border: #224da5 !important;
+  color: white !important;
+}

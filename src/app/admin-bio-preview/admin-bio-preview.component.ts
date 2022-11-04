@@ -78,7 +78,14 @@ export class AdminBioPreviewComponent implements OnInit {
           if (this.adminBio != null && this.adminBio.location != '') {
             this.setLocationValue(this.adminBio.location);
           }
-          if (this.adminBio != null && this.adminBio.is_message_button == 1) {
+          let token = localStorage.getItem('token');
+          console.log(token);
+          if (
+            this.adminBio != null &&
+            this.adminBio.is_message_button == 1 &&
+            token == null &&
+            token == undefined
+          ) {
             this.isMessageButton = true;
             this.email = this.adminBio.email_receive_message;
           }

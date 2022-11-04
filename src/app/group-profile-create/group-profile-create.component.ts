@@ -658,6 +658,7 @@ export class GroupProfileCreateComponent implements OnInit {
     this.uniqueName = x.target.value
       .replace(/[^a-zA-Z- ]/g, '')
       .replace(/\s/g, '-')
+      .replace(/[-]+/g, '-')
       .toLowerCase();
   }
 }

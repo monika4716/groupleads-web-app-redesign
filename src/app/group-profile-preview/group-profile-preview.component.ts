@@ -314,7 +314,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     console.log(admin);
     console.log(this.user);
     this.adminName = this.capitalizeFirstLetter(this.user.name);
-    if (admin.id != null) {
+    if (admin != undefined && admin.id != null) {
       let index = this.locationList.findIndex(
         (x: any) => x.code === admin.location
       );

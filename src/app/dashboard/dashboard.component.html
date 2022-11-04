@@ -12,7 +12,7 @@
             <div class="col-md-10 right_side">
                 <div class="row header">
                     <div class="side_icon">
-                        <span class="sidenav"><i class="fa fa-navicon"></i></span>
+                        <span class="sidenav" (click)="toggleSideBar()"><i class="fa fa-navicon"></i></span>
                     </div>
                     <div class="col-md-8 left_col">
                         <div class="d-flex">
@@ -82,7 +82,6 @@
                         <div class="col-md-12 text-center graph" *ngIf="hasLeads && dataLoaded">
                             <p-chart type="line" #chart [data]="data" width="70vw" height="52vh" [responsive]="true">
                             </p-chart>
-                            <!-- <img src="assets/images/graph.png" /> -->
                         </div>
                     </div>
                     <div class="col-md-12 brand_Sec mt-4">
@@ -100,7 +99,7 @@
                                                 community leader.</p>
                                         </div>
                                         <div class="d-flex align-items-center"><button type="button"
-                                                class="btn btn-primary" routerLink="/adminBio">Complete Bio</button>
+                                                class="btn btn-primary" routerLink="/admin-bio">Complete Bio</button>
                                         </div>
                                     </div>
                                     <div class="d-flex about_row_sec p-3">
@@ -113,7 +112,7 @@
                                                 important statistics about your community to brands.</p>
                                         </div>
                                         <div class="d-flex align-items-center"><button type="button"
-                                                class="btn btn-primary" routerLink="/groupProfiles">Edit
+                                                class="btn btn-primary" routerLink="/group-profiles">Edit
                                                 Profile</button></div>
                                     </div>
                                 </div>

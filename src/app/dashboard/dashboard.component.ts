@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   dataLoaded: boolean = false;
   groupId: any;
   selectedGroup: any = { group_id: 0 };
-  selectedGroupId:any = 0
+  selectedGroupId: any = 0;
   group_listing: any = [];
   filterDropdown: any = 'all_time';
   partocularGroup: any;
@@ -36,8 +36,9 @@ export class DashboardComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
-	this.selectedGroupId = this.activatedRoute.snapshot.queryParamMap.get('group_id');
-    if(this.selectedGroupId == null){
+    this.selectedGroupId =
+      this.activatedRoute.snapshot.queryParamMap.get('group_id');
+    if (this.selectedGroupId == null) {
       this.selectedGroupId = 0;
     }
     this.monthsArray = [
@@ -103,9 +104,8 @@ export class DashboardComponent implements OnInit {
           response.hasOwnProperty('groupsList') &&
           response.hasOwnProperty('totalLeads')
         ) {
-        	this.filterGraphData();
+          this.filterGraphData();
           //this.spinner.hide();
-	
         }
       }
     });
@@ -217,5 +217,9 @@ export class DashboardComponent implements OnInit {
         };
         this.spinner.hide();
       });
+  }
+
+  toggleSideBar() {
+    $('body').toggleClass('open-sidebar');
   }
 }
