@@ -41,7 +41,6 @@ export class BillingComponent implements OnInit {
     this.spinner.show();
     this.apiService.billingDetails(this.token).subscribe(
       (response: any) => {
-        console.log(response);
         this.upgradeURL = 'https://groupleads.net/plans/?hash=' + response.hash;
         if (response['status'] == 404) {
         } else if (response['status'] == 200) {
@@ -52,13 +51,10 @@ export class BillingComponent implements OnInit {
           this.type = response.type;
           this.planDetail = response;
           this.trial = this.planDetail.userDetails.trial;
-
           if (this.planDetail.userDetails.expired_on == null) {
             this.billingCycleSection = false;
           }
-
           this.billingId = response['userDetails'].plan_id;
-
           if (response['userDetails'].expired_on != null) {
             this.expireDate = moment(response['userDetails'].expired_on).format(
               'MMMM Do YYYY'
@@ -69,9 +65,7 @@ export class BillingComponent implements OnInit {
             var todaydate = moment(new Date()).format('MM/DD/YYYY');
             this.dayleft = moment(expireDate).diff(moment(todaydate), 'days');
           }
-
           if (response.reseller_id > 0 || response.type == 'life_time') {
-            //admin
             this.showUpGradeBtn = false;
           } else {
             this.showUpGradeBtn = true;
@@ -85,7 +79,8 @@ export class BillingComponent implements OnInit {
     );
   }
 
-  copyUrl() {
+  /* Copy Billing Url */
+  copyBillingUrl() {
     console.log(this.upgradeURL);
     this.buttonText = 'Copied URL';
     if (navigator.clipboard) {
@@ -103,10 +98,5 @@ export class BillingComponent implements OnInit {
     setTimeout(() => {
       this.buttonText = 'Copy URL';
     }, 2000);
-  }
-
-  toggleSideBar() {
-    console.log('here');
-    $('body').toggleClass('open-sidebar1');
   }
 }

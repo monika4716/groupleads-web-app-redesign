@@ -57,7 +57,6 @@ export class AdminBioPreviewComponent implements OnInit {
     this.apiService
       .getAdminBioPreivew(this.adminSlug)
       .subscribe((response: any) => {
-        console.log(response);
         this.spinner.hide();
         if (response.status == 200) {
           this.linkedGroups = response.Linked_groups;
@@ -79,7 +78,6 @@ export class AdminBioPreviewComponent implements OnInit {
             this.setLocationValue(this.adminBio.location);
           }
           let token = localStorage.getItem('token');
-          console.log(token);
           if (
             this.adminBio != null &&
             this.adminBio.is_message_button == 1 &&
@@ -128,7 +126,6 @@ export class AdminBioPreviewComponent implements OnInit {
           }
         }
       });
-    console.log(this.userId);
   }
 
   /*
@@ -153,9 +150,13 @@ export class AdminBioPreviewComponent implements OnInit {
 
   closePreview() {
     console.log('here');
+    let body = window.parent.document.getElementsByTagName('body');
+    if (body[0]) {
+      body[0].removeAttribute('class');
+    }
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
-      console.log(iframe.parentNode);
+      //console.log(iframe.parentNode);
       iframe.parentNode.removeChild(iframe);
     }
   }

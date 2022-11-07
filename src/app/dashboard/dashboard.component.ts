@@ -59,13 +59,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiService.getGroupOverview().subscribe((response) => {
-      console.log(Object.keys(response).length);
       if (
         Object.keys(response).length === 0 &&
         response.constructor === Object
       ) {
         if (localStorage.getItem('token') != null) {
-          console.log('if');
           this.token = localStorage.getItem('token');
           // to not trigger the api when we clear subject data after user logout
           this.spinner.show();
@@ -73,7 +71,6 @@ export class DashboardComponent implements OnInit {
           this.getAllLeadsCount();
         }
       } else {
-        console.log('else');
         if (response.hasOwnProperty('groupsList')) {
           this.groupsTemp = response.groupsList;
           this.group_listing = response.groupsList;
@@ -85,7 +82,6 @@ export class DashboardComponent implements OnInit {
             this.selectedGroup = this.group_listing[index];
           }
         }
-
         if (response.hasOwnProperty('totalLeads')) {
           this.overAlltotalLeads = response.totalLeads;
           this.totalLeadsTitle = response.totalLeads;
@@ -96,7 +92,6 @@ export class DashboardComponent implements OnInit {
           this.groupsTemp != undefined &&
           this.overAlltotalLeads != undefined
         ) {
-          console.log('in');
           this.dataLoaded = true;
         }
         // once all data loaded then hide loader
@@ -105,26 +100,21 @@ export class DashboardComponent implements OnInit {
           response.hasOwnProperty('totalLeads')
         ) {
           this.filterGraphData();
-          //this.spinner.hide();
         }
       }
     });
   }
   /* Get Group List */
   getGroupsList() {
-    console.log(this.groupId);
     var id = this.groupId;
-    console.log(this.token);
     this.apiService.getGroupsList(this.token).subscribe(
       (response: any) => {
-        console.log(response);
         if (response['status'] == 404) {
           this.spinner.hide();
         } else if (response['status'] == 200) {
           this.group_listing = response['groupList'];
           var temp = response['groupList'];
           temp.unshift({ group_id: '0', group_name: 'All Groups' });
-
           this.groups = temp;
           let data = this.apiService.getGroupOverviewValue();
           data.groupsList = temp;
@@ -143,7 +133,6 @@ export class DashboardComponent implements OnInit {
       if (response['status'] == 404) {
         this.spinner.hide();
       } else if (response['status'] == 200) {
-        console.log(response);
         let temp = this.apiService.getGroupOverviewValue();
         temp.totalLeads = response.totalLeads;
         this.apiService.updateGroupOverview(temp);
@@ -152,10 +141,8 @@ export class DashboardComponent implements OnInit {
   }
 
   /* Group Selection */
-
   onChangeGroup(e: any) {
     this.partocularGroup = this.groups.filter(function (item: any) {
-      // return item.group_id == e.target.value;
       return item.group_id == e.target.value;
     });
     var groupName = this.partocularGroup[0].group_name;
@@ -165,7 +152,6 @@ export class DashboardComponent implements OnInit {
     if (groupId != '0') {
       parameters = { group_id: groupId };
     }
-    console.log(parameters);
     var pathname = this.router.url.split('?')[0];
     if (pathname == '/dashboard') {
       this.router.navigate([], {
@@ -184,6 +170,7 @@ export class DashboardComponent implements OnInit {
       this.filterGraphData();
     }
   }
+
   /*  Lead Show In Graph */
   filterGraphData() {
     this.spinner.show();
@@ -191,17 +178,10 @@ export class DashboardComponent implements OnInit {
     let groupIdParam =
       this.activatedRoute.snapshot.queryParamMap.get('group_id');
     let groupId = groupIdParam ? groupIdParam : 0;
-
-    console.log(groupId);
-    console.log(this.filterDropdown);
     let parameters = { groupId: groupId, filter: this.filterDropdown };
-
-    console.log(parameters);
-
     this.apiService
       .getGraphData(tokenTemp, parameters)
       .subscribe((response: any) => {
-        console.log(response);
         this.dateVariable = '';
         this.data = {
           labels: response.labels,
@@ -217,9 +197,5 @@ export class DashboardComponent implements OnInit {
         };
         this.spinner.hide();
       });
-  }
-
-  toggleSideBar() {
-    $('body').toggleClass('open-sidebar');
   }
 }

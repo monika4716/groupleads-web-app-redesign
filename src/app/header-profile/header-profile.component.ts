@@ -20,7 +20,6 @@ export class HeaderProfileComponent implements OnInit {
     this.cookie.deleteAll();
     window.localStorage.clear();
     setTimeout(() => {
-      // let clearData = {};
       this.apiService.updateGroupOverview({}); // to clear behaviour variable. (to fix if different user is login then it display old user data in behaviour subject)
     }, 100);
 

@@ -93,10 +93,10 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
-    console.log(this.token);
+    //console.log(this.token);
     this.origin = location.origin;
     this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
-    console.log(this.previewEnable);
+    //console.log(this.previewEnable);
     if (this.previewEnable != undefined && this.previewEnable) {
       this.disableWriteReviewBtn = true;
       this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
@@ -106,9 +106,9 @@ export class GroupProfilePreviewComponent implements OnInit {
       // this.disableWriteReviewBtn = false;
       this.spinner.show();
       this.uniqueName = this.activatedRoute.snapshot.paramMap.get('slug');
-      console.log(this.uniqueName);
+      //console.log(this.uniqueName);
       this.showPublishButton = false;
-      console.log(this.token);
+      //console.log(this.token);
       if (this.token == null || this.token == undefined) {
         this.disableWriteReviewBtn = false;
       }
@@ -117,7 +117,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   //SHOW PREVIEW DETAILS
   showPreviewDetails(response: any) {
-    console.log(response);
+    //console.log(response);
     this.adminImageUrl = response.adminImageUrl;
     this.reviewImagesUrl = response.reviewImageUrl;
     this.conversationImageUrl = response.conversationImageURl;
@@ -134,7 +134,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     let linkedDetails = groupDetails.linked_fb_group;
     this.conversations = groupDetails.group_conversation_images;
     this.id = groupDetails.id;
-    console.log(this.id);
+    //console.log(this.id);
 
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
@@ -206,7 +206,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   //SHOW CONVERSATION IMAGES
   showConversationImage() {
     this.conversationsImage = [];
-    console.log(this.conversations);
+    //console.log(this.conversations);
     for (let i = 0; i < this.conversations.length; i++) {
       if (this.conversations[i].image) {
         if (this.conversations[i].image.indexOf('http') < 0) {
@@ -232,7 +232,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   // EDIT REVIEWS
   editReviews() {
-    console.log(this.editReviewsForm);
+    //console.log(this.editReviewsForm);
     this.rating = this.editReviewsForm.value.rating;
     this.review = this.editReviewsForm.value.review;
 
@@ -243,7 +243,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   //EDIT REVIEW SETTING
   saveReviews(reviewsForm: any) {
-    console.log(reviewsForm.value);
+    //console.log(reviewsForm.value);
 
     const formData: FormData = new FormData();
     formData.append('name', reviewsForm.value.name);
@@ -252,7 +252,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('review', reviewsForm.value.review);
     formData.append('groupProfileId', reviewsForm.value.profileId);
     this.apiService.saveReview(formData).subscribe((response: any) => {
-      console.log(response);
+      //console.log(response);
       this.editReviewsForm.reset();
       if (response.status == 200) {
         this.msgs = [
@@ -277,7 +277,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     });
   }
   editReviewSetting() {
-    console.log(this.editReviewSettingForm.value);
+    //console.log(this.editReviewSettingForm.value);
     this.isReview = this.editReviewSettingForm.value.isReview;
   }
 
@@ -311,8 +311,8 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   // SHOW ADMIN
   showAdmins(admin: any) {
-    console.log(admin);
-    console.log(this.user);
+    //console.log(admin);
+    // console.log(this.user);
     this.adminName = this.capitalizeFirstLetter(this.user.name);
     if (admin != undefined && admin.id != null) {
       let index = this.locationList.findIndex(
@@ -387,7 +387,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
-      console.log(iframe.parentNode);
+      //console.log(iframe.parentNode);
       iframe.parentNode.removeChild(iframe);
     }
     $('body').removeClass('hide-scroll');
@@ -403,7 +403,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.publishGroup = localStorage.getItem('publishGroup');
     this.publishGroup = JSON.parse(this.publishGroup);
 
-    console.log(this.publishGroup);
+    //console.log(this.publishGroup);
 
     const formData: FormData = new FormData();
     formData.append('categoryId', this.publishGroup.categoryId);
@@ -433,7 +433,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.apiService
       .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
-        console.log(response);
+        //console.log(response);
         if (response.status == 200) {
           if (publish) {
             this.displayPublishModel = true;
@@ -443,12 +443,12 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   uploadReviewImage(event: any) {
-    console.log(event);
+    //console.log(event);
     this.reviewImage = event.target.files[0];
     let objectURL = URL.createObjectURL(event.target.files[0]);
-    console.log(objectURL);
+    //console.log(objectURL);
     this.reviewImageUrl = objectURL;
-    console.log(this.reviewImage);
-    console.log(this.reviewImageUrl);
+    //console.log(this.reviewImage);
+    //console.log(this.reviewImageUrl);
   }
 }

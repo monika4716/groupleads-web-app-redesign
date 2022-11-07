@@ -7,18 +7,10 @@
             </ngx-spinner>
             <app-sidebar></app-sidebar>
 
-
-
             <div class="col-md-10 right_side">
                 <div class="row header">
-                    <div class="side_icon">
-                        <span class="sidenav" (click)="toggleSideBar()"><i class="fa fa-navicon"></i></span>
-                    </div>
                     <div class="col-md-8 left_col">
                         <div class="d-flex">
-                            <!-- <div class="side_icon">
-                                <span class="sidenav"><i class="fa fa-navicon"></i></span>
-                            </div> -->
                             <div>
                                 <h3>Dashboard</h3>
                             </div>
@@ -43,7 +35,6 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="d-flex">
-                                    <!-- class given in select "appearance" -->
                                     <select (change)="onChangeGroup($event)"
                                         class="form-control form-select select_groups " name="user"
                                         [(ngModel)]='selectedGroupId'>
@@ -51,7 +42,6 @@
                                             {{group.group_name}}
                                         </option>
                                     </select>
-
                                     <select [(ngModel)]="filterDropdown" (change)="onChangeLeadFilter($event)"
                                         class="form-select">
                                         <option id="today" [selected]="filterDropdown == true" value="today">Today
@@ -67,7 +57,6 @@
                                         <option id="allTime" [selected]="filterDropdown == true" value="all_time">All
                                             Time</option>
                                     </select>
-
                                 </div>
                             </div>
                         </div>
@@ -99,7 +88,8 @@
                                                 community leader.</p>
                                         </div>
                                         <div class="d-flex align-items-center"><button type="button"
-                                                class="btn btn-primary" routerLink="/admin-bio">Complete Bio</button>
+                                                class="btn btn-primary button-dark" routerLink="/admin-bio">Complete
+                                                Bio</button>
                                         </div>
                                     </div>
                                     <div class="d-flex about_row_sec p-3">
@@ -112,7 +102,7 @@
                                                 important statistics about your community to brands.</p>
                                         </div>
                                         <div class="d-flex align-items-center"><button type="button"
-                                                class="btn btn-primary" routerLink="/group-profiles">Edit
+                                                class="btn btn-primary button-dark" routerLink="/group-profiles">Edit
                                                 Profile</button></div>
                                     </div>
                                 </div>

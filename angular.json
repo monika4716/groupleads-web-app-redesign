@@ -27,7 +27,13 @@
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "./node_modules/primeng/resources/primeng.min.css"
             ],
-            "scripts": ["./node_modules/chart.js/dist/chart.js"]
+            "scripts": ["./node_modules/chart.js/dist/chart.js"],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "jquery",
+              "sweetalert2",
+              "moment"
+            ]
           },
           "configurations": {
             "production": {

@@ -19,69 +19,91 @@ import { ManageProfileComponent } from './manage-profile/manage-profile.componen
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'login', redirectTo: '', pathMatch: 'full' },
+  {
+    path: 'login',
+    redirectTo: '',
+    pathMatch: 'full',
+    title: 'GroupLeads Login',
+  },
   {
     path: 'forget-password',
     component: ForgetPasswordComponent,
+    title: 'GroupLeads Forget Pasword',
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [RoutingGuard],
+    title: 'Groupleads Web App',
   },
-  { path: 'billing', component: BillingComponent, canActivate: [RoutingGuard] },
+  {
+    path: 'billing',
+    component: BillingComponent,
+    canActivate: [RoutingGuard],
+    title: 'Billing',
+  },
   {
     path: 'group-list',
     component: GroupListComponent,
     canActivate: [RoutingGuard],
+    title: 'Group List',
   },
   {
     path: 'group-leads',
     component: GroupLeadsComponent,
     canActivate: [RoutingGuard],
+    title: 'Group Leads',
   },
   {
     path: 'admin-bio',
     component: AdminBioComponent,
     canActivate: [RoutingGuard],
+    title: 'Admin Bio',
   },
   {
     path: 'profile/:slug',
     component: AdminBioPreviewComponent,
+    title: 'Admin Bio Profile',
   },
   // {
   //   path: 'group-plugin',
   //   component: GroupPluginComponent,
   //   canActivate: [RoutingGuard],
   // },
-  {
-    path: 'plugin/create',
-    component: GroupPluginCreateComponent,
-    canActivate: [RoutingGuard],
-  },
+  // {
+  //   path: 'plugin/create',
+  //   component: GroupPluginCreateComponent,
+  //   canActivate: [RoutingGuard],
+
+  // },
   {
     path: 'group-profiles',
     component: GroupProfilesComponent,
     canActivate: [RoutingGuard],
+    title: 'Group Profiles',
   },
   {
     path: 'group-profile-create',
     component: GroupProfileCreateComponent,
     canActivate: [RoutingGuard],
+    title: 'Group Profile Create',
   },
   {
     path: 'group-profile-manage',
     component: ManageProfileComponent,
     canActivate: [RoutingGuard],
+    title: 'Group Profile Manage',
   },
   {
     path: 'group-profile/:slug',
     component: GroupProfilePreviewComponent,
+    title: 'Group Profile Preview',
   },
   {
     path: 'affiliate',
     component: AffiliatesComponent,
     canActivate: [RoutingGuard],
+    title: 'Affiliate',
   },
 ];
 

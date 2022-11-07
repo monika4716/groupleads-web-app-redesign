@@ -42,13 +42,11 @@ export class GroupListComponent implements OnInit {
     this.spinner.show();
     var token = localStorage.getItem('token');
     this.apiService.getGroupOverview().subscribe((response) => {
-      console.log(Object.keys(response).length);
       if (response.hasOwnProperty('groupsList') && !this.listingUpdated) {
         this.listingUpdated = true;
         let tempGroups = JSON.parse(JSON.stringify(response.groupsList));
         this.groupsTemp = tempGroups;
         this.groupsData = this.groupsTemp;
-        console.log(this.groupsData);
         if (this.groupsData.length > 0) {
           this.Nogroup = true;
         }
@@ -59,31 +57,27 @@ export class GroupListComponent implements OnInit {
     });
   }
 
+  /* GET GROUP DATA*/
   getGroupData() {
     this.apiService.getGroupsList(this.token).subscribe((response: any) => {
       if (response['status'] == 404) {
         this.spinner.hide();
       } else if (response['status'] == 200) {
-        console.log(response);
         this.groupsTemp = response.groupList;
         this.groupsData = this.groupsTemp;
-        console.log(this.groupsData);
         if (this.groupsData.length > 0) {
           this.Nogroup = true;
-          // setTimeout(() => {
-          //   $('table').addClass('table table-striped');
-          // }, 200);
         }
         this.spinner.hide();
       }
     });
   }
 
+  /* FILTER ON CHANGE*/
   onChange(e: any, name: any) {
     $('li').removeClass('link');
     if (e.target.attributes.data_filter.value) {
       this.filterDropdown = e.target.attributes.data_filter.value;
-      // this.filterDropdownLabel = e.target.text;
       if (this.filterDropdown == 'today') {
         $('li#today').addClass('link');
       } else if (this.filterDropdown == 'this_month') {
@@ -102,8 +96,8 @@ export class GroupListComponent implements OnInit {
     return false;
   }
 
+  /* GET AND SHOW DATA ON FILTER CHANGE*/
   filterGridData(filterType: any) {
-    console.log(filterType);
     this.spinner.show();
     var tokenTemp = localStorage.getItem('token');
     this.apiService

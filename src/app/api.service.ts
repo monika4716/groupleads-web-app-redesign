@@ -36,10 +36,8 @@ export class ApiService {
 
   billingDetails(token: any) {
     let headers: HttpHeaders = new HttpHeaders();
-
     headers = headers.append('Accept', 'application/json');
     headers = headers.append('Authorization', 'Bearer ' + token);
-
     return this.httpClient.post(
       this.API_URL + 'app-get-user-details',
       {},
@@ -52,12 +50,10 @@ export class ApiService {
   }
 
   getGroupOverview(): Observable<any> {
-    console.log(this.groupOverview);
     return this.groupOverview.asObservable();
   }
 
   getGroupOverviewValue() {
-    console.log(this.groupOverview.value);
     return this.groupOverview.value;
   }
 
@@ -166,7 +162,6 @@ export class ApiService {
 
   //GROUPS DETAILS WITH PROFILE / OBSERVABLE
   getGroupProfile(): Observable<any> {
-    // console.log(this.groupProfiles);
     return this.groupProfiles.asObservable();
   }
 

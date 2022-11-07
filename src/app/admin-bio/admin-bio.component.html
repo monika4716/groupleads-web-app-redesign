@@ -8,19 +8,15 @@
             </ngx-spinner>
 
             <div class="col-md-10 right_side">
-                <form [formGroup]="adminBioForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+                <form [formGroup]="adminBioForm" id="adminBioForm" (ngSubmit)="onSubmit()"
+                    enctype="multipart/form-data">
                     <div class="row header">
-                        <div class="side_icon">
-                            <span class="sidenav"><i class="fa fa-navicon"></i></span>
-                        </div>
                         <div class="col-md-8 left_col">
                             <div class="d-flex">
-
                                 <div>
                                     <h3>Admin Bio</h3>
                                 </div>
                                 <div class="leads_sec">
-
                                 </div>
                             </div>
                         </div>
@@ -35,12 +31,6 @@
                                     <div class="row user_section">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <!-- <div class="col-md-2 p-0 " data-bs-target="#image_UploadModel"
-                                                    data-bs-toggle="modal" data-bs-backdrop="static" id="profile-image">
-                                                    <img src="{{imageUrl}}" />
-
-                                                </div> -->
-
                                                 <div class="col-md-2 p-0 " id="profile-image">
                                                     <img [src]="imageUrl | safe" class="image1"
                                                         (error)="imageUrl = 'assets/images/default.jpg'" />
@@ -96,7 +86,6 @@
                                             placeholder="Select Country" [options]="countryList" optionLabel="name"
                                             optionValue="code" (onChange)="selectCountryOnChange($event)">
                                         </p-dropdown>
-
                                     </div>
                                     <div>
                                         <label for="about" class="form-label">About Me</label>
@@ -145,7 +134,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12 p-2 acviveBtn" *ngIf="this.isButtonVisible">
-                                            <button type="button" class="btn btn-outline-primary mt-2"
+                                            <button type="button" class="btn btn-outline-primary mt-2 button-dark"
                                                 (click)="addAchievement()"><img src="assets/images/add.png"
                                                     class="mr-2">
                                                 Add
@@ -190,12 +179,11 @@
                                                 (click)="deleteSocialLink(social.name)" />
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-outline-primary mt-4" data-bs-toggle="modal"
-                                        data-bs-target="#add_social_profileModal" data-bs-backdrop="static"><img
-                                            src="assets/images/add.png" class="mr-2" />
+                                    <button type="button" class="btn btn-outline-primary mt-4 button-dark"
+                                        data-bs-toggle="modal" data-bs-target="#add_social_profileModal"
+                                        data-bs-backdrop="static"><img src="assets/images/add.png" class="mr-2" />
                                         Add
                                         Social Profile</button>
-
                                 </div>
                             </div>
                             <div class="card message_section">
@@ -261,8 +249,6 @@
                                         <button type="submit" [disabled]="adminBioForm.invalid"
                                             class="btn btn-primary publish-bio-btn">Publish
                                             Bio</button>
-
-                                        <!-- [disabled]="disabledPublishButton" -->
                                     </div>
                                 </div>
                             </div>
@@ -273,30 +259,7 @@
         </div>
     </div>
 
-    <!-----------------image upload modal------------->
-    <!-- <div class="modal group_modal" id="image_UploadModel">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h4 class="modal-title">Upload Profile Image</h4>
-                    <button type="button" data-bs-dismiss="modal" class="cancel_btn"><img
-                            src="assets/images/Cancel.png" /></button>
-                </div>
-
-
-                <div class="modal-body social_profile_body">
-                    <div class="col-md-12  p-0 d-grid ">
-                        <p-fileUpload name="image[]" url="./upload.php" accept="image/*" [customUpload]="true"
-                            (uploadHandler)="imageUploader($event)"></p-fileUpload>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div> -->
     <!------------------publish bio modal--------------->
-
     <p-dialog [(visible)]="displayBasic" [modal]="true" [style]="{width: '45vw'}">
         <div class="modal-body publish_modal text-center">
             <div class="col-md-12">
@@ -317,10 +280,7 @@
                     <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
                     <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
                 </ul>
-
             </div>
-
-
         </div>
     </p-dialog>
 
@@ -478,11 +438,9 @@
                             Profile</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>
 
 <iframe *ngIf="displayIframe" height="640px" width="100%" [src]="iframeUrl | safe" id="openIframe"></iframe>

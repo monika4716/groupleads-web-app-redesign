@@ -474,3 +474,15 @@ button[disabled] {
   border: #224da5 !important;
   color: white !important;
 }
+.button-light:hover {
+  color: #3c61ad !important;
+  border: #224da5 !important;
+  background: white !important;
+}
+.about_right_sec .btn:hover {
+  background: #ff7a59 !important;
+}
+.dropdown .btn:active,
+.btn.show {
+  border-color: #e5e5e5 !important;
+}

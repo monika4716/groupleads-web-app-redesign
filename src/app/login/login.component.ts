@@ -99,17 +99,20 @@ export class LoginComponent implements OnInit {
     this.spinner.show();
     this.apiService.loginUser(this.credentials.value).subscribe(
       (response: any) => {
-        console.log(response);
+        // console.log(response);
         if (response['status'] == 400 || response['status'] == 404) {
           this.verifying = false;
           this.error = true;
           this.error_Message = response['message'];
           this.spinner.hide();
         } else if (response['status'] == 200) {
+          console.log(this.credentials.value.KeepMeLoggedIn);
           if (this.credentials.value.KeepMeLoggedIn) {
             var now = new Date();
             var time = now.getTime();
             var expireTime = time + 7 * 24 * 60 * 60 * 1000;
+            console.log(expireTime);
+            console.log(now.setTime(expireTime));
             now.setTime(expireTime);
             document.cookie =
               'email=' +
@@ -126,6 +129,7 @@ export class LoginComponent implements OnInit {
           }
           this.error = false;
           var token = response['token'];
+          //console.log(response['token']);
           localStorage.setItem('token', token);
           var name = response['user'].name;
           localStorage.setItem('name', name);
