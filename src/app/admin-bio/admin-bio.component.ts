@@ -90,6 +90,7 @@ export class AdminBioComponent implements OnInit {
   instagramShare: any = '';
   twitterShare: any = '';
   linkedInShare: any = '';
+  adminBioStorage: any = {};
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -148,6 +149,7 @@ export class AdminBioComponent implements OnInit {
     this.apiService.getAdminBio(this.token).subscribe((response: any) => {
       //console.log(response);
       if (response.status == 200) {
+        localStorage.setItem('adminBioStorage', JSON.stringify(response));
         this.linkedGroups = response.Linked_groups;
         this.setAdminBioValue(response);
         this.spinner.hide();
@@ -238,6 +240,13 @@ export class AdminBioComponent implements OnInit {
   /*COUNTRY SELECTION*/
   selectCountryOnChange(event: any) {
     this.countryCode = event.value;
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.location = this.countryCode;
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
   }
 
   public get htmlProperty(): SafeHtml {
@@ -408,6 +417,18 @@ export class AdminBioComponent implements OnInit {
           'cancel_btn'
         )[0] as HTMLElement;
         element.click();
+        console.log(this.socialLinks);
+
+        this.adminBioStorage = localStorage.getItem('adminBioStorage');
+        this.adminBioStorage = JSON.parse(this.adminBioStorage);
+        this.adminBioStorage.admin_bio.social_profile = JSON.stringify(
+          this.socialLinks
+        );
+        console.log(this.adminBioStorage);
+        localStorage.setItem(
+          'adminBioStorage',
+          JSON.stringify(this.adminBioStorage)
+        );
       }
     }, 500);
   }
@@ -423,6 +444,16 @@ export class AdminBioComponent implements OnInit {
         this.socialLinks.splice(found, 1);
       }
     }
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.social_profile = JSON.stringify(
+      this.socialLinks
+    );
+    console.log(this.adminBioStorage);
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
   }
   /* TO COPY ADMIN BIO PROFILE LINK 
   @Parameter{slug}
@@ -545,6 +576,7 @@ export class AdminBioComponent implements OnInit {
         })
       );
     });
+    console.log(control);
   }
   /*
   TO SET DB LOCATION CODE.
@@ -606,12 +638,29 @@ export class AdminBioComponent implements OnInit {
       this.isChecked = false;
       this.messageButton = 0;
     }
+
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.is_message_button = this.messageButton;
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
   }
   // UPLOAD ADMIN BIO IMAGE
   uploadImages(event: any) {
     this.imageData = event.target.files[0];
     let objectURL = URL.createObjectURL(event.target.files[0]);
     this.imageUrl = objectURL;
+
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.image = this.imageUrl;
+    console.log(this.adminBioStorage);
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
   }
   // CREATE UNIQUE NAME - remove special char num and change space into hyphen
   createUniqueUserName(x: any) {
@@ -620,5 +669,51 @@ export class AdminBioComponent implements OnInit {
       .replace(/\s/g, '-')
       .replace(/[-]+/g, '-')
       .toLowerCase();
+    console.log(this.userName);
+
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.user_name = this.userName;
+
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
   }
+
+  //SET IN LOCAL STORAGE FOR PREVIEW
+
+  getAbout() {
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.about_me = this.aboutMe;
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
+  }
+  setAchievements() {
+    let achievements = JSON.stringify(this.adminBioForm.value.achievements);
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.achievements = achievements;
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
+  }
+
+  setEmail() {
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    this.adminBioStorage.admin_bio.email_receive_message =
+      this.adminBioForm.value.email;
+    console.log(this.adminBioStorage);
+    localStorage.setItem(
+      'adminBioStorage',
+      JSON.stringify(this.adminBioStorage)
+    );
+  }
+
+  // End SET IN LOCAL STORAGE FOR PREVIEW
 }

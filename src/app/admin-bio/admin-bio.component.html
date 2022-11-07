@@ -90,7 +90,7 @@
                                     <div>
                                         <label for="about" class="form-label">About Me</label>
                                         <textarea class="form-control" rows="5" id="about" formControlName="about"
-                                            name="about" [(ngModel)]="aboutMe" [value]="aboutMe"
+                                            name="about" [(ngModel)]="aboutMe" (focusout)="getAbout()" [value]="aboutMe"
                                             placeholder="Write a brief description about yourself with regards to your group...">
                                         </textarea>
                                     </div>
@@ -127,8 +127,8 @@
                                         <div *ngFor="let achieve of achievements().controls;   let i=index"
                                             [formGroupName]="i" class="mt-2">
                                             <div class="input-group achievement_field">
-                                                <input type="text" class="form-control" formControlName="achieve"
-                                                    placeholder="Enter an achievement">
+                                                <input type="text" (focusout)="setAchievements()" class="form-control"
+                                                    formControlName="achieve" placeholder="Enter an achievement">
                                                 <span class="input-group-text" (click)="removeAchievement(i)"><img
                                                         src="assets/images/Cancel.png" /></span>
                                             </div>
@@ -212,8 +212,8 @@
                                     <div>
                                         <label for="email" class="form-label">Email to recieve messages<span
                                                 class="required">*</span></label>
-                                        <input formControlName="email" id="email" type="text" class="form-control"
-                                            [(ngModel)]="email">
+                                        <input formControlName="email" (focusout)="setEmail()" id="email" type="text"
+                                            class="form-control" [(ngModel)]="email">
                                         <div *ngIf="f['email'].touched && f['email'].invalid"
                                             class="alert alert-danger">
                                             <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is
