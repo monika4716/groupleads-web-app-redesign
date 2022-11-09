@@ -57,8 +57,9 @@ a:hover {
   font-size: 18px;
   color: #666666;
 }
-.login-screen .btn {
-  background: #3c61ad;
+.login-screen .btn,
+.login-screen .btn:hover {
+  background-color: #3c61ad !important;
   border-radius: 10px;
   font-weight: 500;
   font-size: 20px;
@@ -208,7 +209,7 @@ a.forget-password {
 }
 .preview_btn.btn:disabled {
   color: gray !important;
-  border: 1px solid #80808042 !important;
+  border: 2px solid #80808042 !important;
 }
 .share_btn.btn:disabled {
   border: gray !important;

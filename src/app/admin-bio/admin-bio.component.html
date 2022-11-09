@@ -50,6 +50,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- [disabled]="showPreviewBtn" -->
                                         <div
                                             class="col-md-6 text-end user_right_section d-flex align-items-center justify-content-end">
                                             <button type="button" [disabled]="showPreviewBtn" (click)="openPreview()"
@@ -101,8 +102,8 @@
                                     <h3>Set Username <span class="required">*</span></h3>
                                     <p>Choose a unique username for your admin bio.</p>
                                     <div>
-                                        <input type="text" formControlName="userName" name="userName"
-                                            [ngModel]="userName" class="form-control" placeholder="Enter Username"
+                                        <input type="text" formControlName="userName" [ngModel]="userName"
+                                            class="form-control" placeholder="Enter Username"
                                             (keyup)="createUniqueUserName($event)">
 
                                         <div *ngIf="f['userName'].touched && f['userName'].invalid"
@@ -243,7 +244,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-10 bio_left d-flex align-items-center justify-content-center">
-                                        <h4><img src="assets/images/1.png" /> Publish to make them live. </h4>
+                                        <h4><img src="assets/images/1.png" />Publish to make them live. </h4>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center justify-content-center">
                                         <button type="submit" [disabled]="adminBioForm.invalid"

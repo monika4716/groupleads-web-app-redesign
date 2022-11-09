@@ -8,9 +8,9 @@
             </ngx-spinner>
             <div class="col-md-10 right_side">
                 <div class="row header">
-                    <div class="side_icon">
+                    <!-- <div class="side_icon">
                         <span class="sidenav"><i class="fa fa-navicon"></i></span>
-                    </div>
+                    </div> -->
                     <div class="col-md-8 left_col">
                         <div class="d-flex">
                             <div>
@@ -96,7 +96,7 @@
                                         <div>
                                             <input type="text" class="form-control" id="uniqueName"
                                                 (keyup)="createUniqueGroupSlug($event)" formControlName="uniqueName"
-                                                required="required" value="" [ngModel]="uniqueName"
+                                                required="required" [ngModel]="uniqueName"
                                                 placeholder="Enter unique group name">
 
                                             <div *ngIf="o['uniqueName'].touched && o['uniqueName'].invalid"

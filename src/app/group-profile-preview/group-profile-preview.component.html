@@ -113,7 +113,7 @@
                             <div class="card-body">
                                 <h3>About Group</h3>
                                 <p [ngClass]="{'limitTextHeight': isSeeMore}" [innerHTML]="about"></p>
-                                <a href="javascript:void(0);" (click)="isSeeMore=!isSeeMore">
+                                <a *ngIf="showLessMore" href="javascript:void(0);" (click)="isSeeMore=!isSeeMore">
                                     {{ isSeeMore ? 'See More': 'See Less' }}
                                 </a>
                             </div>

@@ -73,6 +73,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   reviewImageUrl: any = '';
   reviewImagesUrl: any = '';
   reviewImage: any = '';
+  showLessMore: boolean = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -173,6 +174,10 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.setLocationValue(this.selectedLocation);
 
     this.about = groupDetails.description;
+
+    if (groupDetails.description.length > 350) {
+      this.showLessMore = true;
+    }
     this.topics = groupDetails.topic;
     this.uniqueName = groupDetails.unique_name;
     if (!Array.isArray(this.topics)) {

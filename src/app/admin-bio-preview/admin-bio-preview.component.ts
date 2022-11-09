@@ -35,6 +35,8 @@ export class AdminBioPreviewComponent implements OnInit {
   linkedInShare: any = '';
   image: any = 'assets/images/default.jpg';
   adminBioStorage: any = {};
+  showShareBioBtn: boolean = true;
+  shareImage = 'assets/images/share_gray.png';
   public countryList: any = countriesObject;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -44,9 +46,7 @@ export class AdminBioPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.origin = location.origin;
-
     this.adminSlug = this.activatedRoute.snapshot.paramMap.get('slug');
-
     this.displayCloseBtn =
       this.activatedRoute.snapshot.queryParams['displayClose'];
     if (this.displayCloseBtn) {
@@ -80,14 +80,35 @@ export class AdminBioPreviewComponent implements OnInit {
     if (this.adminBio != null && this.adminBio.about_me != null) {
       this.about = this.adminBio.about_me;
     }
+    console.log(this.adminBio.id);
+    if (
+      this.adminBio != null &&
+      this.adminBio.id != null &&
+      this.adminBio.id != undefined
+    ) {
+      this.showShareBioBtn = false;
+      this.shareImage = 'assets/images/share_blue.png';
+    }
 
-    if (this.adminBio != null && this.adminBio.social_profile != '') {
+    if (
+      this.adminBio != null &&
+      this.adminBio.social_profile != '' &&
+      this.adminBio.social_profile != undefined
+    ) {
       this.socialLinks = JSON.parse(this.adminBio.social_profile);
     }
-    if (this.adminBio != null && this.adminBio.achievements != '') {
+    if (
+      this.adminBio != null &&
+      this.adminBio.achievements != '' &&
+      this.adminBio.achievements != undefined
+    ) {
       this.achievements = JSON.parse(this.adminBio.achievements);
     }
-    if (this.adminBio != null && this.adminBio.location != '') {
+    if (
+      this.adminBio != null &&
+      this.adminBio.location != '' &&
+      this.adminBio.location != undefined
+    ) {
       this.setLocationValue(this.adminBio.location);
     }
     let token = localStorage.getItem('token');
@@ -100,7 +121,11 @@ export class AdminBioPreviewComponent implements OnInit {
       this.isMessageButton = true;
       this.email = this.adminBio.email_receive_message;
     }
-    if (this.adminBio != null && this.adminBio.user_name != '') {
+    if (
+      this.adminBio != null &&
+      this.adminBio.user_name != '' &&
+      this.adminBio.user_name != undefined
+    ) {
       this.userName = this.adminBio.user_name;
 
       let url = this.origin + '/profile/' + this.adminBio.user_name;

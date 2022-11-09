@@ -87,8 +87,9 @@ p {
 .open-sidebar .left_side .nav-link {
   padding-left: 20px;
 }
-.log_out .nav-link {
-  color: #dd3828;
+.log_out .nav-link,
+.log_out a:hover {
+  color: #dd3828 !important;
   position: fixed;
   bottom: 20px;
 }
@@ -1015,9 +1016,9 @@ li.p-ripple.p-element.p-dropdown-item {
 }
 .btn.btn-outline-primary.preview_btn.bio_btn {
   background: transparent !important;
-  border: 2px solid #3c61ad !important;
+  border: 2px solid #3c61ad;
   border-radius: 4px !important;
-  color: #3c61ad !important;
+  color: #3c61ad;
 }
 .enable_plugin {
   margin-top: 20px !important;

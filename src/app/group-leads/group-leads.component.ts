@@ -43,7 +43,7 @@ export class GroupLeadsComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.id = params['group_id'];
       this.filter = params['filter_name'];
-      console.log(this.filter);
+      //console.log(this.filter);
       if (this.filter == undefined) {
         this.filter = 'All Time';
       }
@@ -69,7 +69,7 @@ export class GroupLeadsComponent implements OnInit {
 
   ngOnInit(): void {
     this.href = this.router.url;
-    console.log(this.href);
+    //console.log(this.href);
     this.showSelectedFilter();
     if (this.href.indexOf('/group-leads') > -1) {
       setTimeout(() => {
@@ -79,37 +79,37 @@ export class GroupLeadsComponent implements OnInit {
 
     var token = localStorage.getItem('token');
     this.apiService.getGroupOverview().subscribe((response) => {
-      console.log(Object.keys(response).length);
+      //console.log(Object.keys(response).length);
       if (response.hasOwnProperty('groupsList') && !this.listingUpdated) {
-        console.log('if');
+        //console.log('if');
         this.listingUpdated = true;
         let tempGroups = JSON.parse(JSON.stringify(response.groupsList));
         this.groupsTemp = tempGroups;
         this.groupsData = this.groupsTemp;
-        console.log(this.groupsData);
+        //console.log(this.groupsData);
         this.getGroupName();
       } else {
-        console.log('else');
+        //console.log('else');
         this.getGroupData();
       }
     });
   }
 
   lazyLoadLeads(event: any) {
-    console.log(event);
+    //console.log(event);
     this.skip = event.first;
     this.take = event.rows;
     this.sortField = event.sortField;
     this.sortOrder = event.sortOrder;
     this.getLeadsData();
-    console.log('getLeadsData called from lazy load');
+    //console.log('getLeadsData called from lazy load');
   }
 
   getLeadsData() {
     // this.exportCSV();
     this.spinner.show('sp5');
     let token = localStorage.getItem('token');
-    console.log('getLeadsData called');
+    //console.log('getLeadsData called');
     let params = {
       skip: this.skip,
       take: this.take,
@@ -120,7 +120,7 @@ export class GroupLeadsComponent implements OnInit {
     };
     this.apiService.getLeadsData(token, params).subscribe((data: any) => {
       if (data.status == 200) {
-        console.log(data.totalRecords);
+        //console.log(data.totalRecords);
         if (data.totalRecords != '-1') {
           this.totalRecords = data.totalRecords;
           this.Nogroupleads = false;
@@ -139,7 +139,6 @@ export class GroupLeadsComponent implements OnInit {
 
   deleteLeads(id: any, index: any) {
     console.log('delete leads', id, index);
-
     sweetAlert
       .fire({
         title: 'Are you sure?',
@@ -183,25 +182,25 @@ export class GroupLeadsComponent implements OnInit {
       if (response['status'] == 404) {
         this.spinner.hide();
       } else if (response['status'] == 200) {
-        console.log(response);
+        //console.log(response);
         this.groupsTemp = response.groupList;
         this.groupsData = this.groupsTemp;
-        console.log(this.groupsData);
+        //console.log(this.groupsData);
         this.getGroupName();
       }
     });
   }
 
   getGroupName() {
-    console.log(this.groupsData);
-    console.log(this.id);
+    //console.log(this.groupsData);
+    //console.log(this.id);
 
     if (this.groupsData.length > 0) {
       let found = this.groupsData.findIndex((value: any) => {
         return value.group_id == this.id;
       });
 
-      console.log(found);
+      //console.log(found);
       if (found > -1) {
         this.groupName = this.groupsData[found].group_name;
       }
@@ -226,10 +225,10 @@ export class GroupLeadsComponent implements OnInit {
   }
 
   onChange(e: any, name: any) {
-    console.log('onChange called');
+    // console.log('onChange called');
     $('li').removeClass('link');
     this.filter = name ? name : e.target.text ? e.target.text.trim() : '';
-    console.log(this.filter);
+    //console.log(this.filter);
     if (this.filter) {
       const urlTree: any = this.router.createUrlTree([], {
         queryParams: { group_id: this.id, filter_name: this.filter },

@@ -63,6 +63,7 @@ export class DashboardComponent implements OnInit {
         Object.keys(response).length === 0 &&
         response.constructor === Object
       ) {
+        console.log('if');
         if (localStorage.getItem('token') != null) {
           this.token = localStorage.getItem('token');
           // to not trigger the api when we clear subject data after user logout
@@ -71,6 +72,7 @@ export class DashboardComponent implements OnInit {
           this.getAllLeadsCount();
         }
       } else {
+        console.log('else');
         if (response.hasOwnProperty('groupsList')) {
           this.groupsTemp = response.groupsList;
           this.group_listing = response.groupsList;
@@ -78,8 +80,11 @@ export class DashboardComponent implements OnInit {
           let index = response.groupsList.findIndex(
             (x: any) => x.group_id == this.selectedGroupId
           );
+          console.log('in');
           if (index >= 0) {
             this.selectedGroup = this.group_listing[index];
+
+            console.log(this.selectedGroup);
           }
         }
         if (response.hasOwnProperty('totalLeads')) {
@@ -182,6 +187,11 @@ export class DashboardComponent implements OnInit {
     this.apiService
       .getGraphData(tokenTemp, parameters)
       .subscribe((response: any) => {
+        console.log(response);
+        this.selectedGroup = {
+          group_id: groupId,
+          count: response.values.reduce((a: any, b: any) => a + b, 0),
+        };
         this.dateVariable = '';
         this.data = {
           labels: response.labels,
@@ -195,6 +205,7 @@ export class DashboardComponent implements OnInit {
             },
           ],
         };
+
         this.spinner.hide();
       });
   }

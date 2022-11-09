@@ -44,9 +44,10 @@
                                 <button *ngIf="isMessageButton" type="button" attr.email="{{email}}"
                                     class="btn btn-primary share_btn bio_btn mr-3"><img src="assets/images/message.png"
                                         class=" mr-2" />Message Daniel</button>
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#publish_bioPreviewModal"
-                                    class="btn btn-outline-primary preview_btn bio_btn"><img
-                                        src="assets/images/share_blue.png" class="mr-2" />Share Bio</button>
+                                <button type="button" [disabled]="showShareBioBtn" data-bs-toggle="modal"
+                                    data-bs-target="#publish_bioPreviewModal"
+                                    class="btn btn-outline-primary preview_btn bio_btn"><img [src]="shareImage"
+                                        class="mr-2" />Share Bio</button>
                             </div>
                         </div>
                     </div>
