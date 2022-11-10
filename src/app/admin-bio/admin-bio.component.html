@@ -211,16 +211,22 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <label for="email" class="form-label">Email to recieve messages<span
-                                                class="required">*</span></label>
-                                        <input formControlName="email" (focusout)="setEmail()" id="email" type="text"
-                                            class="form-control" [(ngModel)]="email">
-                                        <div *ngIf="f['email'].touched && f['email'].invalid"
+                                        <label for="facebookUrl" class="form-label">Messenger to recieve messages <span
+                                                class="required">*</span></label><br>
+                                        <span id="messenger">example - https://www.facebook.com/xyz...</span>
+
+                                        <input formControlName="facebookUrl" id="facebookUrl" type="text"
+                                            placeholder="Enter your facebook profile url" class="form-control"
+                                            [(ngModel)]="facebookUrl" (focusout)="setFacebookUrl()">
+
+                                        <div *ngIf="f['facebookUrl'].touched && f['facebookUrl'].invalid"
                                             class="alert alert-danger">
-                                            <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is
+                                            <div *ngIf="f['facebookUrl'].errors && f['facebookUrl'].errors['required']">
+                                                Facebook Url is
                                                 required.</div>
-                                            <div *ngIf="f['email'].errors && f['email'].errors['email']">Please, enter
-                                                valid email address.</div>
+                                            <div *ngIf="f['facebookUrl'].errors && f['facebookUrl'].errors['pattern']">
+                                                Please, enter
+                                                valid facebook profile URL address.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -261,7 +267,7 @@
     </div>
 
     <!------------------publish bio modal--------------->
-    <p-dialog [(visible)]="displayBasic" [modal]="true" [style]="{width: '45vw'}">
+    <p-dialog [(visible)]="displayBasic" [modal]="true" [style]="{width: '45vw'}" (onHide)="closePublishModel()">
         <div class="modal-body publish_modal text-center">
             <div class="col-md-12">
                 <img src="assets/images/success.png" class="success" />

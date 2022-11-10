@@ -232,7 +232,10 @@ export class ManageProfileComponent implements OnInit {
           this.selectedLocation = groupDetails.location_id;
           this.setLocationValue(this.selectedLocation);
           this.status = groupDetails.status;
-          this.topics = groupDetails.topic.split(',');
+          if (groupDetails.topic != null) {
+            this.topics = groupDetails.topic.split(',');
+          }
+
           this.uniqueName = groupDetails.unique_name.toLowerCase();
           this.userId = groupDetails.user_id;
           this.created = groupDetails.created_at;
@@ -491,6 +494,7 @@ export class ManageProfileComponent implements OnInit {
       let imageArray = this.uploadUrls[uploadUrlIndex].image.split(
         '/conversationImages/'
       );
+      this.image = {};
       console.log(imageArray);
       this.image.id = id;
       this.image.image = imageArray[1];
@@ -629,5 +633,11 @@ export class ManageProfileComponent implements OnInit {
           this.displayPublishModel = true;
         }
       });
+  }
+
+  closePublishModel() {
+    setTimeout(() => {
+      this.router.navigate(['/group-profiles']);
+    }, 500);
   }
 }

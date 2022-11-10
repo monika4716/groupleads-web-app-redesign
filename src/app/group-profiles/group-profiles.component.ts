@@ -13,6 +13,7 @@ export class GroupProfilesComponent implements OnInit {
   token: any;
   groupProfiles: any = [];
   id: any;
+  published: boolean = false;
   constructor(
     private router: Router,
     private cookie: CookieService,

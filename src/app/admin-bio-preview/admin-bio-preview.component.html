@@ -39,15 +39,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                class="col-md-6 text-end user_right_section d-flex align-items-center justify-content-end">
-                                <button *ngIf="isMessageButton" type="button" attr.email="{{email}}"
-                                    class="btn btn-primary share_btn bio_btn mr-3"><img src="assets/images/message.png"
-                                        class=" mr-2" />Message Daniel</button>
-                                <button type="button" [disabled]="showShareBioBtn" data-bs-toggle="modal"
-                                    data-bs-target="#publish_bioPreviewModal"
-                                    class="btn btn-outline-primary preview_btn bio_btn"><img [src]="shareImage"
-                                        class="mr-2" />Share Bio</button>
+                            <div class="col-md-6 text-end user_right_section align-items-center justify-content-end">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <a *ngIf="isMessageButton"
+                                            href="https://www.messenger.com/t/{{adminFacebookId}}" type="button"
+                                            target="_blank" attr.facebookId="{{adminFacebookId}}"
+                                            class="btn btn-primary share_btn bio_btn mr-3"><img
+                                                src="assets/images/message.png" class=" mr-2" />Message
+                                            {{firstName}}</a>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <button type="button" [disabled]="showShareBioBtn" data-bs-toggle="modal"
+                                            data-bs-target="#publish_bioPreviewModal"
+                                            class="btn btn-outline-primary preview_btn bio_btn"><img [src]="shareImage"
+                                                class="mr-2" />Share Bio</button>
+                                    </div>
+
+                                </div>
+
+
                             </div>
                         </div>
                     </div>

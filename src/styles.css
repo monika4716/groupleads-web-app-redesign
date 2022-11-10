@@ -487,3 +487,7 @@ button[disabled] {
 .btn.show {
   border-color: #e5e5e5 !important;
 }
+#messenger {
+  font-size: 13px;
+  color: gray;
+}

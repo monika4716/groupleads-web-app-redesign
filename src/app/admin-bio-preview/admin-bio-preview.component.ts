@@ -37,7 +37,11 @@ export class AdminBioPreviewComponent implements OnInit {
   adminBioStorage: any = {};
   showShareBioBtn: boolean = true;
   shareImage = 'assets/images/share_gray.png';
+  facebookUrl: any = '';
+  adminFacebookId: any = '';
+  firstName: any = '';
   public countryList: any = countriesObject;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -115,11 +119,12 @@ export class AdminBioPreviewComponent implements OnInit {
     if (
       this.adminBio != null &&
       this.adminBio.is_message_button == 1 &&
-      token == null &&
-      token == undefined
+      this.adminBio.email_receive_message != null &&
+      this.adminBio.email_receive_message != undefined
     ) {
       this.isMessageButton = true;
-      this.email = this.adminBio.email_receive_message;
+      this.facebookUrl = this.adminBio.email_receive_message;
+      this.setFacebookUrl();
     }
     if (
       this.adminBio != null &&
@@ -150,17 +155,17 @@ export class AdminBioPreviewComponent implements OnInit {
 
     if (this.userDetails.name.indexOf(' ') > -1) {
       let nameArray = this.userDetails.name.split(' ');
-      let firstName = this.capitalizeFirstLetter(nameArray[0]);
+      this.firstName = this.capitalizeFirstLetter(nameArray[0]);
       let lastName = this.capitalizeFirstLetter(
         nameArray[nameArray.length - 1]
       );
       this.fullName =
-        this.capitalizeFirstLetter(firstName) +
+        this.capitalizeFirstLetter(this.firstName) +
         ' ' +
         this.capitalizeFirstLetter(lastName);
     } else {
-      let firstName = this.capitalizeFirstLetter(this.userDetails.name);
-      this.fullName = this.capitalizeFirstLetter(firstName);
+      this.firstName = this.capitalizeFirstLetter(this.userDetails.name);
+      this.fullName = this.capitalizeFirstLetter(this.firstName);
     }
   }
 
@@ -218,5 +223,22 @@ export class AdminBioPreviewComponent implements OnInit {
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);
+  }
+
+  setFacebookUrl() {
+    console.log(this.facebookUrl);
+    if (this.facebookUrl.indexOf('profile.php') > 0) {
+      this.adminFacebookId = this.facebookUrl.split('?id=')[1];
+    } else {
+      this.adminFacebookId = this.facebookUrl.split('/');
+      console.log(this.adminFacebookId);
+      if (this.adminFacebookId[this.adminFacebookId.length - 1] != '') {
+        this.adminFacebookId =
+          this.adminFacebookId[this.adminFacebookId.length - 1];
+      } else {
+        this.adminFacebookId =
+          this.adminFacebookId[this.adminFacebookId.length - 2];
+      }
+    }
   }
 }

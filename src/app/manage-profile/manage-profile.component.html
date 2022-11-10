@@ -655,7 +655,7 @@
 </div>
 
 <!-- group publish profile -->
-<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '45vw'}">
+<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '45vw'}" (onHide)="closePublishModel()">
     <div class="modal-body publish_modal text-center">
         <div class="col-md-12">
             <img src="assets/images/success.png" class="success" />

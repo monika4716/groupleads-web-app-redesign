@@ -527,17 +527,16 @@ export class GroupProfileCreateComponent implements OnInit {
       .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
         console.log(response);
+        this.apiService.updateGroupProfile(response);
+
         if (response.status == 200) {
           if (publish) {
             this.displayPublishModel = true;
           } else {
             setTimeout(() => {
-              this.router.navigate(['/', 'group-profiles']);
+              this.router.navigate(['/group-profiles']);
             }, 100);
           }
-          //show copy profile link popup
-          // this.displayBasic = true;
-          // this.setAdminBioValue(response);
         }
       });
   }
@@ -643,14 +642,17 @@ export class GroupProfileCreateComponent implements OnInit {
     // this.publishGroup.images = JSON.stringify(this.publishimages);
     this.publishGroup.group_id = this.groupId;
     this.publishGroup.fb_group_id = this.fbGroupId;
+    this.publishGroup.isReview = 0;
+    this.publishGroup.isTopic = 0;
+    this.publishGroup.isConversations = 0;
     localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
     //end
   }
 
   closePublishModel() {
     setTimeout(() => {
-      this.router.navigate(['/', 'group-profiles']);
-    }, 2000);
+      this.router.navigate(['/group-profiles']);
+    }, 500);
   }
 
   createUniqueGroupSlug(x: any) {

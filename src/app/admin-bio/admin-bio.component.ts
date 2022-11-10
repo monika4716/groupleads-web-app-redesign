@@ -9,6 +9,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 import * as $ from 'jquery';
 import { SafePipe } from '../pipe/safe.pipe';
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import {
   DomSanitizer,
   SafeHtml,
@@ -23,6 +24,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { splitNsName } from '@angular/compiler';
 
 @Component({
   selector: 'app-admin-bio',
@@ -91,6 +93,8 @@ export class AdminBioComponent implements OnInit {
   twitterShare: any = '';
   linkedInShare: any = '';
   adminBioStorage: any = {};
+  facebookUrl: any = '';
+  adminFacebookId: any = '';
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -105,7 +109,6 @@ export class AdminBioComponent implements OnInit {
     this.token = localStorage.getItem('token');
 
     this.adminBioForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
       about: [''],
       userName: [
         '',
@@ -117,7 +120,13 @@ export class AdminBioComponent implements OnInit {
           updateOn: 'blur',
         },
       ],
-
+      facebookUrl: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^(https?://)?(www.facebook.com|web.com)/.+$'),
+        ],
+      ],
       location: [''],
       isMessageButton: [''],
       achievements: this.fb.array([]),
@@ -130,6 +139,7 @@ export class AdminBioComponent implements OnInit {
   }
 
   get f() {
+    //console.log(this.adminBioForm.controls);
     return this.adminBioForm.controls;
   }
 
@@ -202,7 +212,7 @@ export class AdminBioComponent implements OnInit {
 
       // set admin email
       if (this.adminBio.email_receive_message != null) {
-        this.email = this.adminBio.email_receive_message;
+        this.facebookUrl = this.adminBio.email_receive_message;
       }
 
       // set admin achievement value
@@ -285,6 +295,7 @@ export class AdminBioComponent implements OnInit {
     if (i <= 3) {
       this.isButtonVisible = true;
     }
+    this.setAchievement();
   }
 
   //END ACHIEVEMENT DYNAMIC ROWS
@@ -551,7 +562,7 @@ export class AdminBioComponent implements OnInit {
     }
     let parm = new FormData();
     parm.set('about', about);
-    parm.set('email', email);
+    parm.set('email', this.facebookUrl);
     parm.set('location', this.location);
     parm.set('achievements', achievements);
     parm.set('user_id', user_id);
@@ -599,7 +610,7 @@ export class AdminBioComponent implements OnInit {
         })
       );
     });
-    console.log(control);
+    //console.log(control);
   }
   /*
   TO SET DB LOCATION CODE.
@@ -745,6 +756,11 @@ export class AdminBioComponent implements OnInit {
   }
   setAchievements() {
     let achievements = JSON.stringify(this.adminBioForm.value.achievements);
+    this.setAchievement();
+  }
+
+  setAchievement() {
+    let achievements = JSON.stringify(this.adminBioForm.value.achievements);
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
     this.adminBioStorage = JSON.parse(this.adminBioStorage);
 
@@ -761,22 +777,25 @@ export class AdminBioComponent implements OnInit {
     );
   }
 
-  setEmail() {
-    this.adminBioStorage = localStorage.getItem('adminBioStorage');
-    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+  setFacebookUrl() {
+    console.log(this.facebookUrl);
     if (this.adminBioStorage.admin_bio == null) {
       this.adminBioStorage.admin_bio = {};
-      this.adminBioStorage.admin_bio.email_receive_message =
-        this.adminBioForm.value.email;
+      this.adminBioStorage.admin_bio.email_receive_message = this.facebookUrl;
     } else {
-      this.adminBioStorage.admin_bio.email_receive_message =
-        this.adminBioForm.value.email;
+      this.adminBioStorage.admin_bio.email_receive_message = this.facebookUrl;
     }
     console.log(this.adminBioStorage);
     localStorage.setItem(
       'adminBioStorage',
       JSON.stringify(this.adminBioStorage)
     );
+  }
+
+  closePublishModel() {
+    setTimeout(() => {
+      this.router.navigate(['/', 'dashboard']);
+    }, 500);
   }
 
   // End SET IN LOCAL STORAGE FOR PREVIEW

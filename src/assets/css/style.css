@@ -684,12 +684,12 @@ p {
   font-weight: 500 !important;
   font-size: 16px !important;
   line-height: 20px !important;
-  padding: 13px 31px;
+  padding: 13px 31px !important;
   border: 2px solid #3c61ad;
   border-radius: 4px;
   color: #3c61ad;
 }
-.preview_btn.bio_btn {
+.d-flex .preview_btn.bio_btn {
   margin-right: 11px !important;
 }
 .share_btn:hover {
@@ -2002,4 +2002,8 @@ input:checked + .slider:before {
   width: 26px;
   height: 26px;
   padding: 8px;
+}
+.group_admin_msg {
+  padding: 13px 19px !important;
+  text-align: center !important;
 }

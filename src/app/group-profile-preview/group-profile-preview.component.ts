@@ -74,6 +74,8 @@ export class GroupProfilePreviewComponent implements OnInit {
   reviewImagesUrl: any = '';
   reviewImage: any = '';
   showLessMore: boolean = false;
+  adminFacebookId: any = '';
+  facebookUrl: any = '';
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -232,7 +234,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     for (let i = 0; i < this.reviews.length; i++) {
       maxNumberOfStars = parseInt(this.reviews[i].rating) + maxNumberOfStars;
     }
-    let likePercentageStars = (5 / totalRating) * maxNumberOfStars;
+    let likePercentageStars = Math.round((5 / totalRating) * maxNumberOfStars);
     return likePercentageStars;
   }
   // EDIT REVIEWS
@@ -258,6 +260,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('groupProfileId', reviewsForm.value.profileId);
     this.apiService.saveReview(formData).subscribe((response: any) => {
       //console.log(response);
+      this.showPreviewDetails(response);
       this.editReviewsForm.reset();
       if (response.status == 200) {
         this.msgs = [
@@ -316,8 +319,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   // SHOW ADMIN
   showAdmins(admin: any) {
-    //console.log(admin);
-    // console.log(this.user);
+    console.log(admin);
     this.adminName = this.capitalizeFirstLetter(this.user.name);
     if (admin != undefined && admin.id != null) {
       let index = this.locationList.findIndex(
@@ -331,6 +333,24 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.adminImage = this.adminImageUrl + admin.image;
       this.adminSlug = this.origin + '/profile/' + admin.user_name;
       this.showAdminBio = true;
+      this.facebookUrl = admin.email_receive_message;
+      this.setFacebookUrl();
+    }
+  }
+  setFacebookUrl() {
+    console.log(this.facebookUrl);
+    if (this.facebookUrl.indexOf('profile.php') > 0) {
+      this.adminFacebookId = this.facebookUrl.split('?id=')[1];
+    } else {
+      this.adminFacebookId = this.facebookUrl.split('/');
+      console.log(this.adminFacebookId);
+      if (this.adminFacebookId[this.adminFacebookId.length - 1] != '') {
+        this.adminFacebookId =
+          this.adminFacebookId[this.adminFacebookId.length - 1];
+      } else {
+        this.adminFacebookId =
+          this.adminFacebookId[this.adminFacebookId.length - 2];
+      }
     }
   }
 
@@ -392,7 +412,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
-      //console.log(iframe.parentNode);
       iframe.parentNode.removeChild(iframe);
     }
     $('body').removeClass('hide-scroll');
@@ -407,8 +426,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.status = 1;
     this.publishGroup = localStorage.getItem('publishGroup');
     this.publishGroup = JSON.parse(this.publishGroup);
-
-    //console.log(this.publishGroup);
 
     const formData: FormData = new FormData();
     formData.append('categoryId', this.publishGroup.categoryId);
@@ -448,12 +465,14 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   uploadReviewImage(event: any) {
-    //console.log(event);
     this.reviewImage = event.target.files[0];
     let objectURL = URL.createObjectURL(event.target.files[0]);
-    //console.log(objectURL);
     this.reviewImageUrl = objectURL;
-    //console.log(this.reviewImage);
-    //console.log(this.reviewImageUrl);
+  }
+
+  closePublishModel() {
+    setTimeout(() => {
+      this.route.navigate(['/', 'group-profiles']);
+    }, 2000);
   }
 }
