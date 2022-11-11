@@ -59,6 +59,10 @@ export class AdminBioPreviewComponent implements OnInit {
       this.adminBioStorage = localStorage.getItem('adminBioStorage');
       this.adminBioStorage = JSON.parse(this.adminBioStorage);
       this.setAdminBIoPreview(this.adminBioStorage);
+      setTimeout(() => {
+        // all a tag not clickable on preview page
+        $('a').addClass('clickDisable');
+      }, 500);
     } else {
       this.spinner.show();
       this.getAdminBioPreview();
@@ -191,10 +195,10 @@ export class AdminBioPreviewComponent implements OnInit {
 
   closePreview() {
     console.log('here');
-    let body = window.parent.document.getElementsByTagName('body');
-    if (body[0]) {
-      body[0].removeAttribute('class');
-    }
+    // let body = window.parent.document.getElementsByTagName('body');
+    // if (body[0]) {
+    //   body[0].removeAttribute('class');
+    // }
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
       //console.log(iframe.parentNode);

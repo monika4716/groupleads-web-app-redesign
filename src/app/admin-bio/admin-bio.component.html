@@ -147,7 +147,7 @@
                             <div class="card groups_section">
                                 <div class="card-body custom-scroll" style="height: 450px;">
                                     <h3>Your Groups</h3>
-                                    <p>Select the group(s) that you currently own or admin</p>
+                                    <!-- <p>Select the group(s) that you currently own or admin</p> -->
                                     <div *ngFor="let group of linkedGroups;"
                                         class="col-md-12 product d-flex align-items-center justify-content-center mb-2">
                                         <div class="col-md-1 product_img p-0"><img src="assets/images/product.png" />
@@ -161,7 +161,7 @@
                             <div class="card social_profile_section">
                                 <div class="card-body">
                                     <h3>Social Profiles</h3>
-                                    <p>Add social profiles to help brands connect with you.</p>
+                                    <p>Add social profiles.</p>
                                     <div class="col-md-12 mb-2 product d-flex align-items-center justify-content-center"
                                         *ngFor="let social of socialLinks;">
                                         <div class="col-md-1 product_img"><img class="social-icons"
@@ -236,7 +236,7 @@
                                     <h3>Admin Bio URL</h3>
                                     <p>Share your Admin Bio to brands using this URL</p>
                                     <div class="input-group">
-                                        <input type="text" [disabled]="showAddProfileBtn" class="form-control"
+                                        <input type="text" readonly class="form-control"
                                             placeholder="{{origin}}/profile/{{userName}}">
                                         <span *ngIf="displayCopy" type="button" class="input-group-text"
                                             (click)="copyAdminProfile(userName)">{{text}}</span>
@@ -274,7 +274,7 @@
                 <h4 class="modal-title">Bio Published Successfully</h4>
                 <p>Share to start getting noticed</p>
                 <div class="input-group">
-                    <input type="text" class="form-control" [disabled]="showAddProfileBtn"
+                    <input type="text" readonly class="form-control" [disabled]="showAddProfileBtn"
                         placeholder="{{origin}}/profile/{{userName}}">
                     <span type="button" class="input-group-text"
                         (click)="copyAdminProfileModel(userName)">{{model_text}}</span>
@@ -313,7 +313,8 @@
                         </ul>
 
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="{{origin}}/profile/{{userName}}">
+                            <input type="text" readonly class="form-control"
+                                placeholder="{{origin}}/profile/{{userName}}">
                             <span type="button" class="input-group-text"
                                 (click)="copyAdminProfileModel(userName)">{{model_text}}</span>
                         </div>

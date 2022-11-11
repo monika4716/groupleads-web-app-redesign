@@ -76,6 +76,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   showLessMore: boolean = false;
   adminFacebookId: any = '';
   facebookUrl: any = '';
+  groupFile: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -101,9 +102,29 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
     //console.log(this.previewEnable);
     if (this.previewEnable != undefined && this.previewEnable) {
+      //get Image (binary data for upload in database)
       this.disableWriteReviewBtn = true;
       this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
       this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+      if (
+        this.manageProfileStorage.groupDetails.baseCodeimage != undefined &&
+        this.manageProfileStorage.groupDetails.baseCodeimage != ''
+      ) {
+        let blob = this.b64toBlob(
+          this.manageProfileStorage.groupDetails.baseCodeimage
+        );
+        this.groupFile = new File(
+          [blob],
+          this.manageProfileStorage.groupDetails.uploadImageName,
+          {
+            type: 'image/jpeg',
+          }
+        );
+        console.log(this.groupFile);
+
+        // let objectURL = URL.createObjectURL(this.groupFile);
+        // console.log(objectURL);
+      }
       this.showPreviewDetails(this.manageProfileStorage);
     } else {
       // this.disableWriteReviewBtn = false;
@@ -117,6 +138,19 @@ export class GroupProfilePreviewComponent implements OnInit {
       }
       this.getGroupProfilePreview();
     }
+  }
+
+  b64toBlob(dataURI: any) {
+    // dataURI = dataURI.replace("''");
+    console.log(dataURI);
+    var byteString = atob(dataURI.split(',')[1]);
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: 'image/jpeg' });
   }
   //SHOW PREVIEW DETAILS
   showPreviewDetails(response: any) {
@@ -194,7 +228,10 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.conversationsImage = this.conversations;
     }
     if (groupDetails.image != '' && groupDetails.image != undefined) {
-      this.groupImage = this.groupImageUrl + '/' + groupDetails.image;
+      this.groupImage = groupDetails.image;
+      if (this.groupImage.indexOf('/') < 0) {
+        this.groupImage = this.groupImageUrl + '/' + groupDetails.image;
+      }
     }
     this.showAdmins(this.adminDetails);
     this.setSocialLink();
@@ -338,7 +375,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
   }
   setFacebookUrl() {
-    console.log(this.facebookUrl);
+    //console.log(this.facebookUrl);
     if (this.facebookUrl.indexOf('profile.php') > 0) {
       this.adminFacebookId = this.facebookUrl.split('?id=')[1];
     } else {
@@ -438,6 +475,8 @@ export class GroupProfilePreviewComponent implements OnInit {
       'isConversations',
       this.publishGroup.isConversations.toString()
     );
+
+    // formData.append('groupImage', this.groupFile);   //done
     formData.append('isReview', this.publishGroup.isReview.toString());
     formData.append(
       'removeImage',

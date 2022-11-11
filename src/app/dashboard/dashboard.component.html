@@ -15,8 +15,9 @@
                                 <h3>Dashboard</h3>
                             </div>
                             <div class="leads_sec">
-                                <span *ngIf="selectedGroup.group_id != '0'" title="{{selectedGroup.count}}"
-                                    class="group_leads_sec">{{selectedGroup.count | counterdisplayformate}} Group
+                                <span *ngIf="selectedGroup.group_id != '0' || filterDropdown != 'all_time' "
+                                    title="{{selectedGroup.count}}" class="group_leads_sec">{{selectedGroup.count |
+                                    counterdisplayformate}} Group
                                     Leads</span>
                                 <span title="{{totalLeadsTitle}}">{{totalLeads | counterdisplayformate}} Total
                                     Leads</span>

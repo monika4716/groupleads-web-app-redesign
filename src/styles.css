@@ -491,3 +491,11 @@ button[disabled] {
   font-size: 13px;
   color: gray;
 }
+
+.button-dark img {
+  margin-bottom: 0px !important;
+}
+
+.clickDisable {
+  pointer-events: none;
+}

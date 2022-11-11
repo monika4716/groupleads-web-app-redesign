@@ -45,7 +45,7 @@ export class AdminBioComponent implements OnInit {
   userDetails: any;
   adminBio: any;
   selectedCountry: any;
-  selectedCountryCode: any;
+  selectedCountryCode: any = 'AF';
   countryName: any = null;
   countryImage: any = null;
   fullName: any;
@@ -79,7 +79,7 @@ export class AdminBioComponent implements OnInit {
   displayIframe: any = false;
   iframeUrl: any;
   displayForm: any = true;
-  imageUrl: any = 'assets/images/user_profile.png';
+  imageUrl: any = 'assets/images/default.jpg';
   imageData: any = '';
   location: any = '';
   displaycloseButton: any = false;
@@ -252,6 +252,7 @@ export class AdminBioComponent implements OnInit {
   /*COUNTRY SELECTION*/
   selectCountryOnChange(event: any) {
     this.countryCode = event.value;
+    console.log(this.countryCode);
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
     this.adminBioStorage = JSON.parse(this.adminBioStorage);
     if (this.adminBioStorage.admin_bio == null) {
@@ -626,7 +627,7 @@ export class AdminBioComponent implements OnInit {
 
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
-    $('#adminBioForm').closest('body').addClass('hide-scroll');
+    // $('#adminBioForm').closest('body').addClass('hide-scroll');
     let url = this.origin + '/profile/' + this.userName + '?displayClose=true';
     this.displayForm = false;
     this.displaycloseButton = true;

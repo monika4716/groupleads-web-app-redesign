@@ -96,6 +96,8 @@ export class ManageProfileComponent implements OnInit {
   image: any = {};
   displayPublishModel: boolean = false;
   reviewImageUrl = '';
+  uploadedImageName: any = '';
+  groupImageCode: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -274,12 +276,15 @@ export class ManageProfileComponent implements OnInit {
 
   showAdmins(admin: any) {
     if (admin.id != null) {
-      let index = this.locationList.findIndex(
-        (x: any) => x.code === admin.location
-      );
-      let selectedCountry = this.locationList[index];
-      this.adminlocation = selectedCountry.name;
-      this.countryFlag = selectedCountry.image;
+      if (admin.location != null) {
+        let index = this.locationList.findIndex(
+          (x: any) => x.code === admin.location
+        );
+        let selectedCountry = this.locationList[index];
+        console.log(selectedCountry);
+        this.adminlocation = selectedCountry.name;
+        this.countryFlag = selectedCountry.image;
+      }
       this.adminImage = this.adminImageUrl + admin.image;
       this.adminSlug = this.origin + '/profile/' + admin.user_name;
       this.showAdminBio = true;
@@ -522,20 +527,38 @@ export class ManageProfileComponent implements OnInit {
 
   uploadGroupImages(event: any) {
     this.groupFile = event.target.files[0];
+    this.uploadedImageName = event.target.files[0].name;
+    console.log(this.groupFile);
     let objectURL = URL.createObjectURL(event.target.files[0]);
     console.log(objectURL);
     this.groupImage = objectURL;
 
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
-
     this.manageProfileStorage.groupDetails.image = this.groupImage;
+    this.manageProfileStorage.groupDetails.uploadImageName =
+      this.uploadedImageName;
 
-    localStorage.setItem(
-      'manageProfileStorage',
-      JSON.stringify(this.manageProfileStorage)
-    );
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.groupImageCode = reader.result;
+        this.manageProfileStorage.groupDetails.baseCodeimage =
+          this.groupImageCode;
+      };
+    }
+
+    setTimeout(() => {
+      console.log(this.manageProfileStorage.groupDetails);
+      localStorage.setItem(
+        'manageProfileStorage',
+        JSON.stringify(this.manageProfileStorage)
+      );
+    }, 500);
   }
+
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
     $('#manage-create').closest('body').addClass('hide-scroll');
