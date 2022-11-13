@@ -9,7 +9,7 @@
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
                 <button type="button" *ngIf="displayCloseBtn" (click)="closePreview()"
                     class="btn btn-outline-primary preview_btn bio_btn " id="closePreview">Close Preview</button>
-                <!-- <button type="button" class="btn btn-primary share_btn bio_btn" >Publish Bio</button> -->
+                <button type="button"(click)="previewPublished()" class="btn btn-primary share_btn bio_btn" >Publish Bio</button>
             </div>
         </div>
     </div>

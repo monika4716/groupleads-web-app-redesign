@@ -95,6 +95,7 @@ export class AdminBioComponent implements OnInit {
   adminBioStorage: any = {};
   facebookUrl: any = '';
   adminFacebookId: any = '';
+  adminImageCode:any;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -689,23 +690,44 @@ export class AdminBioComponent implements OnInit {
   // UPLOAD ADMIN BIO IMAGE
   uploadImages(event: any) {
     this.imageData = event.target.files[0];
+
+    console.log(this.imageData);
     let objectURL = URL.createObjectURL(event.target.files[0]);
     this.imageUrl = objectURL;
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
     this.adminBioStorage = JSON.parse(this.adminBioStorage);
 
-    if (this.adminBioStorage.admin_bio == null) {
-      this.adminBioStorage.admin_bio = {};
-      this.adminBioStorage.admin_bio.image = this.imageUrl;
-    } else {
-      this.adminBioStorage.admin_bio.image = this.imageUrl;
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.adminImageCode = reader.result;
+        
+      };
     }
+    setTimeout(()=>{
+      if (this.adminBioStorage.admin_bio == null) {
+        this.adminBioStorage.admin_bio = {};
+        this.adminBioStorage.admin_bio.image = this.imageUrl;
+        this.adminBioStorage.admin_bio.adminImageCode =
+            this.adminImageCode;
+        this.adminBioStorage.admin_bio.adminImageName = event.target.files[0].name;   
+      } else {
+        this.adminBioStorage.admin_bio.image = this.imageUrl;
+        this.adminBioStorage.admin_bio.adminImageCode =
+            this.adminImageCode;
+        this.adminBioStorage.admin_bio.adminImageName = event.target.files[0].name;      
+      }
+  
+      console.log(this.adminBioStorage);
+      localStorage.setItem(
+        'adminBioStorage',
+        JSON.stringify(this.adminBioStorage)
+      );
 
-    console.log(this.adminBioStorage);
-    localStorage.setItem(
-      'adminBioStorage',
-      JSON.stringify(this.adminBioStorage)
-    );
+    },1000);
+    
   }
   // CREATE UNIQUE NAME - remove special char num and change space into hyphen
   createUniqueUserName(x: any) {

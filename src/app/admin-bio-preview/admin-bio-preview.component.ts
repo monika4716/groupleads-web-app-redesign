@@ -41,6 +41,7 @@ export class AdminBioPreviewComponent implements OnInit {
   adminFacebookId: any = '';
   firstName: any = '';
   public countryList: any = countriesObject;
+  imageData:any= '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -152,10 +153,28 @@ export class AdminBioPreviewComponent implements OnInit {
     if (
       this.adminBio != null &&
       this.adminBio.image != '' &&
-      this.adminBio.image != null
+      this.adminBio.image != undefined
     ) {
       this.image = this.adminBio.image;
     }
+
+    if(this.adminBio != null &&
+      this.adminBio.adminImageCode != '' &&
+      this.adminBio.adminImageCode != undefined ){
+        let blob = this.b64toBlob(
+          this.adminBio.adminImageCode
+        );
+        this.imageData = new File(
+          [blob],
+          this.adminBio.adminImageName,
+          {
+            type: 'image/jpeg',
+          }
+        );
+        console.log(this.imageData);
+        let objectURL = URL.createObjectURL(this.imageData);
+        console.log(objectURL);
+      }
 
     if (this.userDetails.name.indexOf(' ') > -1) {
       let nameArray = this.userDetails.name.split(' ');
@@ -171,6 +190,20 @@ export class AdminBioPreviewComponent implements OnInit {
       this.firstName = this.capitalizeFirstLetter(this.userDetails.name);
       this.fullName = this.capitalizeFirstLetter(this.firstName);
     }
+  }
+
+
+  b64toBlob(dataURI: any) {
+    // dataURI = dataURI.replace("''");
+    console.log(dataURI);
+    var byteString = atob(dataURI.split(',')[1]);
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: 'image/jpeg' });
   }
 
   /*
@@ -244,5 +277,11 @@ export class AdminBioPreviewComponent implements OnInit {
           this.adminFacebookId[this.adminFacebookId.length - 2];
       }
     }
+  }
+  previewPublished(){
+    console.log('here');
+    this.adminBioStorage = localStorage.getItem('adminBioStorage');
+      this.adminBioStorage = JSON.parse(this.adminBioStorage);
+      console.log(this.adminBioStorage);
   }
 }
