@@ -60,6 +60,7 @@ export class ManageProfileComponent implements OnInit {
   review: any = '';
   public locationList: any = countriesObject;
   model_text: any = 'Copy';
+  showLessMore: boolean = false;
   facebookShare: any = '';
   twitterShare: any = '';
   linkedInShare: any = '';
@@ -224,6 +225,10 @@ export class ManageProfileComponent implements OnInit {
           this.categoryId = groupDetails.category_id;
           this.setCategoryName(this.categoryId, this.groupCategories);
           this.description = groupDetails.description;
+
+          if (groupDetails.description.length > 350) {
+            this.showLessMore = true;
+          }
           this.facebookGroupId = groupDetails.fb_group_id;
           if (groupDetails.image != '') {
             this.groupImage = response.groupImageUrl + '/' + groupDetails.image;
@@ -567,7 +572,7 @@ export class ManageProfileComponent implements OnInit {
       this.origin +
       '/group-profile/' +
       this.uniqueName +
-      '?displayClose=true&preview=true';
+      '?displayClose=true&preview=true&manage=true';
     console.log(url);
     this.displayForm = false;
     this.displaycloseButton = true;

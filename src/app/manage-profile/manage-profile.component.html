@@ -107,7 +107,7 @@
                                 </div>
 
                                 <p [ngClass]="{'limitTextHeight': isSeeMore}" [innerHTML]="description"></p>
-                                <a href="javascript:void(0);" (click)="isSeeMore=!isSeeMore">
+                                <a *ngIf="showLessMore" href="javascript:void(0);" (click)="isSeeMore=!isSeeMore">
                                     {{ isSeeMore ? 'See More': 'See Less' }}
                                 </a>
                             </div>

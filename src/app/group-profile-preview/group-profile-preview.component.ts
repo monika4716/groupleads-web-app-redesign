@@ -463,7 +463,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.status = 1;
     this.publishGroup = localStorage.getItem('publishGroup');
     this.publishGroup = JSON.parse(this.publishGroup);
-
     const formData: FormData = new FormData();
     formData.append('categoryId', this.publishGroup.categoryId);
     formData.append('description', this.publishGroup.description);
@@ -475,7 +474,6 @@ export class GroupProfilePreviewComponent implements OnInit {
       'isConversations',
       this.publishGroup.isConversations.toString()
     );
-
     formData.append('groupImage', this.groupFile);
     formData.append('isReview', this.publishGroup.isReview.toString());
     formData.append(
@@ -492,7 +490,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('group_id', this.publishGroup.group_id);
     formData.append('fb_group_id', this.publishGroup.fb_group_id);
     this.apiService
-      .updateManageProfile(this.token, formData)
+      .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
         //console.log(response);
         if (response.status == 200) {
@@ -508,7 +506,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     let objectURL = URL.createObjectURL(event.target.files[0]);
     this.reviewImageUrl = objectURL;
   }
-
   closePublishModel() {
     setTimeout(() => {
       this.closePreview();

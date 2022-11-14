@@ -92,6 +92,7 @@ export class GroupProfileCreateComponent implements OnInit {
   publishimages: any = [];
   image: any = {};
   isCopyDisable: boolean = false;
+  conversationBaseCode: any = [];
 
   constructor(
     private router: Router,
@@ -597,7 +598,7 @@ export class GroupProfileCreateComponent implements OnInit {
       this.origin +
       '/group-profile/' +
       this.uniqueName +
-      '?displayClose=true&preview=true';
+      '?displayClose=true&preview=true&manage=false';
     console.log(url);
     this.displayForm = false;
     this.displaycloseButton = true;
@@ -628,9 +629,19 @@ export class GroupProfileCreateComponent implements OnInit {
     for (let image of imagesArray) {
       console.log(image);
       this.publishimages.push(image);
+
+      const reader = new FileReader();
+      if (image) {
+        reader.readAsDataURL(image);
+        reader.onload = () => {
+          console.log(reader.result);
+          this.conversationBaseCode.push(reader.result);
+        };
+      }
+      console.log(this.conversationBaseCode);
     }
     console.log(this.publishimages);
-    console.log(JSON.stringify(this.publishimages));
+    // console.log(JSON.stringify(this.publishimages));
     // create storage to publish form from preview publish button
     this.publishGroup.categoryId = this.selectedCategory;
     this.publishGroup.description = this.description;
@@ -639,7 +650,6 @@ export class GroupProfileCreateComponent implements OnInit {
     this.publishGroup.topic = this.topic;
     this.publishGroup.removeImage = JSON.stringify(this.removeImage);
     this.publishGroup.profile_id = this.groupProfileId;
-    // this.publishGroup.images = JSON.stringify(this.publishimages);
     this.publishGroup.group_id = this.groupId;
     this.publishGroup.fb_group_id = this.fbGroupId;
     this.publishGroup.isReview = 0;
