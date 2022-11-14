@@ -318,8 +318,10 @@ input#lastName {
 }
 
 .image1 {
-  min-width: 65px !important;
-  min-height: 65px !important;
+  min-width: 70px !important;
+  min-height: 70px !important;
+  max-width: 70px !important;
+  max-height: 70px !important;
   border: solid 1px gray;
   position: relative;
   top: 0;
@@ -330,7 +332,7 @@ input#lastName {
   cursor: pointer;
   position: absolute;
   top: 41px;
-  left: 46px;
+  left: 49px;
   border: 1px solid gray;
   width: 20px !important;
 }

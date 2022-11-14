@@ -2007,3 +2007,73 @@ input:checked + .slider:before {
   padding: 13px 19px !important;
   text-align: center !important;
 }
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .open-sidebar .right_side {
+    width: 82%;
+    padding-left: 30px;
+    margin-left: 152px;
+  }
+  .group_list_section {
+    padding-left: 34px !important;
+    padding-right: 38px !important;
+  }
+  .bio_tab .btn {
+    font-size: 10px !important;
+  }
+  .p-readonly {
+    padding: 14px 14px 0px 0px;
+  }
+  .billing_acc_plan .next_payment {
+    padding: 50px 35px;
+  }
+  .billing_acc_plan .amount h5 {
+    font-size: 33px;
+  }
+  .publish_bio .btn {
+    font-size: 12px !important;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .left_side .navbar-nav {
+    margin-top: 25px !important;
+    padding-left: 10px !important;
+  }
+  .open-sidebar .left_side {
+    width: 20%;
+  }
+  .open-sidebar .right_side {
+    width: 82%;
+    padding-left: 30px;
+    margin-left: 128px;
+  }
+  .billing_acc_plan .amount h5 {
+    font-size: 18px;
+    line-height: 35px;
+  }
+  .billing_acc_plan .amount p {
+    font-size: 13px;
+  }
+  .open-sidebar .left_side .nav-link {
+    padding-left: 11px;
+  }
+  .group_list_section {
+    padding: 25px;
+    padding-left: 24px !important;
+    padding-right: 10px !important;
+  }
+  .billing_acc_plan .next_payment {
+    padding: 37px 18px;
+  }
+  .p-readonly {
+    padding: 13px 4px 0px 0px;
+  }
+  .manage_profile h4 {
+    font-size: 33px !important;
+  }
+  .billing_acc_plan .amount {
+    padding: 34px 28px;
+  }
+  .bio_tab .btn {
+    font-size: 10px !important;
+  }
+}
