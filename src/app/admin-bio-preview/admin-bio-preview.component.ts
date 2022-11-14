@@ -41,9 +41,11 @@ export class AdminBioPreviewComponent implements OnInit {
   adminFacebookId: any = '';
   firstName: any = '';
   public countryList: any = countriesObject;
-  imageData:any= '';
+  imageData: any = '';
+  displayBasic: boolean = false;
 
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private spinner: NgxSpinnerService
@@ -158,23 +160,19 @@ export class AdminBioPreviewComponent implements OnInit {
       this.image = this.adminBio.image;
     }
 
-    if(this.adminBio != null &&
+    if (
+      this.adminBio != null &&
       this.adminBio.adminImageCode != '' &&
-      this.adminBio.adminImageCode != undefined ){
-        let blob = this.b64toBlob(
-          this.adminBio.adminImageCode
-        );
-        this.imageData = new File(
-          [blob],
-          this.adminBio.adminImageName,
-          {
-            type: 'image/jpeg',
-          }
-        );
-        console.log(this.imageData);
-        let objectURL = URL.createObjectURL(this.imageData);
-        console.log(objectURL);
-      }
+      this.adminBio.adminImageCode != undefined
+    ) {
+      let blob = this.b64toBlob(this.adminBio.adminImageCode);
+      this.imageData = new File([blob], this.adminBio.adminImageName, {
+        type: 'image/jpeg',
+      });
+      console.log(this.imageData);
+      let objectURL = URL.createObjectURL(this.imageData);
+      console.log(objectURL);
+    }
 
     if (this.userDetails.name.indexOf(' ') > -1) {
       let nameArray = this.userDetails.name.split(' ');
@@ -191,7 +189,6 @@ export class AdminBioPreviewComponent implements OnInit {
       this.fullName = this.capitalizeFirstLetter(this.firstName);
     }
   }
-
 
   b64toBlob(dataURI: any) {
     // dataURI = dataURI.replace("''");
@@ -278,10 +275,38 @@ export class AdminBioPreviewComponent implements OnInit {
       }
     }
   }
-  previewPublished(){
+  previewPublished() {
     console.log('here');
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
-      this.adminBioStorage = JSON.parse(this.adminBioStorage);
-      console.log(this.adminBioStorage);
+    this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    let adminBio = this.adminBioStorage.admin_bio;
+    let parm = new FormData();
+    parm.set('about', adminBio.about_me);
+    parm.set('email', adminBio.email_receive_message);
+    parm.set('location', adminBio.location);
+    parm.set('achievements', adminBio.achievements);
+    parm.set('user_id', adminBio.user_id);
+    parm.set('socialProfile', adminBio.social_profile);
+    parm.set('messageButton', adminBio.is_message_button);
+    parm.set('userName', adminBio.user_name);
+    parm.set('image', this.imageData);
+    this.saveAdminBioProfile(parm);
+  }
+
+  /* 
+  TO CALL API TO SAVE ADMIN PROFILE.
+  @Parameter{parm}
+*/
+  saveAdminBioProfile(parm: any) {
+    let token = localStorage.getItem('token');
+    this.apiService.saveAdminBio(token, parm).subscribe((response: any) => {
+      if (response.status == 200) {
+        this.displayBasic = true;
+      }
+    });
+  }
+
+  closePublishModel() {
+    this.closePreview();
   }
 }

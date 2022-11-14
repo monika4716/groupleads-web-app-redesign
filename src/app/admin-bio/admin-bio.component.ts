@@ -95,7 +95,7 @@ export class AdminBioComponent implements OnInit {
   adminBioStorage: any = {};
   facebookUrl: any = '';
   adminFacebookId: any = '';
-  adminImageCode:any;
+  adminImageCode: any;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -703,31 +703,28 @@ export class AdminBioComponent implements OnInit {
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.adminImageCode = reader.result;
-        
       };
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       if (this.adminBioStorage.admin_bio == null) {
         this.adminBioStorage.admin_bio = {};
         this.adminBioStorage.admin_bio.image = this.imageUrl;
-        this.adminBioStorage.admin_bio.adminImageCode =
-            this.adminImageCode;
-        this.adminBioStorage.admin_bio.adminImageName = event.target.files[0].name;   
+        this.adminBioStorage.admin_bio.adminImageCode = this.adminImageCode;
+        this.adminBioStorage.admin_bio.adminImageName =
+          event.target.files[0].name;
       } else {
         this.adminBioStorage.admin_bio.image = this.imageUrl;
-        this.adminBioStorage.admin_bio.adminImageCode =
-            this.adminImageCode;
-        this.adminBioStorage.admin_bio.adminImageName = event.target.files[0].name;      
+        this.adminBioStorage.admin_bio.adminImageCode = this.adminImageCode;
+        this.adminBioStorage.admin_bio.adminImageName =
+          event.target.files[0].name;
       }
-  
+
       console.log(this.adminBioStorage);
       localStorage.setItem(
         'adminBioStorage',
         JSON.stringify(this.adminBioStorage)
       );
-
-    },1000);
-    
+    }, 1000);
   }
   // CREATE UNIQUE NAME - remove special char num and change space into hyphen
   createUniqueUserName(x: any) {

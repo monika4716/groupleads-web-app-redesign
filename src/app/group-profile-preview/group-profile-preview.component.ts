@@ -76,7 +76,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   showLessMore: boolean = false;
   adminFacebookId: any = '';
   facebookUrl: any = '';
-  groupFile: any;
+  groupFile: any = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -216,7 +216,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
     this.topics = groupDetails.topic;
     this.uniqueName = groupDetails.unique_name;
-    if (!Array.isArray(this.topics)) {
+    if (!Array.isArray(this.topics) && this.topics.length > 0) {
       if (this.topics.indexOf(',') > 0) {
         this.topics = this.topics.split(',');
       } else {
@@ -476,7 +476,7 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.publishGroup.isConversations.toString()
     );
 
-    // formData.append('groupImage', this.groupFile);   //done
+    formData.append('groupImage', this.groupFile);
     formData.append('isReview', this.publishGroup.isReview.toString());
     formData.append(
       'removeImage',
@@ -492,7 +492,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('group_id', this.publishGroup.group_id);
     formData.append('fb_group_id', this.publishGroup.fb_group_id);
     this.apiService
-      .saveGroupProfile(this.token, formData)
+      .updateManageProfile(this.token, formData)
       .subscribe((response: any) => {
         //console.log(response);
         if (response.status == 200) {
@@ -511,6 +511,7 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   closePublishModel() {
     setTimeout(() => {
+      this.closePreview();
       this.route.navigate(['/', 'group-profiles']);
     }, 2000);
   }

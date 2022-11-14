@@ -9,7 +9,8 @@
             <div class="col-md-6 bio_tab text-end user_right_section d-flex align-items-center justify-content-end">
                 <button type="button" *ngIf="displayCloseBtn" (click)="closePreview()"
                     class="btn btn-outline-primary preview_btn bio_btn " id="closePreview">Close Preview</button>
-                <button type="button"(click)="previewPublished()" class="btn btn-primary share_btn bio_btn" >Publish Bio</button>
+                <button type="button" (click)="previewPublished()" class="btn btn-primary share_btn bio_btn">Publish
+                    Bio</button>
             </div>
         </div>
     </div>
@@ -169,3 +170,27 @@
         </div>
     </div>
 </div>
+
+<p-dialog [(visible)]="displayBasic" [modal]="true" [style]="{width: '45vw'}" (onHide)="closePublishModel()">
+    <div class="modal-body publish_modal text-center">
+        <div class="col-md-12">
+            <img src="assets/images/success.png" class="success" />
+            <h4 class="modal-title">Bio Published Successfully</h4>
+            <p>Share to start getting noticed</p>
+            <div class="input-group">
+                <input type="text" readonly class="form-control" placeholder="{{origin}}/profile/{{userName}}">
+                <span type="button" class="input-group-text"
+                    (click)="copyAdminProfileModel(userName)">{{model_text}}</span>
+            </div>
+            <h6><span class="border_left"></span>Share with<span class="border_right"></span>
+            </h6>
+            <ul class="social_icons">
+                <a href="{{facebookShare}}" target="_blank"><img src="assets/images/Facebook.png" /></a>
+                <!-- <a href="{{instagramShare}}" target="_blank"><img src="assets/images/Instagram.png" /></a> -->
+                <a href="{{twitterShare}}" target="_blank"><img src="assets/images/Twitter.png" /></a>
+                <a href="{{linkedInShare}}" target="_blank"><img src="assets/images/LinkedIn.png"
+                        class="linkedin" /></a>
+            </ul>
+        </div>
+    </div>
+</p-dialog>
