@@ -151,54 +151,7 @@ export class GroupProfileCreateComponent implements OnInit {
     this.token = token;
     this.urls = [];
     this.href = this.router.url;
-
-    // if (this.groupProfileId == 0) {
-    //   this.apiService.getGroupProfile().subscribe((response) => {
-    //     console.log(response);
-    //     if (
-    //       response.hasOwnProperty('groupProfile') &&
-    //       response.hasOwnProperty('GroupCategories') &&
-    //       response.hasOwnProperty('conversationImageURl')
-    //     ) {
-    //       console.log('call ovserable');
-    //       console.log(response);
-    //       this.groupProfile = response.groupProfile;
-    //       this.groupCategories = response.GroupCategories;
-    //       this.imagePath = response.conversationImageURl;
-    //       let found = this.groupProfile.findIndex((value: any) => {
-    //         return value.id == this.groupId;
-    //       });
-
-    //       if (found > -1) {
-    //         this.groupName = this.groupProfile[found].group_name;
-    //         console.log(this.groupName);
-    //         this.fbGroupId = this.groupProfile[found].fb_group_id;
-    //         this.groupDetails = this.groupProfile[found];
-    //         if (this.groupDetails.group_profile_id != null) {
-    //           this.previewFlag = true;
-    //           this.setProfileValues();
-    //         }
-    //         let url = '';
-    //         this.setSocialLink(url);
-    //       }
-
-    //       console.log(this.groupProfile[found]);
-
-    //       if (this.groupProfileId != 0) {
-    //         this.getProfileImages();
-    //       }
-    //     } else {
-    //       console.log('call api');
-    //       this.getGroupDetails();
-    //     }
-    //     console.log('call api');
-    //       this.getGroupDetails();
-    //   });
-    // } else {
-    console.log('call api');
     this.getGroupDetails();
-    // }
-
     this.items = [
       {
         label: 'Group Overview',
@@ -370,6 +323,7 @@ export class GroupProfileCreateComponent implements OnInit {
       console.log(this.uniqueName);
     }
     this.activeStepIndex = 1;
+    //$('.p-steps-number').text(&#10003).addClass('active-group-menu');
 
     // set the updated value in manageProfileStorage storage //
 

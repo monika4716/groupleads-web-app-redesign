@@ -39,7 +39,8 @@
                                     <select (change)="onChangeGroup($event)"
                                         class="form-control form-select select_groups " name="user"
                                         [(ngModel)]='selectedGroupId'>
-                                        <option *ngFor="let group of group_listing" [value]="group.group_id">
+                                        <option *ngFor="let group of group_listing" title="{{group.group_name}}"
+                                            tooltipPosition="left" [value]="group.group_id">
                                             {{group.group_name}}
                                         </option>
                                     </select>

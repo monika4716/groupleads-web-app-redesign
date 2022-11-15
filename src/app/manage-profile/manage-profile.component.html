@@ -25,7 +25,7 @@
                     <div class="manage_profile_banner" style="background-image: url({{groupImage}});">
                         <div class="col-md-12">
                             <div class="row manage_profile_banner_review">
-                                <div class="col-md-6 ">
+                                <div class="col-md-6 d-grid align-items-end">
                                     <div class="row">
                                         <div class="col-md-4 pr-0 rating review-setting">
                                             <p-rating [ngModel]="averageRating" [readonly]="true" [cancel]="false">
@@ -655,11 +655,11 @@
 </div>
 
 <!-- group publish profile -->
-<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '45vw'}" (onHide)="closePublishModel()">
+<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '40vw'}" (onHide)="closePublishModel()">
     <div class="modal-body publish_modal text-center">
         <div class="col-md-12">
             <img src="assets/images/success.png" class="success" />
-            <h4 class="modal-title">Group Profile Published Successfully</h4>
+            <h4 class="modal-title">Profile Published Successfully</h4>
             <p>Share to start getting noticed</p>
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
@@ -670,7 +670,7 @@
             </h6>
             <ul class="social_icons">
                 <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
-                <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                <!-- <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a> -->
                 <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
                 <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
             </ul>

@@ -103,6 +103,10 @@ export class GroupProfilePreviewComponent implements OnInit {
     //console.log(this.previewEnable);
     if (this.previewEnable != undefined && this.previewEnable) {
       //get Image (binary data for upload in database)
+      setTimeout(() => {
+        // all a tag not clickable on preview page
+        $('a').addClass('clickDisable');
+      }, 500);
       this.disableWriteReviewBtn = true;
       this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
       this.manageProfileStorage = JSON.parse(this.manageProfileStorage);

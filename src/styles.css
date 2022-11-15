@@ -482,7 +482,9 @@ button[disabled] {
   border: #224da5 !important;
   background: white !important;
 }
-.about_right_sec .btn:hover {
+.about_right_sec .btn:hover,
+.about_right_sec .btn:active,
+.about_right_sec .btn:focus {
   background: #ff7a59 !important;
 }
 .dropdown .btn:active,
@@ -500,4 +502,16 @@ button[disabled] {
 
 .clickDisable {
   pointer-events: none;
+}
+
+select.select_groups option {
+  white-space: nowrap !important;
+  width: 50px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  border: 1px solid #000000 !important;
+}
+.routers-link img {
+  margin-bottom: 4px !important;
+  cursor: pointer;
 }

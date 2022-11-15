@@ -66,7 +66,7 @@
                             </div>
                             <div class="col-md-6 d-flex align-items-center">
                                 <div class="col-md-6">
-                                    <a *ngIf="adminFacebookId != '' && token == null"
+                                    <a *ngIf="adminFacebookId != ''"
                                         href="https://www.messenger.com/t/{{adminFacebookId}}" target="_blank"
                                         type="button"
                                         class=" btn-outline-primary btn-block group_admin group_admin_msg message-btn"><img
@@ -251,7 +251,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="col-md-12 p-0">
-                                    <h3>Group Admin <span class="badge badge-primary">1</span></h3>
+                                    <h3>Group Admins <span class="badge badge-primary">1</span></h3>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="d-flex admin_sec">
@@ -267,38 +267,7 @@
                                             <h5 *ngIf="showAdminBio"><a href="{{adminSlug}}">View bio</a></h5>
                                         </div>
                                     </div>
-                                    <!-- <div class="d-flex admin_sec">
-                                        <div class="admin_left_sec d-flex align-items-center justify-content-center">
-                                            <img src="assets/images/user.png" />
-                                        </div>
-                                        <div class="admin_profile_sec">
-                                            <h2 class="name">Daniel Edwards</h2>
-                                            <h5 class="place"><img src="assets/images/flag.png" />Nigeria</h5>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <h5><a href="#">View bio</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex admin_sec">
-                                        <div class="admin_left_sec d-flex align-items-center justify-content-center">
-                                            <img src="assets/images/user.png" />
-                                        </div>
-                                        <div class="admin_profile_sec">
-                                            <h2 class="name">Daniel Edwards</h2>
-                                            <h5 class="place"><img src="assets/images/flag.png" />Nigeria</h5>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <h5><a href="#">View bio</a></h5>
-                                        </div>
-                                    </div> -->
-
-
                                 </div>
-                                <!-- <div class="col-md-12 d-grid admin_sec">
-                                    <button type="button" class="btn btn-outline-primary btn-block">See All
-                                        Admins</button>
-                                </div> -->
-
                             </div>
                         </div>
 
@@ -321,7 +290,7 @@
             <div class="modal-body publish_modal text-center">
                 <div class="col-md-12">
                     <img src="assets/images/success.png" class="success" />
-                    <h4 class="modal-title">Group Profile Published Successfully</h4>
+                    <h4 class="modal-title">Profile Published Successfully</h4>
                     <p>Share to start getting noticed</p>
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
@@ -330,7 +299,7 @@
                     <h6><span class="border_left"></span>Share with<span class="border_right"></span></h6>
                     <ul class="social_icons">
                         <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
-                        <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                        <!-- <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a> -->
                         <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
                         <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
                     </ul>
@@ -495,7 +464,7 @@
             </h6>
             <ul class="social_icons">
                 <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
-                <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
+                <!-- <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a> -->
                 <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
                 <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
             </ul>
