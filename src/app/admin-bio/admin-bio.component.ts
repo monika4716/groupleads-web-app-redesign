@@ -231,6 +231,7 @@ export class AdminBioComponent implements OnInit {
       }
 
       if (this.adminBio.image != '') {
+        localStorage.setItem('userImage', this.adminBio.image);
         this.imageUrl = this.adminBio.image;
       }
     }

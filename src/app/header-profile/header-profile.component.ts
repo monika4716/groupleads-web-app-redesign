@@ -9,13 +9,16 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./header-profile.component.css'],
 })
 export class HeaderProfileComponent implements OnInit {
+  adminImage: any = '';
   constructor(
     private router: Router,
     private apiService: ApiService,
     private cookie: CookieService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.adminImage = localStorage.getItem('userImage');
+  }
   logout() {
     this.cookie.deleteAll();
     window.localStorage.clear();

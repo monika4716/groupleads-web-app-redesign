@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     setInterval(() => {
       this.verifyUserToken();
-    }, 2 * 60000);
+    }, 60 * 60000);
   }
 
   verifyUserToken() {

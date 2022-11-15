@@ -6,7 +6,7 @@
     <div class="p-2 d-grid align-items-center head_sec">
         <div class="dropdown">
             <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                <img profile-image src="assets/images/default.jpg" />
+                <img profile-image [src]="adminImage" (error)="adminImage = 'assets/images/default.jpg'" />
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item billing" href="#" routerLink="/billing"><img

@@ -133,6 +133,11 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('token', token);
           var name = response['user'].name;
           localStorage.setItem('name', name);
+          if (response['adminBio'] != null) {
+            let image = response['adminBio'].adminImage;
+            localStorage.setItem('userImage', image);
+          }
+
           this.router.navigate(['dashboard']);
         }
       },
