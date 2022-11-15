@@ -159,6 +159,7 @@ p {
 }
 .header .dropdown img {
   width: 40px;
+  height: 40px;
   margin-left: 6px;
   border-radius: 50%;
 }
@@ -2151,4 +2152,29 @@ input:checked + .slider:before {
 }
 .card.groups_section .btn-primary img {
   margin-bottom: 0;
+}
+.name-highlight:hover {
+  color: #3f3a3a !important;
+}
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .publish_bio {
+    position: fixed !important;
+    bottom: 0 !important;
+    width: 77% !important;
+    z-index: 99 !important;
+    margin-left: 10px;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .publish_bio {
+    position: fixed !important;
+    bottom: 0 !important;
+    width: 77% !important;
+    z-index: 99 !important;
+    margin-left: 10px;
+  }
+}
+
+span.p-inputtext {
+  margin: -5px !important;
 }

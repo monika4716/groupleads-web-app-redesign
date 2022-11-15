@@ -2,6 +2,7 @@
     <div class="container-fluid">
         <div *ngIf="displayForm" class="row">
             <app-sidebar></app-sidebar>
+
             <ngx-spinner bdOpacity=0.4 bdColor="rgba(51,51,51,0.42)" size="medium" color="#2457c7"
                 type="ball-scale-multiple" [fullScreen]="true">
                 <p style="color: white"> Loading... </p>
@@ -15,6 +16,7 @@
                             <div class="d-flex">
                                 <div>
                                     <h3>Admin Bio</h3>
+
                                 </div>
                                 <div class="leads_sec">
                                 </div>
@@ -25,6 +27,7 @@
                         </div>
                     </div>
                     <div class="row section admin_bio_page group_list_section">
+                        <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
                         <div class="row bio_tab">
                             <div class="card admin_section">
                                 <div class="card-body">

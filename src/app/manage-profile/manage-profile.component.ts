@@ -78,6 +78,7 @@ export class ManageProfileComponent implements OnInit {
   fileList: File[] = [];
   listOfFiles: any[] = [];
   files: any = [];
+  msgs: any;
   //uploadUrls = new Array<string>();
   uploadUrls: any = [];
   groupFile: any = [];
@@ -471,22 +472,46 @@ export class ManageProfileComponent implements OnInit {
 
   uploadImages(event: any) {
     this.files = event.target.files;
+    console.log(this.files);
     for (var i = 0; i <= this.files.length - 1; i++) {
-      let objectURL = URL.createObjectURL(event.target.files[i]);
-      let id = Math.floor(10000 + Math.random() * 90000);
-      this.uploadUrls.push({
-        id: id,
-        image: objectURL,
-        name: event.target.files[i].name,
-      });
-      let reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.urls.push(e.target.result);
-      };
-      reader.readAsDataURL(this.files[i]);
-      var selectedFile = event.target.files[i];
-      this.fileList.push(selectedFile);
-      this.listOfFiles.push(selectedFile.name);
+      let Imagesize = 5000000;
+      if (Imagesize <= this.files[i]) {
+        this.msgs = [
+          {
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'Image size should be less than 5 Mb ',
+          },
+        ];
+      } else if (
+        this.files[i].type != 'image/jpeg' &&
+        this.files[i].type != 'image/png' &&
+        this.files[i].type != 'image/jpg'
+      ) {
+        this.msgs = [
+          {
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'Image type should be ( jpeg | jpg | png ) ',
+          },
+        ];
+      } else {
+        let objectURL = URL.createObjectURL(event.target.files[i]);
+        let id = Math.floor(10000 + Math.random() * 90000);
+        this.uploadUrls.push({
+          id: id,
+          image: objectURL,
+          name: event.target.files[i].name,
+        });
+        let reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.urls.push(e.target.result);
+        };
+        reader.readAsDataURL(this.files[i]);
+        var selectedFile = event.target.files[i];
+        this.fileList.push(selectedFile);
+        this.listOfFiles.push(selectedFile.name);
+      }
     }
   }
 
@@ -529,39 +554,66 @@ export class ManageProfileComponent implements OnInit {
       $('#editReviews_close').click();
     }, 1000);
   }
-
+  // Uplaoad Group image with validation & show error in message toaster
   uploadGroupImages(event: any) {
     this.groupFile = event.target.files[0];
-    this.uploadedImageName = event.target.files[0].name;
-    console.log(this.groupFile);
-    let objectURL = URL.createObjectURL(event.target.files[0]);
-    console.log(objectURL);
-    this.groupImage = objectURL;
+    let Imagesize = 5000000;
+    if (Imagesize <= this.groupFile.size) {
+      this.msgs = [
+        {
+          severity: 'warn',
+          summary: 'Warning',
+          detail: 'Image size should be less than 5 Mb ',
+        },
+      ];
+    } else if (
+      this.groupFile.type != 'image/jpeg' &&
+      this.groupFile.type != 'image/png' &&
+      this.groupFile.type != 'image/jpg'
+    ) {
+      console.log(this.groupFile.type);
+      this.msgs = [
+        {
+          severity: 'warn',
+          summary: 'Warning',
+          detail: 'Image type should be ( jpeg | jpg | png ) ',
+        },
+      ];
+    } else {
+      this.uploadedImageName = event.target.files[0].name;
+      console.log(this.groupFile);
+      let objectURL = URL.createObjectURL(event.target.files[0]);
+      console.log(objectURL);
+      this.groupImage = objectURL;
 
-    this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
-    this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
-    this.manageProfileStorage.groupDetails.image = this.groupImage;
-    this.manageProfileStorage.groupDetails.uploadImageName =
-      this.uploadedImageName;
+      this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
+      this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
+      this.manageProfileStorage.groupDetails.image = this.groupImage;
+      this.manageProfileStorage.groupDetails.uploadImageName =
+        this.uploadedImageName;
 
-    const reader = new FileReader();
-    if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.groupImageCode = reader.result;
-        this.manageProfileStorage.groupDetails.baseCodeimage =
-          this.groupImageCode;
-      };
+      const reader = new FileReader();
+      if (event.target.files && event.target.files.length) {
+        const [file] = event.target.files;
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.groupImageCode = reader.result;
+          this.manageProfileStorage.groupDetails.baseCodeimage =
+            this.groupImageCode;
+        };
+      }
+
+      setTimeout(() => {
+        console.log(this.manageProfileStorage.groupDetails);
+        localStorage.setItem(
+          'manageProfileStorage',
+          JSON.stringify(this.manageProfileStorage)
+        );
+      }, 500);
     }
-
     setTimeout(() => {
-      console.log(this.manageProfileStorage.groupDetails);
-      localStorage.setItem(
-        'manageProfileStorage',
-        JSON.stringify(this.manageProfileStorage)
-      );
-    }, 500);
+      this.msgs = [];
+    }, 3000);
   }
 
   /* OPEN ADMIN BIO PREVIEW */
