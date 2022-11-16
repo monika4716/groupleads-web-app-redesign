@@ -109,6 +109,9 @@
                                                 <div
                                                     *ngIf="o['uniqueName'].errors && o['uniqueName'].errors['minlength']">
                                                     Groupname must be at least 5 characters.</div>
+                                                <div
+                                                    *ngIf="o['uniqueName'].errors && o['uniqueName'].errors['maxlength']">
+                                                    Groupname should be less than 50 characters.</div>
 
                                                 <div
                                                     *ngIf="o['uniqueName'].errors && o['uniqueName'].errors['uniqueNameExists']">

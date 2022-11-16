@@ -124,7 +124,11 @@ export class GroupProfileCreateComponent implements OnInit {
       uniqueName: [
         '',
         {
-          validators: [Validators.required, Validators.minLength(5)],
+          validators: [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.maxLength(50),
+          ],
           asyncValidators: [
             this.apiService.GroupUniqueNameExistsValidator(
               token,
@@ -301,7 +305,7 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   get o() {
-    //console.log(this.overViewForm.controls);
+    console.log(this.overViewForm.controls);
     return this.overViewForm.controls;
   }
 

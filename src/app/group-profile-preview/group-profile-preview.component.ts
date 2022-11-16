@@ -380,7 +380,10 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   setFacebookUrl() {
     //console.log(this.facebookUrl);
-    if (this.facebookUrl.indexOf('profile.php') > 0) {
+    if (
+      this.facebookUrl != null &&
+      this.facebookUrl.indexOf('profile.php') > 0
+    ) {
       this.adminFacebookId = this.facebookUrl.split('?id=')[1];
     } else {
       this.adminFacebookId = this.facebookUrl.split('/');
