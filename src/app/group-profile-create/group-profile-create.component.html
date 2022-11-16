@@ -183,7 +183,9 @@
                                             <img src="assets/images/upload_ss.png" (click)="selectImage.click()">
                                             <input #imageInput type="file" accept="image/*" multiple
                                                 (change)="uploadImages($event)" style="display: none" #selectImage>
+                                            <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
                                         </div>
+
                                     </div>
                                     <div class="col-md-12">
                                         <div class="row">
@@ -260,7 +262,7 @@
 </div>
 
 <!-- group publish profile -->
-<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '45vw'}" (onHide)="closePublishModel()">
+<p-dialog [(visible)]="displayPublishModel" [modal]="true" [style]="{width: '40vw'}" (onHide)="closePublishModel()">
     <div class="modal-body publish_modal text-center">
         <div class="col-md-12">
             <img src="assets/images/success.png" class="success" />
@@ -277,7 +279,7 @@
             <ul class="social_icons">
                 <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
                 <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a>
-                <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
+                <!-- <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a> -->
                 <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
             </ul>
 

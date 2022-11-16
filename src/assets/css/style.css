@@ -159,7 +159,7 @@ p {
 }
 .header .dropdown img {
   width: 40px;
-  height: 40px;
+
   margin-left: 6px;
   border-radius: 50%;
 }
@@ -2177,4 +2177,8 @@ input:checked + .slider:before {
 
 span.p-inputtext {
   margin: -5px !important;
+}
+
+.profile-image {
+  height: 40px !important;
 }

@@ -52,6 +52,7 @@ export class GroupProfileCreateComponent implements OnInit {
   previousImage: any = [];
   removeImage: any = [];
   showAddProfileBtn: boolean = true;
+  msgs: any;
 
   activeStepIndex: number = 0;
   overViewForm: FormGroup;
@@ -376,22 +377,45 @@ export class GroupProfileCreateComponent implements OnInit {
     //console.log(event.target.files);
     this.files = event.target.files;
     for (var i = 0; i <= this.files.length - 1; i++) {
-      let objectURL = URL.createObjectURL(event.target.files[i]);
-      let id = Math.floor(10000 + Math.random() * 90000);
-      this.uploadUrls.push({
-        id: id,
-        image: objectURL,
-        name: event.target.files[i].name,
-      });
-      let reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.urls.push(e.target.result);
-      };
-      reader.readAsDataURL(this.files[i]);
-      var selectedFile = event.target.files[i];
-      this.fileList.push(selectedFile);
-      console.log(this.fileList);
-      this.listOfFiles.push(selectedFile.name);
+      let Imagesize = 5000000;
+      if (Imagesize <= this.files[i]) {
+        this.msgs = [
+          {
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'Image size should be less than 5 Mb ',
+          },
+        ];
+      } else if (
+        this.files[i].type != 'image/jpeg' &&
+        this.files[i].type != 'image/png' &&
+        this.files[i].type != 'image/jpg'
+      ) {
+        this.msgs = [
+          {
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'Image type should be ( jpeg | jpg | png ) ',
+          },
+        ];
+      } else {
+        let objectURL = URL.createObjectURL(event.target.files[i]);
+        let id = Math.floor(10000 + Math.random() * 90000);
+        this.uploadUrls.push({
+          id: id,
+          image: objectURL,
+          name: event.target.files[i].name,
+        });
+        let reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.urls.push(e.target.result);
+        };
+        reader.readAsDataURL(this.files[i]);
+        var selectedFile = event.target.files[i];
+        this.fileList.push(selectedFile);
+        console.log(this.fileList);
+        this.listOfFiles.push(selectedFile.name);
+      }
     }
   }
   removePreviousFile(i: any, id: any) {
