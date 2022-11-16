@@ -100,6 +100,7 @@ export class ManageProfileComponent implements OnInit {
   reviewImageUrl = '';
   uploadedImageName: any = '';
   groupImageCode: any;
+  conversationNum: any = 3;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -133,17 +134,17 @@ export class ManageProfileComponent implements OnInit {
 
     this.responsiveOptions = [
       {
-        breakpoint: '1024px',
+        breakpoint: '768px',
         numVisible: 3,
         numScroll: 3,
       },
       {
-        breakpoint: '768px',
+        breakpoint: '560px',
         numVisible: 2,
         numScroll: 2,
       },
       {
-        breakpoint: '560px',
+        breakpoint: '230px',
         numVisible: 1,
         numScroll: 1,
       },
@@ -463,6 +464,10 @@ export class ManageProfileComponent implements OnInit {
   }
 
   showConversationImages() {
+    this.conversationNum = this.conversationImages.length;
+    if (this.conversationNum >= 3) {
+      this.conversationNum = 3;
+    }
     for (var i = 0; i <= this.conversationImages.length - 1; i++) {
       let id = this.conversationImages[i].id;
       let image = this.conversationImageUrl + this.conversationImages[i].image;

@@ -369,6 +369,7 @@
                         </div>
                     </div>
                     <div class="mb-3 mt-4">
+                        <p-messages [(value)]="msgs" [enableService]="false"></p-messages>
 
                         <img src="assets/images/upload.png" pTooltip="Upload Image" tooltipPosition="bottom"
                             tooltipEvent="focus" class="review-image-upload" (click)="selectImage.click()">
@@ -384,6 +385,10 @@
                             <div *ngIf="r['name'].errors && r['name'].errors['required']">
                                 Name is
                                 required.</div>
+                            <div *ngIf="r['name'].errors && r['name'].errors['pattern']">
+                                Name is
+                                required.</div>
+
                         </div>
                     </div>
 

@@ -141,15 +141,14 @@
                                             data-bs-backdrop="static" data-bs-target="#edit_conversation_Modal" />
                                     </div>
                                 </div>
-                                <p-carousel [value]="uploadUrls" styleClass="custom-carousel" [numVisible]="3"
-                                    [numScroll]="1" [circular]="true" [autoplayInterval]="3000"
-                                    [responsiveOptions]="responsiveOptions">
-                                    <ng-template let-conversation pTemplate="item">
-                                        <div class="conversation-item">
+                                <p-carousel [value]="uploadUrls" styleClass="custom-carousel"
+                                    [numVisible]="conversationNum" [numScroll]="1" [circular]="true"
+                                    [autoplayInterval]="3000">
+                                    <ng-template let-row pTemplate="item">
+                                        <div class="conversation-item1">
                                             <div class="conversation-item-content">
                                                 <div class="mb-3" id="image-conversations">
-                                                    <img [src]="conversation.image |safe" [alt]="conversation"
-                                                        class="conversation-image" />
+                                                    <img [src]="row.image | safe" class="conversation-image" />
                                                 </div>
                                             </div>
                                         </div>

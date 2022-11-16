@@ -86,7 +86,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   ) {
     this.editReviewsForm = this.fb.group({
       profileId: ['', Validators.required],
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.pattern('(?! ).*[^ ]')]],
       rating: ['', Validators.required],
       review: ['', Validators.required],
     });
@@ -331,6 +331,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   get r() {
+    //console.log(this.editReviewsForm.controls);
     return this.editReviewsForm.controls;
   }
   // GET DETAILS BY SLUG AND SHOW PREVIEW
@@ -360,7 +361,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   // SHOW ADMIN
   showAdmins(admin: any) {
-    console.log(admin);
+    //console.log(admin);
     this.adminName = this.capitalizeFirstLetter(this.user.name);
     if (admin != undefined && admin.id != null) {
       let index = this.locationList.findIndex(
@@ -417,7 +418,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   setSocialLink() {
-    console.log(this.uniqueName);
+    //console.log(this.uniqueName);
     let url = this.origin + '/group-profile/' + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
@@ -510,8 +511,36 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   uploadReviewImage(event: any) {
     this.reviewImage = event.target.files[0];
-    let objectURL = URL.createObjectURL(event.target.files[0]);
-    this.reviewImageUrl = objectURL;
+
+    let Imagesize = 5000000;
+    if (Imagesize <= this.reviewImage) {
+      this.msgs = [
+        {
+          severity: 'warn',
+          summary: 'Warning',
+          detail: 'Image size should be less than 5 Mb ',
+        },
+      ];
+    } else if (
+      this.reviewImage.type != 'image/jpeg' &&
+      this.reviewImage.type != 'image/png' &&
+      this.reviewImage.type != 'image/jpg'
+    ) {
+      this.msgs = [
+        {
+          severity: 'warn',
+          summary: 'Warning',
+          detail: 'Image type should be ( jpeg | jpg | png ) ',
+        },
+      ];
+    } else {
+      let objectURL = URL.createObjectURL(event.target.files[0]);
+      this.reviewImageUrl = objectURL;
+    }
+
+    setTimeout(() => {
+      this.msgs = [];
+    }, 3000);
   }
   closePublishModel() {
     setTimeout(() => {

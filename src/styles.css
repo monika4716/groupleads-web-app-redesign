@@ -518,3 +518,26 @@ select.select_groups option {
 .topics_name span.ng-star-inserted {
   max-width: 706px !important;
 }
+.preview_bio_btn {
+  background: transparent !important;
+  border: 2px solid #3c61ad;
+  border-radius: 4px !important;
+  color: #3c61ad;
+  padding: 21px 25px !important;
+}
+
+/* .p-carousel-item {
+  text-align: center;
+} */
+
+.conversation-item1 .conversation-item-content {
+  border-radius: 3px;
+  margin: 0.1rem;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.conversation-item1 .conversation-image {
+  width: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}

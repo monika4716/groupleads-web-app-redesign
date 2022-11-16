@@ -2133,7 +2133,7 @@ input:checked + .slider:before {
   padding: 8px 25px !important;
 }
 
-.review-setting .pi-star {
+.manage_profile_banner_review .review-setting .pi-star {
   color: white !important;
 }
 .btn.btn-outline-primary.preview_btn.bio_btn {
@@ -2221,7 +2221,20 @@ span.p-inputtext {
   width: 100%;
   z-index: 99;
 }
-.conversations-text {
+.conversation-text {
   padding-right: 64px;
   padding-left: 64px;
+}
+
+.btn.btn-outline-primary.preview_bio_btn.bio_btn {
+  background: transparent !important;
+  border: 2px solid #3c61ad;
+  border-radius: 4px !important;
+  color: #3c61ad;
+  padding: 21px 25px !important;
+}
+
+#publish_bioModal .modal-body.publish_modal h6 {
+  margin-top: 11px !important;
+  margin-bottom: 12px !important;
 }

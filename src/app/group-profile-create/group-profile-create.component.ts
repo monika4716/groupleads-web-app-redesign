@@ -118,7 +118,10 @@ export class GroupProfileCreateComponent implements OnInit {
       console.log(this.groupProfileId);
     });
     this.overViewForm = this.fb.group({
-      description: ['', Validators.required],
+      description: [
+        '',
+        [Validators.required, Validators.pattern('(?! ).*[^ ]')],
+      ],
       category: ['', Validators.required],
       location: ['', Validators.required],
       uniqueName: [
@@ -659,5 +662,10 @@ export class GroupProfileCreateComponent implements OnInit {
       .replace(/[-]+/g, '-')
       .toLowerCase();
     x.target.value = this.uniqueName;
+  }
+
+  removeDescriptionSpace(e: any) {
+    this.description = e.target.value.replace(/^\d+|[\W_]?/, '');
+    e.target.value = this.description;
   }
 }
