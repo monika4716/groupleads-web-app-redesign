@@ -596,7 +596,7 @@ p {
   margin-top: 14px;
 }
 .bio_tab .card-body {
-  padding: 25px 21px 35px 20px !important;
+  padding: 31px 21px 26px 17px !important;
 }
 .card-body h5 {
   font-style: normal;
@@ -643,9 +643,12 @@ p {
   padding-left: 10px !important;
 }
 .achievement_field .input-group-text {
-  background: transparent !important;
+  background: whitesmoke !important;
   cursor: pointer;
   z-index: 99;
+}
+.input-group.achievement_field input {
+  padding-right: 65px;
 }
 .admin_bio_list .form-select {
   font-style: normal;
@@ -2181,4 +2184,44 @@ span.p-inputtext {
 
 .profile-image {
   height: 40px !important;
+}
+
+/* error page */
+.banner.error {
+  background-image: unset;
+  margin-bottom: 70px;
+}
+.banner.error p {
+  width: 43%;
+  margin: 0 auto;
+  letter-spacing: 0.2px;
+  font-size: 25px;
+  line-height: 44px;
+}
+.banner .btn {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  background: #3f64ae;
+  z-index: 99999999999;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 16px 44px;
+  margin-top: 18px;
+  border: none;
+  letter-spacing: -0.16px;
+  color: #ffffff;
+}
+.section.header {
+  background: #ffffff;
+  box-shadow: 0px 2px 8px rgb(204 204 204 / 25%);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+.conversations-text {
+  padding-right: 64px;
+  padding-left: 64px;
 }

@@ -198,7 +198,7 @@ a.forget-password {
 }
 .placeholder-icon {
   position: absolute !important;
-  top: 100px !important;
+  top: 129px !important;
   left: 22px !important;
 }
 
@@ -514,4 +514,7 @@ select.select_groups option {
 .routers-link img {
   margin-bottom: 4px !important;
   cursor: pointer;
+}
+.topics_name span.ng-star-inserted {
+  max-width: 706px !important;
 }

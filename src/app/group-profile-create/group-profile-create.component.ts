@@ -416,6 +416,9 @@ export class GroupProfileCreateComponent implements OnInit {
         console.log(this.fileList);
         this.listOfFiles.push(selectedFile.name);
       }
+      setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
     }
   }
   removePreviousFile(i: any, id: any) {
@@ -646,6 +649,7 @@ export class GroupProfileCreateComponent implements OnInit {
   createUniqueGroupSlug(x: any) {
     //remove special char num and change space into hyphen//
     this.uniqueName = x.target.value
+      .replace(/^\d+|[\W_]?/, '')
       .replace(/[^a-zA-Z- ]/g, '')
       .replace(/\s/g, '-')
       .replace(/[-]+/g, '-')

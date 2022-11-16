@@ -45,7 +45,7 @@ export class AdminBioComponent implements OnInit {
   userDetails: any;
   adminBio: any;
   selectedCountry: any;
-  selectedCountryCode: any = 'AF';
+  selectedCountryCode: any = '';
   countryName: any = null;
   countryImage: any = null;
   fullName: any;
@@ -97,6 +97,7 @@ export class AdminBioComponent implements OnInit {
   adminFacebookId: any = '';
   adminImageCode: any;
   msgs: any;
+  formEnable: boolean = false;
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -115,11 +116,14 @@ export class AdminBioComponent implements OnInit {
       userName: [
         '',
         {
-          validators: [Validators.required, Validators.minLength(5)],
+          validators: [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.maxLength(100),
+          ],
           asyncValidators: [
             this.apiService.userExistsValidator(this.token, this.userName),
           ],
-          updateOn: 'blur',
         },
       ],
       facebookUrl: [
@@ -230,7 +234,7 @@ export class AdminBioComponent implements OnInit {
       if (this.adminBio.social_profile != '') {
         this.socialLinks = JSON.parse(this.adminBio.social_profile);
       }
-
+      localStorage.setItem('userImage', '');
       if (this.adminBio.image != '') {
         localStorage.setItem('userImage', this.adminBio.image);
         this.imageUrl = this.adminBio.image;
@@ -286,10 +290,13 @@ export class AdminBioComponent implements OnInit {
   }
 
   addAchievement() {
-    this.achiveCount++;
-    this.achievements().push(this.newAchievement());
-    if (this.achiveCount == 3) {
-      this.isButtonVisible = false;
+    let previousCount = this.achiveCount - 1;
+    if ($("[achieveIndex='" + previousCount + "']").val() != '') {
+      this.achiveCount++;
+      this.achievements().push(this.newAchievement());
+      if (this.achiveCount == 3) {
+        this.isButtonVisible = false;
+      }
     }
   }
 
@@ -363,10 +370,13 @@ export class AdminBioComponent implements OnInit {
   TO CHANGE VALUE ACCORDING TO SELECTED SOCIAL LINK AND VALIDATION 
   @Parameter{socialLink}
 */
-  onEnterSocialLink(socialLink: any) {
+  onEnterSocialLink(e: any, socialLink: any) {
+    socialLink = e.target.value.replace(/^\d+|[\W_]?/, '');
+    e.target.value = socialLink;
+
     this.errorMessage = '';
     this.showAddProfileBtn = true;
-    if (socialLink != '') {
+    if (socialLink.trim() != '') {
       if (this.socialName == 'Facebook') {
         if (socialLink.match('^(https?://)?(www.facebook.com|web.com)/.+$')) {
           this.showAddProfileBtn = false;
@@ -754,7 +764,11 @@ export class AdminBioComponent implements OnInit {
   }
   // CREATE UNIQUE NAME - remove special char num and change space into hyphen
   createUniqueUserName(x: any) {
+    console.log(this.adminBioForm.controls);
+    console.log(this.adminBioForm.invalid);
+
     this.userName = x.target.value
+      .replace(/^\d+|[\W_]?/, '')
       .replace(/[^a-zA-Z- ]/g, '')
       .replace(/\s/g, '-')
       .replace(/[-]+/g, '-')
@@ -801,6 +815,7 @@ export class AdminBioComponent implements OnInit {
     }
   }
   setAchievements() {
+    console.log(this.adminBioForm.value.achievements);
     let achievements = JSON.stringify(this.adminBioForm.value.achievements);
     this.setAchievement();
   }
