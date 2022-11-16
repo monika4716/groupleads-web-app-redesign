@@ -380,20 +380,20 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   setFacebookUrl() {
     //console.log(this.facebookUrl);
-    if (
-      this.facebookUrl != null &&
-      this.facebookUrl.indexOf('profile.php') > 0
-    ) {
-      this.adminFacebookId = this.facebookUrl.split('?id=')[1];
-    } else {
-      this.adminFacebookId = this.facebookUrl.split('/');
-      console.log(this.adminFacebookId);
-      if (this.adminFacebookId[this.adminFacebookId.length - 1] != '') {
-        this.adminFacebookId =
-          this.adminFacebookId[this.adminFacebookId.length - 1];
+
+    if (this.facebookUrl != null) {
+      if (this.facebookUrl.indexOf('profile.php') > 0) {
+        this.adminFacebookId = this.facebookUrl.split('?id=')[1];
       } else {
-        this.adminFacebookId =
-          this.adminFacebookId[this.adminFacebookId.length - 2];
+        this.adminFacebookId = this.facebookUrl.split('/');
+        console.log(this.adminFacebookId);
+        if (this.adminFacebookId[this.adminFacebookId.length - 1] != '') {
+          this.adminFacebookId =
+            this.adminFacebookId[this.adminFacebookId.length - 1];
+        } else {
+          this.adminFacebookId =
+            this.adminFacebookId[this.adminFacebookId.length - 2];
+        }
       }
     }
   }
