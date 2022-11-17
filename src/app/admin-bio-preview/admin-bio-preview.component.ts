@@ -279,17 +279,44 @@ export class AdminBioPreviewComponent implements OnInit {
     console.log('here');
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
     this.adminBioStorage = JSON.parse(this.adminBioStorage);
+    console.log(this.adminBioStorage.user_details.id);
     let adminBio = this.adminBioStorage.admin_bio;
+    console.log(adminBio);
+    let about = '';
+    if (adminBio.about_me != undefined) {
+      about = adminBio.about_me;
+    }
+    let facebookUrl = '';
+    if (adminBio.email_receive_message != undefined) {
+      facebookUrl = adminBio.email_receive_message;
+    }
+    let location = '';
+    if (adminBio.location != undefined) {
+      location = adminBio.location;
+    }
+    let achievements = '';
+    if (adminBio.achievements != undefined) {
+      achievements = adminBio.achievements;
+    }
+    let social_profile = '';
+    if (adminBio.social_profile != undefined) {
+      social_profile = adminBio.social_profile;
+    }
+    let is_message_button = 'false';
+    if (adminBio.is_message_button != undefined) {
+      is_message_button = adminBio.is_message_button;
+    }
     let parm = new FormData();
-    parm.set('about', adminBio.about_me);
-    parm.set('email', adminBio.email_receive_message);
-    parm.set('location', adminBio.location);
-    parm.set('achievements', adminBio.achievements);
-    parm.set('user_id', adminBio.user_id);
-    parm.set('socialProfile', adminBio.social_profile);
-    parm.set('messageButton', adminBio.is_message_button);
+    parm.set('about', about);
+    parm.set('email', facebookUrl);
+    parm.set('location', location);
+    parm.set('achievements', achievements);
+    parm.set('user_id', this.adminBioStorage.user_details.id);
+    parm.set('socialProfile', social_profile);
+    parm.set('messageButton', is_message_button);
     parm.set('userName', adminBio.user_name);
     parm.set('image', this.imageData);
+
     this.saveAdminBioProfile(parm);
   }
 

@@ -242,7 +242,8 @@
                                 <div class="col-md-12">
                                     <div class="d-flex admin_sec">
                                         <div class="admin_left_sec d-flex align-items-center justify-content-center">
-                                            <img class="admin-imag" src="{{adminImage}}" />
+                                            <img class="admin-imag" src="{{adminImage}}"
+                                                (error)="adminImage = 'assets/images/default.jpg'" />
                                         </div>
                                         <div class="admin_profile_sec">
                                             <h2 class="name">{{adminName}}</h2>

@@ -80,6 +80,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   facebookUrl: any = '';
   groupFile: any = [];
   conversationNum: any = 3;
+  publishButtonText: any = 'Publish Profile';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -227,12 +228,18 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
     this.topics = groupDetails.topic;
     this.uniqueName = groupDetails.unique_name;
-    if (!Array.isArray(this.topics) && this.topics.length > 0) {
+    if (
+      this.topics != null &&
+      !Array.isArray(this.topics) &&
+      this.topics.length > 0
+    ) {
       if (this.topics.indexOf(',') > 0) {
         this.topics = this.topics.split(',');
       } else {
         this.topics = this.topics.split(' ');
       }
+    } else {
+      this.topics = [];
     }
     this.showConversationImage();
     if (this.conversationsImage.length == 0) {
@@ -368,13 +375,17 @@ export class GroupProfilePreviewComponent implements OnInit {
   showAdmins(admin: any) {
     this.adminName = this.capitalizeFirstLetter(this.user.name);
     if (admin != undefined && admin.id != null) {
-      let index = this.locationList.findIndex(
-        (x: any) => x.code === admin.location
-      );
-      let selectedCountry = this.locationList[index];
+      console.log(admin.location);
+      if (admin.location != 'undefined') {
+        let index = this.locationList.findIndex(
+          (x: any) => x.code === admin.location
+        );
+        let selectedCountry = this.locationList[index];
+        console.log(selectedCountry);
 
-      this.adminlocation = selectedCountry.name;
-      this.countryFlag = selectedCountry.image;
+        this.adminlocation = selectedCountry.name;
+        this.countryFlag = selectedCountry.image;
+      }
 
       this.adminImage = this.adminImageUrl + admin.image;
       this.adminSlug = this.origin + '/profile/' + admin.user_name;
@@ -468,6 +479,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   saveGroupProfile(publish: any) {
+    this.publishButtonText = 'Processing...';
     this.status = 1;
     this.publishGroup = localStorage.getItem('publishGroup');
     this.publishGroup = JSON.parse(this.publishGroup);
@@ -501,6 +513,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.apiService
       .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
+        this.publishButtonText = 'Publish Profile';
         if (response.status == 200) {
           if (publish) {
             this.displayPublishModel = true;

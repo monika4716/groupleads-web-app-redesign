@@ -107,15 +107,14 @@ export class GroupProfileCreateComponent implements OnInit {
     this.origin = location.origin;
 
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
-    console.log(this.manageProfileStorage);
 
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log(params);
+      // console.log(params);
       this.groupId = params['group_id'];
       if (params['id']) {
         this.groupProfileId = params['id'];
       }
-      console.log(this.groupProfileId);
+      // console.log(this.groupProfileId);
     });
     this.overViewForm = this.fb.group({
       description: [
@@ -200,9 +199,9 @@ export class GroupProfileCreateComponent implements OnInit {
       .getGProfileImages(token, this.groupProfileId)
       .subscribe((response: any) => {
         if (response.status == 200) {
-          console.log(response);
+          // console.log(response);
           this.previousImage = response.profileImages;
-          console.log(this.previousImage);
+          // console.log(this.previousImage);
         }
       });
   }
@@ -210,12 +209,10 @@ export class GroupProfileCreateComponent implements OnInit {
   getGroupDetails() {
     this.spinner.show();
     var token = localStorage.getItem('token');
-    console.log(this.groupProfileId);
 
     this.apiService
       .getParticularGroupProfile(this.groupId, token, this.groupProfileId)
       .subscribe((response: any) => {
-        console.log(response);
         if (response.status == 200) {
           localStorage.setItem(
             'manageProfileStorage',
@@ -288,13 +285,9 @@ export class GroupProfileCreateComponent implements OnInit {
       let id = this.conversationImages[i].id;
       let image = this.conversationImageUrl + this.conversationImages[i].image;
       this.uploadUrls.push({ id: id, image: image });
-      console.log(this.uploadUrls);
     }
   }
   setProfileValues() {
-    console.log(this.groupDetails);
-    console.log(this.imagePath);
-    console.log(this.groupCategories);
     this.description = this.groupDetails.description;
     this.uniqueName = this.groupDetails.unique_name;
     this.slug = this.groupDetails.unique_name.toLowerCase();
@@ -308,16 +301,13 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   get o() {
-    console.log(this.overViewForm.controls);
     return this.overViewForm.controls;
   }
 
   validateStep1() {
     //logic perform
-    console.log(this.overViewForm);
     if (this.overViewForm.value.location != undefined) {
       this.selectedLocation = this.overViewForm.value.location;
-      console.log(this.selectedLocation);
     }
     if (this.overViewForm.value.category != undefined) {
       this.selectedCategory = this.overViewForm.value.category;
@@ -328,7 +318,6 @@ export class GroupProfileCreateComponent implements OnInit {
     if (this.overViewForm.value.uniqueName != undefined) {
       this.uniqueName = this.overViewForm.value.uniqueName;
       // this.uniqueName = this.uniqueName.replace(/\s/g, '');
-      console.log(this.uniqueName);
     }
     this.activeStepIndex = 1;
     //$('.p-steps-number').text(&#10003).addClass('active-group-menu');
@@ -337,8 +326,6 @@ export class GroupProfileCreateComponent implements OnInit {
 
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
-
-    console.log(this.manageProfileStorage);
 
     if (
       this.manageProfileStorage != null &&
@@ -365,7 +352,6 @@ export class GroupProfileCreateComponent implements OnInit {
     // end  the updated value in manageProfileStorage storage //
   }
   validateStep2() {
-    console.log(this.popularTopicForm);
     this.activeStepIndex = 2;
 
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
@@ -385,7 +371,7 @@ export class GroupProfileCreateComponent implements OnInit {
     this.files = event.target.files;
     for (var i = 0; i <= this.files.length - 1; i++) {
       let Imagesize = 5000000;
-      if (Imagesize <= this.files[i]) {
+      if (Imagesize <= this.files[i].size) {
         this.msgs = [
           {
             severity: 'warn',
@@ -420,7 +406,6 @@ export class GroupProfileCreateComponent implements OnInit {
         reader.readAsDataURL(this.files[i]);
         var selectedFile = event.target.files[i];
         this.fileList.push(selectedFile);
-        console.log(this.fileList);
         this.listOfFiles.push(selectedFile.name);
       }
       setTimeout(() => {
@@ -450,13 +435,9 @@ export class GroupProfileCreateComponent implements OnInit {
     if (fileListIndex >= 0) {
       this.fileList.splice(fileListIndex, 1);
     }
-    console.log(this.uploadUrls);
-    console.log(this.fileList);
-    console.log(this.removeImage);
   }
 
   validateStep3() {
-    console.log(this.files);
     this.activeStepIndex = 3;
     this.manageProfileStorage.groupDetails.group_conversation_images =
       this.uploadUrls;
@@ -483,8 +464,6 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   saveGroupProfile(publish: any) {
-    console.log(this.status);
-    console.log(publish);
     this.selectedCategory = this.overViewForm.value.category;
     this.description = this.overViewForm.value.description;
     this.selectedLocation = this.overViewForm.value.location;
@@ -492,9 +471,6 @@ export class GroupProfileCreateComponent implements OnInit {
     if (this.popularTopicForm.value.topic.length > 0) {
       this.topic = this.popularTopicForm.value.topic;
     }
-
-    console.log(this.selectedLocation);
-
     const formData: FormData = new FormData();
     formData.append('categoryId', this.selectedCategory);
     formData.append('description', this.description);
@@ -507,7 +483,6 @@ export class GroupProfileCreateComponent implements OnInit {
 
     let imagesArray = this.fileList;
     for (let image of imagesArray) {
-      console.log(image);
       formData.append('images[]', image);
     }
     formData.append('group_id', this.groupId);
@@ -515,7 +490,6 @@ export class GroupProfileCreateComponent implements OnInit {
     this.apiService
       .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
-        console.log(response);
         this.apiService.updateGroupProfile(response);
 
         if (response.status == 200) {
@@ -534,15 +508,11 @@ export class GroupProfileCreateComponent implements OnInit {
     this.activeStepIndex = stepIndex;
   }
   onChangeCategory(e: any) {
-    console.log(e);
     this.selectedCategory = e.value;
-    console.log(this.selectedCategory);
   }
 
   onChangeLocation(e: any) {
-    console.log(e);
     this.selectedLocation = e.value;
-    console.log(this.selectedLocation);
   }
 
   setSocialLink(link: any) {
@@ -581,13 +551,11 @@ export class GroupProfileCreateComponent implements OnInit {
   openPreview() {
     //$('#profile-create').closest('body').addClass('hide-scroll');
     this.setPublishGroupStorage();
-    console.log(this.uniqueName);
     let url =
       this.origin +
       '/group-profile/' +
       this.uniqueName +
       '?displayClose=true&preview=true&manage=false';
-    console.log(url);
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
@@ -610,25 +578,20 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   setPublishGroupStorage() {
-    console.log(this.fileList);
     let status: any = 1;
     let imagesArray = this.fileList;
 
     for (let image of imagesArray) {
-      console.log(image);
       this.publishimages.push(image);
 
       const reader = new FileReader();
       if (image) {
         reader.readAsDataURL(image);
         reader.onload = () => {
-          console.log(reader.result);
           this.conversationBaseCode.push(reader.result);
         };
       }
-      console.log(this.conversationBaseCode);
     }
-    console.log(this.publishimages);
     // console.log(JSON.stringify(this.publishimages));
     // create storage to publish form from preview publish button
     this.publishGroup.categoryId = this.selectedCategory;

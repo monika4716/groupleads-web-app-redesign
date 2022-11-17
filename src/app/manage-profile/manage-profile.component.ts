@@ -282,7 +282,7 @@ export class ManageProfileComponent implements OnInit {
 
   showAdmins(admin: any) {
     if (admin.id != null) {
-      if (admin.location != null) {
+      if (admin.location != 'undefined' && admin.location != null) {
         let index = this.locationList.findIndex(
           (x: any) => x.code === admin.location
         );
@@ -478,7 +478,7 @@ export class ManageProfileComponent implements OnInit {
     this.files = event.target.files;
     for (var i = 0; i <= this.files.length - 1; i++) {
       let Imagesize = 3000000;
-      if (Imagesize <= this.files[i]) {
+      if (Imagesize <= this.files[i].size) {
         this.msgs = [
           {
             severity: 'warn',
