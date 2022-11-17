@@ -145,7 +145,6 @@ export class AdminBioComponent implements OnInit {
   }
 
   get f() {
-    //console.log(this.adminBioForm.controls);
     return this.adminBioForm.controls;
   }
 
@@ -163,7 +162,6 @@ export class AdminBioComponent implements OnInit {
   getAdminBioDetails() {
     this.token = localStorage.getItem('token');
     this.apiService.getAdminBio(this.token).subscribe((response: any) => {
-      //console.log(response);
       if (response.status == 200) {
         localStorage.setItem('adminBioStorage', JSON.stringify(response));
         this.adminBioStorage = localStorage.getItem('adminBioStorage');
@@ -181,6 +179,7 @@ export class AdminBioComponent implements OnInit {
     this.userDetails = response.user_details;
 
     this.adminBio = response.admin_bio;
+    localStorage.setItem('userImage', '');
     if (this.adminBio != null) {
       if (this.adminBio.about_me != null) {
         this.aboutMe = this.adminBio.about_me;
@@ -259,7 +258,6 @@ export class AdminBioComponent implements OnInit {
   /*COUNTRY SELECTION*/
   selectCountryOnChange(event: any) {
     this.countryCode = event.value;
-    console.log(this.countryCode);
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
     this.adminBioStorage = JSON.parse(this.adminBioStorage);
     if (this.adminBioStorage.admin_bio == null) {
@@ -357,7 +355,6 @@ export class AdminBioComponent implements OnInit {
 
     this.socialName = socialName;
     let socialProfileModal = document.getElementById('add_social_profileModal');
-    //console.log(socialProfileModal);
     if (socialProfileModal != null) {
       let element: HTMLElement = socialProfileModal.getElementsByClassName(
         'cancel_btn'
@@ -442,15 +439,12 @@ export class AdminBioComponent implements OnInit {
     }
 
     setTimeout(() => {
-      //console.log('in');
       let socialLinkModal = document.getElementById('social_linkModal');
       if (socialLinkModal != null) {
         let element: HTMLElement = socialLinkModal.getElementsByClassName(
           'cancel_btn'
         )[0] as HTMLElement;
         element.click();
-        console.log(this.socialLinks);
-
         this.adminBioStorage = localStorage.getItem('adminBioStorage');
         this.adminBioStorage = JSON.parse(this.adminBioStorage);
 
@@ -464,8 +458,6 @@ export class AdminBioComponent implements OnInit {
             this.socialLinks
           );
         }
-
-        console.log(this.adminBioStorage);
         localStorage.setItem(
           'adminBioStorage',
           JSON.stringify(this.adminBioStorage)
@@ -497,7 +489,6 @@ export class AdminBioComponent implements OnInit {
         this.socialLinks
       );
     }
-    console.log(this.adminBioStorage);
     localStorage.setItem(
       'adminBioStorage',
       JSON.stringify(this.adminBioStorage)
@@ -547,7 +538,6 @@ export class AdminBioComponent implements OnInit {
   }
   /*SUBMIT COMPLETE ADMIN BIO FROM */
   onSubmit() {
-    //console.log(this.adminBioForm);
     let about = this.adminBioForm.value.about;
     let email = this.adminBioForm.value.email;
     let userName = this.adminBioForm.value.userName;
@@ -596,8 +586,6 @@ export class AdminBioComponent implements OnInit {
     this.apiService
       .saveAdminBio(this.token, parm)
       .subscribe((response: any) => {
-        //console.log(response);
-
         if (response.status == 200) {
           //show copy profile link popup
           this.displayBasic = true;
@@ -624,7 +612,6 @@ export class AdminBioComponent implements OnInit {
         })
       );
     });
-    //console.log(control);
   }
   /*
   TO SET DB LOCATION CODE.
@@ -669,14 +656,12 @@ export class AdminBioComponent implements OnInit {
       if (this.userName != '') {
         this.disabledPublishButton = false;
       } else {
-        console.log('else');
         this.disabledPublishButton = true;
       }
     }
   }
   /* MESSAGE BUTTON SHOW OR HIDE*/
   onCheckboxChange(e: any) {
-    //console.log(e.target.checked);
     if (e.target.checked) {
       this.isChecked = true;
       this.messageButton = 1;
@@ -693,7 +678,6 @@ export class AdminBioComponent implements OnInit {
     } else {
       this.adminBioStorage.admin_bio.is_message_button = this.messageButton;
     }
-    console.log(this.adminBioStorage);
     localStorage.setItem(
       'adminBioStorage',
       JSON.stringify(this.adminBioStorage)
@@ -716,7 +700,6 @@ export class AdminBioComponent implements OnInit {
       this.imageData.type != 'image/png' &&
       this.imageData.type != 'image/jpg'
     ) {
-      console.log(this.imageData.type);
       this.msgs = [
         {
           severity: 'warn',
@@ -751,7 +734,6 @@ export class AdminBioComponent implements OnInit {
           this.adminBioStorage.admin_bio.adminImageName =
             event.target.files[0].name;
         }
-        console.log(this.adminBioStorage);
         localStorage.setItem(
           'adminBioStorage',
           JSON.stringify(this.adminBioStorage)
@@ -764,9 +746,6 @@ export class AdminBioComponent implements OnInit {
   }
   // CREATE UNIQUE NAME - remove special char num and change space into hyphen
   createUniqueUserName(x: any) {
-    console.log(this.adminBioForm.controls);
-    console.log(this.adminBioForm.invalid);
-
     this.userName = x.target.value
       .replace(/^\d+|[\W_]?/, '')
       .replace(/[^a-zA-Z- ]/g, '')
@@ -807,7 +786,6 @@ export class AdminBioComponent implements OnInit {
       } else {
         this.adminBioStorage.admin_bio.about_me = this.aboutMe;
       }
-      console.log(this.adminBioStorage.admin_bio);
       localStorage.setItem(
         'adminBioStorage',
         JSON.stringify(this.adminBioStorage)
@@ -815,7 +793,6 @@ export class AdminBioComponent implements OnInit {
     }
   }
   setAchievements() {
-    console.log(this.adminBioForm.value.achievements);
     let achievements = JSON.stringify(this.adminBioForm.value.achievements);
     this.setAchievement();
   }
@@ -839,14 +816,12 @@ export class AdminBioComponent implements OnInit {
   }
 
   setFacebookUrl() {
-    console.log(this.facebookUrl);
     if (this.adminBioStorage.admin_bio == null) {
       this.adminBioStorage.admin_bio = {};
       this.adminBioStorage.admin_bio.email_receive_message = this.facebookUrl;
     } else {
       this.adminBioStorage.admin_bio.email_receive_message = this.facebookUrl;
     }
-    console.log(this.adminBioStorage);
     localStorage.setItem(
       'adminBioStorage',
       JSON.stringify(this.adminBioStorage)

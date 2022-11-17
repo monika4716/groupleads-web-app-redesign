@@ -136,14 +136,14 @@
                                         <h3>Top Conversations</h3>
                                     </div>
                                 </div>
-                                <p-carousel [value]="conversationsImage" styleClass="custom-carousel" [numVisible]="3"
-                                    [numScroll]="1" [circular]="true" [autoplayInterval]="3000">
-                                    <ng-template let-conversation pTemplate="item">
-                                        <div class="conversation-item">
+                                <p-carousel [value]="conversationsImage" styleClass="custom-carousel"
+                                    [numVisible]="conversationNum" [numScroll]="1" [circular]="true"
+                                    [autoplayInterval]="3000">
+                                    <ng-template let-row pTemplate="item">
+                                        <div class="conversation-item1">
                                             <div class="conversation-item-content">
-                                                <div class="mb-3">
-                                                    <img [src]="conversation |safe" [alt]="conversation"
-                                                        class="conversation-image" />
+                                                <div class="mb-3" id="image-conversations">
+                                                    <img [src]="row | safe" class="conversation-image" />
                                                 </div>
                                             </div>
                                         </div>
@@ -458,7 +458,7 @@
     <div class="modal-body publish_modal text-center">
         <div class="col-md-12">
             <img src="assets/images/success.png" class="success" />
-            <h4 class="modal-title">Group Profile Published Successfully</h4>
+            <h4 class="modal-title">Profile Published Successfully</h4>
             <p>Share to start getting noticed</p>
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">

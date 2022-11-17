@@ -79,7 +79,6 @@ export class ManageProfileComponent implements OnInit {
   listOfFiles: any[] = [];
   files: any = [];
   msgs: any;
-  //uploadUrls = new Array<string>();
   uploadUrls: any = [];
   groupFile: any = [];
   groupImage: any = 'assets/images/profile_banner.png';
@@ -101,7 +100,7 @@ export class ManageProfileComponent implements OnInit {
   uploadedImageName: any = '';
   groupImageCode: any;
   conversationNum: any = 3;
-
+  conversationImagesCode = new Array<string>();
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -167,7 +166,6 @@ export class ManageProfileComponent implements OnInit {
   }
 
   get o() {
-    //console.log(this.overViewForm.controls);
     return this.editOverViewForm.controls;
   }
   get r() {
@@ -197,6 +195,7 @@ export class ManageProfileComponent implements OnInit {
           this.adminBio = groupDetails.admin_bio;
           this.user = groupDetails.user;
           this.conversationImages = groupDetails.group_conversation_images;
+          this.showConversationImages();
 
           this.groupReview = groupDetails.group_reviews;
           console.log(this.groupReview);
@@ -250,7 +249,7 @@ export class ManageProfileComponent implements OnInit {
           this.created = groupDetails.created_at;
           this.averageRating = this.calculateAverageReview();
           this.setSocialLink();
-          this.showConversationImages();
+
           setTimeout(() => {
             this.spinner.hide();
           }, 2000);
@@ -444,12 +443,13 @@ export class ManageProfileComponent implements OnInit {
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
     this.isConversations = this.editConversationsForm.value.isConversations;
-    console.log(this.isConversations);
-
     this.manageProfileStorage.groupDetails.is_conversations =
       this.editConversationsForm.value.isConversations;
     this.manageProfileStorage.groupDetails.group_conversation_images =
       this.uploadUrls;
+
+    this.manageProfileStorage.groupDetails.conversationImagesCode =
+      this.conversationImagesCode;
 
     localStorage.setItem(
       'manageProfileStorage',
@@ -459,33 +459,31 @@ export class ManageProfileComponent implements OnInit {
     // end  update storage
     setTimeout(() => {
       $('#editConversations_cancel').click();
-      console.log(this.urls);
     }, 1000);
   }
 
   showConversationImages() {
-    this.conversationNum = this.conversationImages.length;
-    if (this.conversationNum >= 3) {
-      this.conversationNum = 3;
-    }
     for (var i = 0; i <= this.conversationImages.length - 1; i++) {
       let id = this.conversationImages[i].id;
       let image = this.conversationImageUrl + this.conversationImages[i].image;
       this.uploadUrls.push({ id: id, image: image });
     }
+    this.conversationNum = this.conversationImages.length;
+    if (this.conversationNum >= 3) {
+      this.conversationNum = 3;
+    }
   }
 
   uploadImages(event: any) {
     this.files = event.target.files;
-    console.log(this.files);
     for (var i = 0; i <= this.files.length - 1; i++) {
-      let Imagesize = 5000000;
+      let Imagesize = 3000000;
       if (Imagesize <= this.files[i]) {
         this.msgs = [
           {
             severity: 'warn',
             summary: 'Warning',
-            detail: 'Image size should be less than 5 Mb ',
+            detail: 'Image size should be less than 3 Mb ',
           },
         ];
       } else if (
@@ -511,6 +509,7 @@ export class ManageProfileComponent implements OnInit {
         let reader = new FileReader();
         reader.onload = (e: any) => {
           this.urls.push(e.target.result);
+          this.conversationImagesCode.push(e.target.result);
         };
         reader.readAsDataURL(this.files[i]);
         var selectedFile = event.target.files[i];
@@ -522,8 +521,6 @@ export class ManageProfileComponent implements OnInit {
 
   removePreviousFile(i: any, id: any) {
     let uploadUrlIndex = this.uploadUrls.findIndex((x: any) => x.id == id);
-
-    console.log(uploadUrlIndex);
     let fileListIndex = this.fileList.findIndex(
       (x: any) => x.name == this.uploadUrls[uploadUrlIndex].name
     );
@@ -535,7 +532,6 @@ export class ManageProfileComponent implements OnInit {
         '/conversationImages/'
       );
       this.image = {};
-      console.log(imageArray);
       this.image.id = id;
       this.image.image = imageArray[1];
       this.removeImage.push(this.image);
@@ -545,9 +541,6 @@ export class ManageProfileComponent implements OnInit {
     if (fileListIndex >= 0) {
       this.fileList.splice(fileListIndex, 1);
     }
-    console.log(this.removeImage);
-    console.log(this.uploadUrls);
-    console.log(this.fileList);
   }
 
   // End Edit upload and remove Conversation Image//
@@ -576,7 +569,6 @@ export class ManageProfileComponent implements OnInit {
       this.groupFile.type != 'image/png' &&
       this.groupFile.type != 'image/jpg'
     ) {
-      console.log(this.groupFile.type);
       this.msgs = [
         {
           severity: 'warn',
@@ -586,17 +578,13 @@ export class ManageProfileComponent implements OnInit {
       ];
     } else {
       this.uploadedImageName = event.target.files[0].name;
-      console.log(this.groupFile);
       let objectURL = URL.createObjectURL(event.target.files[0]);
-      console.log(objectURL);
       this.groupImage = objectURL;
-
       this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
       this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
       this.manageProfileStorage.groupDetails.image = this.groupImage;
       this.manageProfileStorage.groupDetails.uploadImageName =
         this.uploadedImageName;
-
       const reader = new FileReader();
       if (event.target.files && event.target.files.length) {
         const [file] = event.target.files;
@@ -607,9 +595,7 @@ export class ManageProfileComponent implements OnInit {
             this.groupImageCode;
         };
       }
-
       setTimeout(() => {
-        console.log(this.manageProfileStorage.groupDetails);
         localStorage.setItem(
           'manageProfileStorage',
           JSON.stringify(this.manageProfileStorage)
@@ -630,7 +616,6 @@ export class ManageProfileComponent implements OnInit {
       '/group-profile/' +
       this.uniqueName +
       '?displayClose=true&preview=true&manage=true';
-    console.log(url);
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
@@ -652,17 +637,12 @@ export class ManageProfileComponent implements OnInit {
   }
 
   setPublishGroupStorage() {
-    console.log(this.isTopic);
-    console.log(this.fileList);
     let status: any = 1;
     let imagesArray = this.fileList;
 
     for (let image of imagesArray) {
-      console.log(image);
       this.publishimages.push(image);
     }
-    console.log(this.publishimages);
-    console.log(JSON.stringify(this.publishimages));
     // create storage to publish form from preview publish button
     this.publishGroup.categoryId = this.selectedCategory;
     this.publishGroup.description = this.description;
@@ -674,7 +654,6 @@ export class ManageProfileComponent implements OnInit {
     this.publishGroup.isReview = this.isReview;
     this.publishGroup.removeImage = JSON.stringify(this.removeImage);
     this.publishGroup.profile_id = this.id;
-    // this.publishGroup.images = JSON.stringify(this.publishimages);
     this.publishGroup.group_id = this.groupId;
     this.publishGroup.fb_group_id = this.facebookGroupId;
     localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
@@ -713,7 +692,6 @@ export class ManageProfileComponent implements OnInit {
     this.apiService
       .updateManageProfile(this.token, formData)
       .subscribe((response: any) => {
-        console.log(response);
         if (response.status == 200) {
           this.displayPublishModel = true;
         }

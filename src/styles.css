@@ -541,3 +541,10 @@ select.select_groups option {
   width: 50%;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
+.section {
+  padding-bottom: 40px !important;
+}
+
+.all-review-btn:hover {
+  background-color: white !important;
+}

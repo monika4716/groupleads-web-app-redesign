@@ -46,7 +46,7 @@ import { GroupProfileCreateComponent } from './group-profile-create/group-profil
 import { GroupProfilePreviewComponent } from './group-profile-preview/group-profile-preview.component';
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
-import { ErrorComponentComponent } from './error-component/error-component.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +72,7 @@ import { ErrorComponentComponent } from './error-component/error-component.compo
     GroupProfilePreviewComponent,
     ManageProfileComponent,
     ForgetPasswordComponent,
-    ErrorComponentComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -141,9 +141,9 @@
                                             data-bs-backdrop="static" data-bs-target="#edit_conversation_Modal" />
                                     </div>
                                 </div>
+                                <!-- [autoplayInterval]="3000" -->
                                 <p-carousel [value]="uploadUrls" styleClass="custom-carousel"
-                                    [numVisible]="conversationNum" [numScroll]="1" [circular]="true"
-                                    [autoplayInterval]="3000">
+                                    [numVisible]="conversationNum" [numScroll]="1" [circular]="true">
                                     <ng-template let-row pTemplate="item">
                                         <div class="conversation-item1">
                                             <div class="conversation-item-content">
@@ -431,8 +431,9 @@
                         </div>
                     </div>
                     <div class="mb-3 mt-4">
-                        <button type="button" class="btn btn-outline-primary btn-block all_review_btn"><img
-                                src="assets/images/review_star.png" /> See All Reviews</button>
+                        <a href="https://www.groupleads.net/testimonials" target="_blank"><button type="button"
+                                class="btn btn-outline-primary btn-block all_review_btn"><img
+                                    src="assets/images/review_star.png" /> See All Reviews</button></a>
                     </div>
                     <div class="col-md-12 d-grid mt-4">
                         <button type="submit" class="btn btn-primary btn-block select_group_btn">Change

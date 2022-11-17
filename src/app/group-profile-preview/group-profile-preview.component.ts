@@ -31,6 +31,8 @@ export class GroupProfilePreviewComponent implements OnInit {
   topics: any = [];
   reviews: any = [];
   conversations: any = [];
+  conversationFile: any = [];
+  conversationFileList: any = [];
   user: any;
   adminName: any = '';
   adminlocation: any = '';
@@ -77,6 +79,8 @@ export class GroupProfilePreviewComponent implements OnInit {
   adminFacebookId: any = '';
   facebookUrl: any = '';
   groupFile: any = [];
+  conversationNum: any = 3;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -97,10 +101,8 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
-    //console.log(this.token);
     this.origin = location.origin;
     this.previewEnable = this.activatedRoute.snapshot.queryParams['preview'];
-    //console.log(this.previewEnable);
     if (this.previewEnable != undefined && this.previewEnable) {
       //get Image (binary data for upload in database)
       setTimeout(() => {
@@ -124,29 +126,38 @@ export class GroupProfilePreviewComponent implements OnInit {
             type: 'image/jpeg',
           }
         );
-        console.log(this.groupFile);
+      }
+      if (
+        this.manageProfileStorage.groupDetails.conversationImagesCode !=
+          undefined &&
+        this.manageProfileStorage.groupDetails.conversationImagesCode.length > 0
+      ) {
+        let conversationsBaseCode =
+          this.manageProfileStorage.groupDetails.conversationImagesCode;
+        conversationsBaseCode;
 
-        // let objectURL = URL.createObjectURL(this.groupFile);
-        // console.log(objectURL);
+        for (var i = 0; i <= conversationsBaseCode.length - 1; i++) {
+          let blob = this.b64toBlob(conversationsBaseCode[i]);
+          this.conversationFile = new File([blob], 'conversation.png', {
+            type: 'image/jpeg',
+          });
+          this.conversationFileList.push(this.conversationFile);
+        }
       }
       this.showPreviewDetails(this.manageProfileStorage);
     } else {
-      // this.disableWriteReviewBtn = false;
       this.spinner.show();
       this.uniqueName = this.activatedRoute.snapshot.paramMap.get('slug');
-      //console.log(this.uniqueName);
       this.showPublishButton = false;
-      //console.log(this.token);
       if (this.token == null || this.token == undefined) {
         this.disableWriteReviewBtn = false;
       }
       this.getGroupProfilePreview();
     }
   }
+  //  converert image base code to blob
 
   b64toBlob(dataURI: any) {
-    // dataURI = dataURI.replace("''");
-    console.log(dataURI);
     var byteString = atob(dataURI.split(',')[1]);
     var ab = new ArrayBuffer(byteString.length);
     var ia = new Uint8Array(ab);
@@ -158,7 +169,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   //SHOW PREVIEW DETAILS
   showPreviewDetails(response: any) {
-    //console.log(response);
     this.adminImageUrl = response.adminImageUrl;
     this.reviewImagesUrl = response.reviewImageUrl;
     this.conversationImageUrl = response.conversationImageURl;
@@ -175,8 +185,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     let linkedDetails = groupDetails.linked_fb_group;
     this.conversations = groupDetails.group_conversation_images;
     this.id = groupDetails.id;
-    //console.log(this.id);
-
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
       this.facebookGroupLink =
@@ -187,7 +195,6 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.facebookGroupLink =
         'https://www.facebook.com/groups/' + groupDetails.fb_group_id;
     }
-
     this.isReview = groupDetails.is_reviews;
     if (groupDetails.is_reviews == 0) {
       this.isReview = false;
@@ -254,7 +261,11 @@ export class GroupProfilePreviewComponent implements OnInit {
   //SHOW CONVERSATION IMAGES
   showConversationImage() {
     this.conversationsImage = [];
-    //console.log(this.conversations);
+
+    this.conversationNum = this.conversations.length;
+    if (this.conversationNum >= 3) {
+      this.conversationNum = 3;
+    }
     for (let i = 0; i < this.conversations.length; i++) {
       if (this.conversations[i].image) {
         if (this.conversations[i].image.indexOf('http') < 0) {
@@ -280,7 +291,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   // EDIT REVIEWS
   editReviews() {
-    //console.log(this.editReviewsForm);
     this.rating = this.editReviewsForm.value.rating;
     this.review = this.editReviewsForm.value.review;
 
@@ -291,8 +301,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   //EDIT REVIEW SETTING
   saveReviews(reviewsForm: any) {
-    //console.log(reviewsForm.value);
-
     const formData: FormData = new FormData();
     formData.append('name', reviewsForm.value.name);
     formData.append('image', this.reviewImage);
@@ -300,7 +308,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('review', reviewsForm.value.review);
     formData.append('groupProfileId', reviewsForm.value.profileId);
     this.apiService.saveReview(formData).subscribe((response: any) => {
-      //console.log(response);
       this.showPreviewDetails(response);
       this.editReviewsForm.reset();
       if (response.status == 200) {
@@ -326,12 +333,10 @@ export class GroupProfilePreviewComponent implements OnInit {
     });
   }
   editReviewSetting() {
-    //console.log(this.editReviewSettingForm.value);
     this.isReview = this.editReviewSettingForm.value.isReview;
   }
 
   get r() {
-    //console.log(this.editReviewsForm.controls);
     return this.editReviewsForm.controls;
   }
   // GET DETAILS BY SLUG AND SHOW PREVIEW
@@ -361,7 +366,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   // SHOW ADMIN
   showAdmins(admin: any) {
-    //console.log(admin);
     this.adminName = this.capitalizeFirstLetter(this.user.name);
     if (admin != undefined && admin.id != null) {
       let index = this.locationList.findIndex(
@@ -380,14 +384,11 @@ export class GroupProfilePreviewComponent implements OnInit {
     }
   }
   setFacebookUrl() {
-    //console.log(this.facebookUrl);
-
     if (this.facebookUrl != null) {
       if (this.facebookUrl.indexOf('profile.php') > 0) {
         this.adminFacebookId = this.facebookUrl.split('?id=')[1];
       } else {
         this.adminFacebookId = this.facebookUrl.split('/');
-        console.log(this.adminFacebookId);
         if (this.adminFacebookId[this.adminFacebookId.length - 1] != '') {
           this.adminFacebookId =
             this.adminFacebookId[this.adminFacebookId.length - 1];
@@ -418,7 +419,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   setSocialLink() {
-    //console.log(this.uniqueName);
     let url = this.origin + '/group-profile/' + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
@@ -491,16 +491,16 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('profile_id', this.publishGroup.profile_id);
     formData.append('status', this.status);
 
-    // let imagesArray = this.fileList;
-    // for (let image of imagesArray) {
-    //   formData.append('images[]', image);
-    // }
+    let imagesArray = this.conversationFileList;
+    for (let image of imagesArray) {
+      formData.append('images[]', image);
+    }
+
     formData.append('group_id', this.publishGroup.group_id);
     formData.append('fb_group_id', this.publishGroup.fb_group_id);
     this.apiService
       .saveGroupProfile(this.token, formData)
       .subscribe((response: any) => {
-        //console.log(response);
         if (response.status == 200) {
           if (publish) {
             this.displayPublishModel = true;
@@ -511,7 +511,6 @@ export class GroupProfilePreviewComponent implements OnInit {
 
   uploadReviewImage(event: any) {
     this.reviewImage = event.target.files[0];
-
     let Imagesize = 5000000;
     if (Imagesize <= this.reviewImage) {
       this.msgs = [
