@@ -2135,6 +2135,7 @@ input:checked + .slider:before {
 
 .manage_profile_banner_review .review-setting .pi-star {
   color: white !important;
+  cursor: default !important;
 }
 .btn.btn-outline-primary.preview_btn.bio_btn {
   background: transparent !important;

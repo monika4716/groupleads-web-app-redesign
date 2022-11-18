@@ -190,7 +190,17 @@ export class AdminBioComponent implements OnInit {
         this.displayCopy = true;
         this.userName = this.adminBio.user_name;
         this.perviousUser = this.adminBio.user_name;
-        let url = this.origin + '/profile/' + this.adminBio.user_name;
+
+        let currrentUrl = new URL(window.location.href);
+        let pathnamArray = currrentUrl.pathname.split('/');
+
+        console.log(pathnamArray);
+        let dynamicUrl = '/profile/';
+        if (pathnamArray.length > 2) {
+          dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+        }
+
+        let url = this.origin + dynamicUrl + this.adminBio.user_name;
         this.facebookShare =
           'https://www.facebook.com/sharer/sharer.php?u=' +
           encodeURIComponent(url);
@@ -498,7 +508,18 @@ export class AdminBioComponent implements OnInit {
   @Parameter{slug}
 */
   copyAdminProfile(slug: any) {
-    let profileSlug = this.origin + '/profile/' + slug;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+    }
+
+    let profileSlug = this.origin + dynamicUrl + slug;
+
+    console.log(profileSlug);
     this.text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(
@@ -518,7 +539,16 @@ export class AdminBioComponent implements OnInit {
   @Parameter{slug}
 */
   copyAdminProfileModel(slug: any) {
-    let profileSlug = this.origin + '/profile/' + slug;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+    }
+
+    let profileSlug = this.origin + dynamicUrl + slug;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(
@@ -628,11 +658,22 @@ export class AdminBioComponent implements OnInit {
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
     // $('#adminBioForm').closest('body').addClass('hide-scroll');
-    let url = this.origin + '/profile/' + this.userName + '?displayClose=true';
+
+    let url = new URL(window.location.href);
+    let pathnamArray = url.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+    }
+
+    let urlPreview =
+      this.origin + dynamicUrl + this.userName + '?displayClose=true';
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
-    this.iframeUrl = url;
+    this.iframeUrl = urlPreview;
     this.getIframPreview();
     $('.preview_btn').prop('disabled', false);
     $('.share_btn').prop('disabled', false);
@@ -830,7 +871,7 @@ export class AdminBioComponent implements OnInit {
 
   closePublishModel() {
     setTimeout(() => {
-      this.router.navigate(['/', 'dashboard']);
+      this.router.navigate(['/dashboard']);
     }, 500);
   }
 

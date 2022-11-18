@@ -140,7 +140,16 @@ export class AdminBioPreviewComponent implements OnInit {
     ) {
       this.userName = this.adminBio.user_name;
 
-      let url = this.origin + '/profile/' + this.adminBio.user_name;
+      let currrentUrl = new URL(window.location.href);
+      let pathnamArray = currrentUrl.pathname.split('/');
+
+      console.log(pathnamArray);
+      let dynamicUrl = '/profile/';
+      if (pathnamArray.length > 2) {
+        dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+      }
+
+      let url = this.origin + dynamicUrl + this.adminBio.user_name;
       this.facebookShare =
         'https://www.facebook.com/sharer/sharer.php?u=' +
         encodeURIComponent(url);
@@ -240,7 +249,15 @@ export class AdminBioPreviewComponent implements OnInit {
   @Parameter{slug}
 */
   copyAdminProfileModel(slug: any) {
-    let profileSlug = this.origin + '/profile/' + slug;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/' + pathnamArray[1] + '/';
+    if (pathnamArray.length > 3) {
+      dynamicUrl = '/' + pathnamArray[1] + '/' + pathnamArray[2] + '/';
+    }
+    let profileSlug = this.origin + dynamicUrl + slug;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(

@@ -410,7 +410,7 @@ export class GroupProfileCreateComponent implements OnInit {
       }
       setTimeout(() => {
         this.msgs = [];
-      }, 3000);
+      }, 2000);
     }
   }
   removePreviousFile(i: any, id: any) {
@@ -516,7 +516,16 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   setSocialLink(link: any) {
-    let url = this.origin + '/group-profile/' + this.slug;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
+    let url = this.origin + dynamicUrl + this.slug;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
     this.instagramShare = '';
@@ -528,7 +537,16 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   copyGroupProfileModel(uniqueName: any) {
-    let profileSlug = this.origin + '/group-profile/' + uniqueName;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
+    let profileSlug = this.origin + dynamicUrl + uniqueName;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(
@@ -549,17 +567,26 @@ export class GroupProfileCreateComponent implements OnInit {
 
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
-    //$('#profile-create').closest('body').addClass('hide-scroll');
     this.setPublishGroupStorage();
-    let url =
-      this.origin +
-      '/group-profile/' +
+    //$('#profile-create').closest('body').addClass('hide-scroll');
+    let url = new URL(window.location.href);
+    let pathnamArray = url.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+    let urlPreview =
+      url.origin +
+      dynamicUrl +
       this.uniqueName +
       '?displayClose=true&preview=true&manage=false';
+
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
-    this.iframeUrl = url;
+    this.iframeUrl = urlPreview;
     this.getIframPreview();
     $('.preview_btn').prop('disabled', false);
     $('.share_btn').prop('disabled', false);
@@ -606,6 +633,8 @@ export class GroupProfileCreateComponent implements OnInit {
     this.publishGroup.isReview = 0;
     this.publishGroup.isTopic = 0;
     this.publishGroup.isConversations = 0;
+
+    console.log(this.publishGroup);
     localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
     //end
   }

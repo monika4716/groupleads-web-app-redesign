@@ -100,6 +100,7 @@ export class ManageProfileComponent implements OnInit {
   uploadedImageName: any = '';
   groupImageCode: any;
   conversationNum: any = 3;
+  publishButtonText = 'Publish Profile';
   conversationImagesCode = new Array<string>();
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -292,7 +293,17 @@ export class ManageProfileComponent implements OnInit {
         this.countryFlag = selectedCountry.image;
       }
       this.adminImage = this.adminImageUrl + admin.image;
-      this.adminSlug = this.origin + '/profile/' + admin.user_name;
+
+      let currrentUrl = new URL(window.location.href);
+      let pathnamArray = currrentUrl.pathname.split('/');
+
+      console.log(pathnamArray);
+      let dynamicUrl = '/profile/';
+      if (pathnamArray.length > 2) {
+        dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+      }
+
+      this.adminSlug = this.origin + dynamicUrl + admin.user_name;
       this.showAdminBio = true;
     }
   }
@@ -320,7 +331,16 @@ export class ManageProfileComponent implements OnInit {
   }
 
   copyGroupProfileModel(slug: any) {
-    let profileSlug = this.origin + '/group-profile/' + this.uniqueName;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
+    let profileSlug = this.origin + dynamicUrl + this.uniqueName;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(
@@ -340,7 +360,16 @@ export class ManageProfileComponent implements OnInit {
   }
 
   setSocialLink() {
-    let url = this.origin + '/group-profile/' + this.uniqueName;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
+    let url = this.origin + dynamicUrl + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
     this.instagramShare = '';
@@ -516,6 +545,10 @@ export class ManageProfileComponent implements OnInit {
         this.fileList.push(selectedFile);
         this.listOfFiles.push(selectedFile.name);
       }
+
+      setTimeout(() => {
+        this.msgs = [];
+      }, 2000);
     }
   }
 
@@ -611,15 +644,24 @@ export class ManageProfileComponent implements OnInit {
   openPreview() {
     $('#manage-create').closest('body').addClass('hide-scroll');
     this.setPublishGroupStorage();
-    let url =
+    let url = new URL(window.location.href);
+    let pathnamArray = url.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
+    let urlPreview =
       this.origin +
-      '/group-profile/' +
+      dynamicUrl +
       this.uniqueName +
       '?displayClose=true&preview=true&manage=true';
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
-    this.iframeUrl = url;
+    this.iframeUrl = urlPreview;
     this.getIframPreview();
     $('.preview_btn').prop('disabled', false);
     $('.share_btn').prop('disabled', false);
@@ -665,6 +707,7 @@ export class ManageProfileComponent implements OnInit {
   }
 
   updateGroupProfile() {
+    this.publishButtonText = 'Processing....';
     const formData: FormData = new FormData();
     formData.append('categoryId', this.selectedCategory);
     formData.append('description', this.description);
@@ -692,6 +735,7 @@ export class ManageProfileComponent implements OnInit {
     this.apiService
       .updateManageProfile(this.token, formData)
       .subscribe((response: any) => {
+        this.publishButtonText = 'Publish Profile';
         if (response.status == 200) {
           this.displayPublishModel = true;
         }

@@ -186,6 +186,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     let linkedDetails = groupDetails.linked_fb_group;
     this.conversations = groupDetails.group_conversation_images;
     this.id = groupDetails.id;
+
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
       this.facebookGroupLink =
@@ -304,6 +305,10 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.saveReviews(this.editReviewsForm);
     setTimeout(() => {
       $('#editReviews_close').click();
+      this.editReviewsForm.controls['name'].reset();
+      this.editReviewsForm.controls['review'].reset();
+      this.editReviewsForm.controls['rating'].reset();
+      $('#review-image-show').attr('src', '');
     }, 2000);
   }
   //EDIT REVIEW SETTING
@@ -316,7 +321,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('groupProfileId', reviewsForm.value.profileId);
     this.apiService.saveReview(formData).subscribe((response: any) => {
       this.showPreviewDetails(response);
-      this.editReviewsForm.reset();
+
       if (response.status == 200) {
         this.msgs = [
           {
@@ -344,6 +349,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   get r() {
+    console.log(this.editReviewsForm.controls);
     return this.editReviewsForm.controls;
   }
   // GET DETAILS BY SLUG AND SHOW PREVIEW
@@ -388,7 +394,16 @@ export class GroupProfilePreviewComponent implements OnInit {
       }
 
       this.adminImage = this.adminImageUrl + admin.image;
-      this.adminSlug = this.origin + '/profile/' + admin.user_name;
+      let currrentUrl = new URL(window.location.href);
+      let pathnamArray = currrentUrl.pathname.split('/');
+
+      console.log(pathnamArray);
+      let dynamicUrl = '/profile/';
+      if (pathnamArray.length > 2) {
+        dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+      }
+
+      this.adminSlug = this.origin + dynamicUrl + admin.user_name;
       this.showAdminBio = true;
       this.facebookUrl = admin.email_receive_message;
       this.setFacebookUrl();
@@ -430,7 +445,16 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   setSocialLink() {
-    let url = this.origin + '/group-profile/' + this.uniqueName;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
+    let url = this.origin + dynamicUrl + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
     this.instagramShare = '';
@@ -442,7 +466,20 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   copyGroupProfileModel(slug: any) {
-    let profileSlug = this.origin + '/group-profile/' + this.uniqueName;
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+
+    console.log(pathnamArray);
+    let dynamicUrl = '/' + pathnamArray[1] + '/';
+    if (pathnamArray.length > 3) {
+      dynamicUrl = '/' + pathnamArray[1] + '/' + pathnamArray[2] + '/';
+    }
+
+    let profileSlug = this.origin + dynamicUrl + this.uniqueName;
+
+    console.log(profileSlug);
     this.model_text = 'Copied';
     if (navigator.clipboard) {
       navigator.clipboard.writeText(profileSlug).then(
@@ -483,6 +520,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.status = 1;
     this.publishGroup = localStorage.getItem('publishGroup');
     this.publishGroup = JSON.parse(this.publishGroup);
+
     const formData: FormData = new FormData();
     formData.append('categoryId', this.publishGroup.categoryId);
     formData.append('description', this.publishGroup.description);
@@ -494,7 +532,9 @@ export class GroupProfilePreviewComponent implements OnInit {
       'isConversations',
       this.publishGroup.isConversations.toString()
     );
+
     formData.append('groupImage', this.groupFile);
+
     formData.append('isReview', this.publishGroup.isReview.toString());
     formData.append(
       'removeImage',
@@ -555,9 +595,12 @@ export class GroupProfilePreviewComponent implements OnInit {
     }, 3000);
   }
   closePublishModel() {
-    setTimeout(() => {
-      this.closePreview();
-      this.route.navigate(['/', 'group-profiles']);
-    }, 2000);
+    let url = new URL(window.location.href);
+    let pathnamArray = url.pathname.split('/');
+    let dynamicUrl = '/group-profiles';
+    if (pathnamArray.length > 3) {
+      dynamicUrl = '/' + pathnamArray[1] + '/group-profiles';
+    }
+    window.parent.location.href = url.origin + dynamicUrl;
   }
 }
