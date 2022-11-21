@@ -21,6 +21,8 @@ export class ManageProfileComponent implements OnInit {
   displayIframe: boolean = false;
   iframeUrl: any = '';
   origin: any;
+  profileSlug: any;
+  dynamicGroupUrl: any;
   groupId: any;
   id: any;
   token: any;
@@ -154,6 +156,16 @@ export class ManageProfileComponent implements OnInit {
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
     this.origin = location.origin;
+
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    this.dynamicGroupUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      this.dynamicGroupUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
     this.spinner.show();
     this.activatedRoute.queryParams.subscribe((params) => {
       this.groupId = params['group_id'];
@@ -251,6 +263,9 @@ export class ManageProfileComponent implements OnInit {
           this.averageRating = this.calculateAverageReview();
           this.setSocialLink();
 
+          this.profileSlug =
+            this.origin + this.dynamicGroupUrl + this.uniqueName;
+
           setTimeout(() => {
             this.spinner.hide();
           }, 2000);
@@ -298,12 +313,11 @@ export class ManageProfileComponent implements OnInit {
       let pathnamArray = currrentUrl.pathname.split('/');
 
       console.log(pathnamArray);
-      let dynamicUrl = '/profile/';
+      let dynamicBioUrl = '/profile/';
       if (pathnamArray.length > 2) {
-        dynamicUrl = '/' + pathnamArray[1] + '/profile/';
+        dynamicBioUrl = '/' + pathnamArray[1] + '/profile/';
       }
-
-      this.adminSlug = this.origin + dynamicUrl + admin.user_name;
+      this.adminSlug = this.origin + dynamicBioUrl + admin.user_name;
       this.showAdminBio = true;
     }
   }
@@ -331,19 +345,11 @@ export class ManageProfileComponent implements OnInit {
   }
 
   copyGroupProfileModel(slug: any) {
-    let currrentUrl = new URL(window.location.href);
-    let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/group-profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
-    }
-
-    let profileSlug = this.origin + dynamicUrl + this.uniqueName;
+    this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
+    console.log(this.profileSlug);
     this.model_text = 'Copied';
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(profileSlug).then(
+      navigator.clipboard.writeText(this.profileSlug).then(
         () => {
           //alert("Copied to Clipboard");
         },
@@ -360,24 +366,17 @@ export class ManageProfileComponent implements OnInit {
   }
 
   setSocialLink() {
-    let currrentUrl = new URL(window.location.href);
-    let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/group-profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
-    }
-
-    let url = this.origin + dynamicUrl + this.uniqueName;
+    this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
     this.facebookShare =
-      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+      'https://www.facebook.com/sharer/sharer.php?u=' +
+      encodeURIComponent(this.profileSlug);
     this.instagramShare = '';
     this.twitterShare =
-      'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url);
+      'https://twitter.com/intent/tweet?url=' +
+      encodeURIComponent(this.profileSlug);
     this.linkedInShare =
       'https://www.linkedin.com/sharing/share-offsite/?url=' +
-      encodeURIComponent(url);
+      encodeURIComponent(this.profileSlug);
   }
 
   onChangeCategory(e: any) {
@@ -644,18 +643,9 @@ export class ManageProfileComponent implements OnInit {
   openPreview() {
     $('#manage-create').closest('body').addClass('hide-scroll');
     this.setPublishGroupStorage();
-    let url = new URL(window.location.href);
-    let pathnamArray = url.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/group-profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
-    }
-
     let urlPreview =
       this.origin +
-      dynamicUrl +
+      this.dynamicGroupUrl +
       this.uniqueName +
       '?displayClose=true&preview=true&manage=true';
     this.displayForm = false;

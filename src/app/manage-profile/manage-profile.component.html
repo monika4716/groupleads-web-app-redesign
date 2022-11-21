@@ -649,7 +649,7 @@
                                 class="linkedin" /></a>
                     </ul>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                        <input type="text" readonly class="form-control" placeholder="{{profileSlug}}">
                         <span type="button" class="input-group-text"
                             (click)="copyGroupProfileModel(uniqueName)">{{model_text}}</span>
                     </div>
@@ -667,7 +667,7 @@
             <h4 class="modal-title">Profile Published Successfully</h4>
             <p>Share to start getting noticed</p>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                <input type="text" readonly class="form-control" placeholder="{{profileSlug}}">
                 <span type="button" (click)="copyGroupProfileModel(uniqueName)"
                     class="input-group-text">{{model_text}}</span>
             </div>

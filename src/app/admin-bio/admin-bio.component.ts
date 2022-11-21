@@ -98,6 +98,8 @@ export class AdminBioComponent implements OnInit {
   adminImageCode: any;
   msgs: any;
   formEnable: boolean = false;
+  adminBioSlug: any = '';
+  dynamicBioUrl: any = '/profile/';
   constructor(
     private router: Router,
     private cookie: CookieService,
@@ -110,6 +112,12 @@ export class AdminBioComponent implements OnInit {
     this.origin = location.origin;
     this.name = localStorage.getItem('name');
     this.token = localStorage.getItem('token');
+
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+    if (pathnamArray.length > 2) {
+      this.dynamicBioUrl = '/' + pathnamArray[1] + '/profile/';
+    }
 
     this.adminBioForm = this.fb.group({
       about: [''],
@@ -189,27 +197,21 @@ export class AdminBioComponent implements OnInit {
         this.disabledPublishButton = false;
         this.displayCopy = true;
         this.userName = this.adminBio.user_name;
+
         this.perviousUser = this.adminBio.user_name;
 
-        let currrentUrl = new URL(window.location.href);
-        let pathnamArray = currrentUrl.pathname.split('/');
-
-        console.log(pathnamArray);
-        let dynamicUrl = '/profile/';
-        if (pathnamArray.length > 2) {
-          dynamicUrl = '/' + pathnamArray[1] + '/profile/';
-        }
-
-        let url = this.origin + dynamicUrl + this.adminBio.user_name;
+        this.adminBioSlug =
+          this.origin + this.dynamicBioUrl + this.adminBio.user_name;
         this.facebookShare =
           'https://www.facebook.com/sharer/sharer.php?u=' +
-          encodeURIComponent(url);
+          encodeURIComponent(this.adminBioSlug);
         this.instagramShare = '';
         this.twitterShare =
-          'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url);
+          'https://twitter.com/intent/tweet?url=' +
+          encodeURIComponent(this.adminBioSlug);
         this.linkedInShare =
           'https://www.linkedin.com/sharing/share-offsite/?url=' +
-          encodeURIComponent(url);
+          encodeURIComponent(this.adminBioSlug);
       }
 
       this.messageButton = this.adminBio.is_message_button;
@@ -508,21 +510,11 @@ export class AdminBioComponent implements OnInit {
   @Parameter{slug}
 */
   copyAdminProfile(slug: any) {
-    let currrentUrl = new URL(window.location.href);
-    let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/profile/';
-    }
-
-    let profileSlug = this.origin + dynamicUrl + slug;
-
-    console.log(profileSlug);
+    this.adminBioSlug = this.origin + this.dynamicBioUrl + slug;
+    console.log(this.adminBioSlug);
     this.text = 'Copied';
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(profileSlug).then(
+      navigator.clipboard.writeText(this.adminBioSlug).then(
         () => {
           //alert("Copied to Clipboard");
         },
@@ -533,25 +525,20 @@ export class AdminBioComponent implements OnInit {
     } else {
       console.log('Browser do not support Clipboard API');
     }
+
+    setTimeout(() => {
+      this.text = 'Copy';
+    }, 2000);
   }
 
   /* TO COPY ADMIN BIO PROFILE LINK FROM PUBLISH MODEL
   @Parameter{slug}
 */
   copyAdminProfileModel(slug: any) {
-    let currrentUrl = new URL(window.location.href);
-    let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/profile/';
-    }
-
-    let profileSlug = this.origin + dynamicUrl + slug;
+    this.adminBioSlug = this.origin + this.dynamicBioUrl + slug;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(profileSlug).then(
+      navigator.clipboard.writeText(this.adminBioSlug).then(
         () => {
           //alert("Copied to Clipboard");
         },
@@ -658,18 +645,8 @@ export class AdminBioComponent implements OnInit {
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
     // $('#adminBioForm').closest('body').addClass('hide-scroll');
-
-    let url = new URL(window.location.href);
-    let pathnamArray = url.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/profile/';
-    }
-
     let urlPreview =
-      this.origin + dynamicUrl + this.userName + '?displayClose=true';
+      this.origin + this.dynamicBioUrl + this.userName + '?displayClose=true';
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;

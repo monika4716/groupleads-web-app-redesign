@@ -241,8 +241,7 @@
                                     <h3>Admin Bio URL</h3>
                                     <p>Share your Admin Bio to brands using this URL</p>
                                     <div class="input-group">
-                                        <input type="text" readonly class="form-control"
-                                            placeholder="{{origin}}/profile/{{userName}}">
+                                        <input type="text" readonly class="form-control" placeholder="{{adminBioSlug}}">
                                         <span *ngIf="displayCopy" type="button" class="input-group-text"
                                             (click)="copyAdminProfile(userName)">{{text}}</span>
                                     </div>
@@ -280,17 +279,18 @@
                 <p>Share to start getting noticed</p>
                 <div class="input-group">
                     <input type="text" readonly class="form-control" [disabled]="showAddProfileBtn"
-                        placeholder="{{origin}}/profile/{{userName}}">
+                        placeholder="{{adminBioSlug}}">
                     <span type="button" class="input-group-text"
                         (click)="copyAdminProfileModel(userName)">{{model_text}}</span>
                 </div>
                 <h6><span class="border_left"></span>Share with<span class="border_right"></span>
                 </h6>
                 <ul class="social_icons">
-                    <a href="{{facebookShare}}"><img src="assets/images/Facebook.png" /></a>
+                    <a href="{{facebookShare}}" target="_blank"><img src="assets/images/Facebook.png" /></a>
                     <!-- <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a> -->
-                    <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
-                    <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                    <a href="{{twitterShare}}" target="_blank"><img src="assets/images/Twitter.png" /></a>
+                    <a href="{{linkedInShare}}" target="_blank"><img src="assets/images/LinkedIn.png"
+                            class="linkedin" /></a>
                 </ul>
             </div>
         </div>
@@ -313,13 +313,13 @@
                         <ul class="social_icons">
                             <a href="{{facebookShare}}" target="_blank"><img src="assets/images/Facebook.png" /></a>
                             <!-- <a href="{{instagramShare}}"><img src="assets/images/Instagram.png" /></a> -->
-                            <a href="{{twitterShare}}"><img src="assets/images/Twitter.png" /></a>
-                            <a href="{{linkedInShare}}"><img src="assets/images/LinkedIn.png" class="linkedin" /></a>
+                            <a href="{{twitterShare}}" target="_blank"><img src="assets/images/Twitter.png" /></a>
+                            <a href="{{linkedInShare}}" target="_blank"><img src="assets/images/LinkedIn.png"
+                                    class="linkedin" /></a>
                         </ul>
 
                         <div class="input-group">
-                            <input type="text" readonly class="form-control"
-                                placeholder="{{origin}}/profile/{{userName}}">
+                            <input type="text" readonly class="form-control" placeholder="{{adminBioSlug}}">
                             <span type="button" class="input-group-text"
                                 (click)="copyAdminProfileModel(userName)">{{model_text}}</span>
                         </div>

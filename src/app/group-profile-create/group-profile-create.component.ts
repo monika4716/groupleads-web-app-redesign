@@ -30,6 +30,8 @@ export class GroupProfileCreateComponent implements OnInit {
   token: any;
   groupProfiles: any = [];
   groupId: any;
+  profileSlug: any;
+  dynamicGroupUrl: any;
   fbGroupId: any;
   groupProfileId: any = 0;
   groupProfile: any = [];
@@ -186,6 +188,15 @@ export class GroupProfileCreateComponent implements OnInit {
       },
     ];
 
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+
+    console.log(pathnamArray);
+    this.dynamicGroupUrl = '/group-profile/';
+    if (pathnamArray.length > 2) {
+      this.dynamicGroupUrl = '/' + pathnamArray[1] + '/group-profile/';
+    }
+
     if (this.href.indexOf('/group-profile') > -1) {
       setTimeout(() => {
         $('.group-profiles-list').find('a').addClass('active');
@@ -207,6 +218,7 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   getGroupDetails() {
+    console.log('getGroupDetails');
     this.spinner.show();
     var token = localStorage.getItem('token');
 
@@ -256,6 +268,8 @@ export class GroupProfileCreateComponent implements OnInit {
           }
           if (groupDetails.unique_name) {
             this.uniqueName = groupDetails.unique_name;
+            this.profileSlug =
+              this.origin + this.dynamicGroupUrl + this.uniqueName;
           }
           if (groupDetails.topic) {
             this.topic = groupDetails.topic.split(',');
@@ -273,8 +287,7 @@ export class GroupProfileCreateComponent implements OnInit {
             this.conversationImages = groupDetails.group_conversation_images;
             this.showConversationImages();
           }
-          let url = '';
-          this.setSocialLink(url);
+          this.setSocialLink();
         }
         this.spinner.hide();
       });
@@ -288,8 +301,10 @@ export class GroupProfileCreateComponent implements OnInit {
     }
   }
   setProfileValues() {
+    console.log('setProfileValues');
     this.description = this.groupDetails.description;
     this.uniqueName = this.groupDetails.unique_name;
+    this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
     this.slug = this.groupDetails.unique_name.toLowerCase();
     this.groupName = this.groupDetails.group_name;
     this.showAddProfileBtn = false;
@@ -515,17 +530,8 @@ export class GroupProfileCreateComponent implements OnInit {
     this.selectedLocation = e.value;
   }
 
-  setSocialLink(link: any) {
-    let currrentUrl = new URL(window.location.href);
-    let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/group-profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
-    }
-
-    let url = this.origin + dynamicUrl + this.slug;
+  setSocialLink() {
+    let url = this.origin + this.dynamicGroupUrl + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
     this.instagramShare = '';
@@ -537,19 +543,12 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   copyGroupProfileModel(uniqueName: any) {
-    let currrentUrl = new URL(window.location.href);
-    let pathnamArray = currrentUrl.pathname.split('/');
+    this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
+    console.log(this.profileSlug);
 
-    console.log(pathnamArray);
-    let dynamicUrl = '/group-profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
-    }
-
-    let profileSlug = this.origin + dynamicUrl + uniqueName;
     this.model_text = 'Copied';
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(profileSlug).then(
+      navigator.clipboard.writeText(this.profileSlug).then(
         () => {
           //alert("Copied to Clipboard");
         },
@@ -570,16 +569,9 @@ export class GroupProfileCreateComponent implements OnInit {
     this.setPublishGroupStorage();
     //$('#profile-create').closest('body').addClass('hide-scroll');
     let url = new URL(window.location.href);
-    let pathnamArray = url.pathname.split('/');
-
-    console.log(pathnamArray);
-    let dynamicUrl = '/group-profile/';
-    if (pathnamArray.length > 2) {
-      dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
-    }
     let urlPreview =
       url.origin +
-      dynamicUrl +
+      this.dynamicGroupUrl +
       this.uniqueName +
       '?displayClose=true&preview=true&manage=false';
 

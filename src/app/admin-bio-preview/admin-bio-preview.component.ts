@@ -43,6 +43,8 @@ export class AdminBioPreviewComponent implements OnInit {
   public countryList: any = countriesObject;
   imageData: any = '';
   displayBasic: boolean = false;
+  dynamicBioUrl: any = '/profile/';
+  adminBioSlug: any = '';
 
   constructor(
     private router: Router,
@@ -56,6 +58,12 @@ export class AdminBioPreviewComponent implements OnInit {
     this.adminSlug = this.activatedRoute.snapshot.paramMap.get('slug');
     this.displayCloseBtn =
       this.activatedRoute.snapshot.queryParams['displayClose'];
+    let currrentUrl = new URL(window.location.href);
+    let pathnamArray = currrentUrl.pathname.split('/');
+    if (pathnamArray.length > 2) {
+      this.dynamicBioUrl = '/' + pathnamArray[1] + '/profile/';
+    }
+
     if (this.displayCloseBtn) {
       this.spinner.show();
       this.displayCloseBtn = true;
@@ -140,25 +148,18 @@ export class AdminBioPreviewComponent implements OnInit {
     ) {
       this.userName = this.adminBio.user_name;
 
-      let currrentUrl = new URL(window.location.href);
-      let pathnamArray = currrentUrl.pathname.split('/');
-
-      console.log(pathnamArray);
-      let dynamicUrl = '/profile/';
-      if (pathnamArray.length > 2) {
-        dynamicUrl = '/' + pathnamArray[1] + '/profile/';
-      }
-
-      let url = this.origin + dynamicUrl + this.adminBio.user_name;
+      this.adminBioSlug =
+        this.origin + this.dynamicBioUrl + this.adminBio.user_name;
       this.facebookShare =
         'https://www.facebook.com/sharer/sharer.php?u=' +
-        encodeURIComponent(url);
+        encodeURIComponent(this.adminBioSlug);
       this.instagramShare = '';
       this.twitterShare =
-        'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url);
+        'https://twitter.com/intent/tweet?url=' +
+        encodeURIComponent(this.adminBioSlug);
       this.linkedInShare =
         'https://www.linkedin.com/sharing/share-offsite/?url=' +
-        encodeURIComponent(url);
+        encodeURIComponent(this.adminBioSlug);
     }
 
     if (
