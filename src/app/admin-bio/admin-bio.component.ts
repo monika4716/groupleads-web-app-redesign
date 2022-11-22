@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import * as $ from 'jquery';
 import { SafePipe } from '../pipe/safe.pipe';
 import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { ClipboardService } from 'ngx-clipboard';
 import {
   DomSanitizer,
   SafeHtml,
@@ -107,7 +108,8 @@ export class AdminBioComponent implements OnInit {
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
     private DOMSR: DomSanitizer,
-    private fb: FormBuilder // private safe: SafePipe
+    private fb: FormBuilder, // private safe: SafePipe
+    private clipboardService: ClipboardService
   ) {
     this.origin = location.origin;
     this.name = localStorage.getItem('name');
@@ -118,6 +120,8 @@ export class AdminBioComponent implements OnInit {
     if (pathnamArray.length > 2) {
       this.dynamicBioUrl = '/' + pathnamArray[1] + '/profile/';
     }
+
+    this.adminBioSlug = this.origin + this.dynamicBioUrl;
 
     this.adminBioForm = this.fb.group({
       about: [''],
@@ -511,21 +515,8 @@ export class AdminBioComponent implements OnInit {
 */
   copyAdminProfile(slug: any) {
     this.adminBioSlug = this.origin + this.dynamicBioUrl + slug;
-    console.log(this.adminBioSlug);
     this.text = 'Copied';
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(this.adminBioSlug).then(
-        () => {
-          //alert("Copied to Clipboard");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      console.log('Browser do not support Clipboard API');
-    }
-
+    this.clipboardService.copyFromContent(this.adminBioSlug);
     setTimeout(() => {
       this.text = 'Copy';
     }, 2000);
@@ -537,22 +528,13 @@ export class AdminBioComponent implements OnInit {
   copyAdminProfileModel(slug: any) {
     this.adminBioSlug = this.origin + this.dynamicBioUrl + slug;
     this.model_text = 'Copied';
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(this.adminBioSlug).then(
-        () => {
-          //alert("Copied to Clipboard");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      console.log('Browser do not support Clipboard API');
-    }
+    this.clipboardService.copyFromContent(this.adminBioSlug);
+
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);
   }
+
   /*SUBMIT COMPLETE ADMIN BIO FROM */
   onSubmit() {
     let about = this.adminBioForm.value.about;
@@ -776,6 +758,8 @@ export class AdminBioComponent implements OnInit {
       this.showPreviewBtn = false;
       this.eyeImage = 'assets/images/eye.png';
     }
+
+    this.adminBioSlug = this.origin + this.dynamicBioUrl + this.userName;
 
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
     this.adminBioStorage = JSON.parse(this.adminBioStorage);

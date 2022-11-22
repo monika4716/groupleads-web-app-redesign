@@ -11,6 +11,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-group-profile-preview',
@@ -81,13 +82,15 @@ export class GroupProfilePreviewComponent implements OnInit {
   groupFile: any = [];
   conversationNum: any = 3;
   publishButtonText: any = 'Publish Profile';
+  profileUrl: any = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
     private route: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private clipboardService: ClipboardService
   ) {
     this.editReviewsForm = this.fb.group({
       profileId: ['', Validators.required],
@@ -269,7 +272,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   //SHOW CONVERSATION IMAGES
   showConversationImage() {
     this.conversationsImage = [];
-
     this.conversationNum = this.conversations.length;
     if (this.conversationNum >= 3) {
       this.conversationNum = 3;
@@ -349,7 +351,6 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
 
   get r() {
-    console.log(this.editReviewsForm.controls);
     return this.editReviewsForm.controls;
   }
   // GET DETAILS BY SLUG AND SHOW PREVIEW
@@ -381,14 +382,11 @@ export class GroupProfilePreviewComponent implements OnInit {
   showAdmins(admin: any) {
     this.adminName = this.capitalizeFirstLetter(this.user.name);
     if (admin != undefined && admin.id != null) {
-      console.log(admin.location);
       if (admin.location != 'undefined') {
         let index = this.locationList.findIndex(
           (x: any) => x.code === admin.location
         );
         let selectedCountry = this.locationList[index];
-        console.log(selectedCountry);
-
         this.adminlocation = selectedCountry.name;
         this.countryFlag = selectedCountry.image;
       }
@@ -396,8 +394,6 @@ export class GroupProfilePreviewComponent implements OnInit {
       this.adminImage = this.adminImageUrl + admin.image;
       let currrentUrl = new URL(window.location.href);
       let pathnamArray = currrentUrl.pathname.split('/');
-
-      console.log(pathnamArray);
       let dynamicUrl = '/profile/';
       if (pathnamArray.length > 2) {
         dynamicUrl = '/' + pathnamArray[1] + '/profile/';
@@ -447,13 +443,11 @@ export class GroupProfilePreviewComponent implements OnInit {
   setSocialLink() {
     let currrentUrl = new URL(window.location.href);
     let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
     let dynamicUrl = '/group-profile/';
     if (pathnamArray.length > 2) {
       dynamicUrl = '/' + pathnamArray[1] + '/group-profile/';
     }
-
+    this.profileUrl = this.origin + dynamicUrl + this.uniqueName;
     let url = this.origin + dynamicUrl + this.uniqueName;
     this.facebookShare =
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
@@ -468,31 +462,14 @@ export class GroupProfilePreviewComponent implements OnInit {
   copyGroupProfileModel(slug: any) {
     let currrentUrl = new URL(window.location.href);
     let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
-
-    console.log(pathnamArray);
     let dynamicUrl = '/' + pathnamArray[1] + '/';
     if (pathnamArray.length > 3) {
       dynamicUrl = '/' + pathnamArray[1] + '/' + pathnamArray[2] + '/';
     }
 
     let profileSlug = this.origin + dynamicUrl + this.uniqueName;
-
-    console.log(profileSlug);
     this.model_text = 'Copied';
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(profileSlug).then(
-        () => {
-          //alert("Copied to Clipboard");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      console.log('Browser do not support Clipboard API');
-    }
+    this.clipboardService.copyFromContent(profileSlug);
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);
@@ -520,7 +497,6 @@ export class GroupProfilePreviewComponent implements OnInit {
     this.status = 1;
     this.publishGroup = localStorage.getItem('publishGroup');
     this.publishGroup = JSON.parse(this.publishGroup);
-
     const formData: FormData = new FormData();
     formData.append('categoryId', this.publishGroup.categoryId);
     formData.append('description', this.publishGroup.description);

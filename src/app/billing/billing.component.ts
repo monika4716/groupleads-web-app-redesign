@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as moment from 'moment';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-billing',
@@ -32,7 +33,8 @@ export class BillingComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
     private activatedRoute: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private clipboardService: ClipboardService
   ) {
     this.token = localStorage.getItem('token');
   }
@@ -81,20 +83,8 @@ export class BillingComponent implements OnInit {
 
   /* Copy Billing Url */
   copyBillingUrl() {
-    console.log(this.upgradeURL);
     this.buttonText = 'Copied URL';
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(this.upgradeURL).then(
-        () => {
-          //alert("Copied to Clipboard");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      console.log('Browser do not support Clipboard API');
-    }
+    this.clipboardService.copyFromContent(this.upgradeURL);
     setTimeout(() => {
       this.buttonText = 'Copy URL';
     }, 2000);

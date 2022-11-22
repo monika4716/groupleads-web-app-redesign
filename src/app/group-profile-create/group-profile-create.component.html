@@ -279,8 +279,7 @@
             <h4 class="modal-title">Group Profile Published Successfully</h4>
             <p>Share to start getting noticed</p>
             <div class="input-group">
-                <input type="text" class="form-control" [disabled]="showAddProfileBtn"
-                    placeholder="{{origin}}/group-profile/{{uniqueName}}">
+                <input type="text" class="form-control" [disabled]="showAddProfileBtn" placeholder="{{profileSlug}}">
                 <span type="button" (click)="copyGroupProfileModel(uniqueName)"
                     class="input-group-text">{{model_text}}</span>
             </div>

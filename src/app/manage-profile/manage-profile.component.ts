@@ -11,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-manage-profile',
@@ -76,9 +77,7 @@ export class ManageProfileComponent implements OnInit {
   isConversations: boolean = true;
   isReview: boolean = true;
   removeImage: any = [];
-  urls = new Array<string>();
   fileList: File[] = [];
-  listOfFiles: any[] = [];
   files: any = [];
   msgs: any;
   uploadUrls: any = [];
@@ -109,7 +108,8 @@ export class ManageProfileComponent implements OnInit {
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private clipboardService: ClipboardService
   ) {
     this.editOverViewForm = this.fb.group({
       description: ['', Validators.required],
@@ -156,16 +156,12 @@ export class ManageProfileComponent implements OnInit {
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
     this.origin = location.origin;
-
     let currrentUrl = new URL(window.location.href);
     let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
     this.dynamicGroupUrl = '/group-profile/';
     if (pathnamArray.length > 2) {
       this.dynamicGroupUrl = '/' + pathnamArray[1] + '/group-profile/';
     }
-
     this.spinner.show();
     this.activatedRoute.queryParams.subscribe((params) => {
       this.groupId = params['group_id'];
@@ -173,8 +169,6 @@ export class ManageProfileComponent implements OnInit {
         this.id = params['id'];
       }
     });
-    console.log('id', this.id);
-    console.log('group-id', this.groupId);
     this.getManageProfileDetails();
   }
 
@@ -186,14 +180,9 @@ export class ManageProfileComponent implements OnInit {
   }
 
   getManageProfileDetails() {
-    //console.log(this.id);
-    //console.log(this.groupId);
-
     this.apiService
       .getManageProfileDetails(this.id, this.groupId, this.token)
       .subscribe((response: any) => {
-        console.log(response);
-
         if (response.status == 200) {
           this.apiService.updateGroupManage(response);
           localStorage.setItem(
@@ -209,10 +198,7 @@ export class ManageProfileComponent implements OnInit {
           this.user = groupDetails.user;
           this.conversationImages = groupDetails.group_conversation_images;
           this.showConversationImages();
-
           this.groupReview = groupDetails.group_reviews;
-          console.log(this.groupReview);
-
           if (this.user.length > 0) {
             this.user = this.user[0];
             this.adminName = this.capitalizeFirstLetter(this.user.name);
@@ -239,7 +225,6 @@ export class ManageProfileComponent implements OnInit {
           this.categoryId = groupDetails.category_id;
           this.setCategoryName(this.categoryId, this.groupCategories);
           this.description = groupDetails.description;
-
           if (groupDetails.description.length > 350) {
             this.showLessMore = true;
           }
@@ -247,7 +232,6 @@ export class ManageProfileComponent implements OnInit {
           if (groupDetails.image != '') {
             this.groupImage = response.groupImageUrl + '/' + groupDetails.image;
           }
-
           this.previousGroupImage = groupDetails.image;
           this.id = groupDetails.id;
           this.selectedLocation = groupDetails.location_id;
@@ -256,7 +240,6 @@ export class ManageProfileComponent implements OnInit {
           if (groupDetails.topic != null) {
             this.topics = groupDetails.topic.split(',');
           }
-
           this.uniqueName = groupDetails.unique_name.toLowerCase();
           this.userId = groupDetails.user_id;
           this.created = groupDetails.created_at;
@@ -303,7 +286,6 @@ export class ManageProfileComponent implements OnInit {
           (x: any) => x.code === admin.location
         );
         let selectedCountry = this.locationList[index];
-        console.log(selectedCountry);
         this.adminlocation = selectedCountry.name;
         this.countryFlag = selectedCountry.image;
       }
@@ -311,8 +293,6 @@ export class ManageProfileComponent implements OnInit {
 
       let currrentUrl = new URL(window.location.href);
       let pathnamArray = currrentUrl.pathname.split('/');
-
-      console.log(pathnamArray);
       let dynamicBioUrl = '/profile/';
       if (pathnamArray.length > 2) {
         dynamicBioUrl = '/' + pathnamArray[1] + '/profile/';
@@ -346,20 +326,8 @@ export class ManageProfileComponent implements OnInit {
 
   copyGroupProfileModel(slug: any) {
     this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
-    console.log(this.profileSlug);
     this.model_text = 'Copied';
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(this.profileSlug).then(
-        () => {
-          //alert("Copied to Clipboard");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      console.log('Browser do not support Clipboard API');
-    }
+    this.clipboardService.copyFromContent(this.profileSlug);
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);
@@ -380,23 +348,19 @@ export class ManageProfileComponent implements OnInit {
   }
 
   onChangeCategory(e: any) {
-    console.log(e);
     this.selectedCategory = e.value;
   }
 
   onChangeLocation(e: any) {
-    console.log(e);
     this.selectedLocation = e.value;
   }
 
   editOverview() {
-    console.log(this.editOverViewForm);
     this.description = this.editOverViewForm.value.description;
     this.selectedCategory = this.editOverViewForm.value.category;
     this.selectedLocation = this.editOverViewForm.value.location;
 
     // set the updated value in manageProfileStorage storage //
-
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
 
@@ -412,49 +376,36 @@ export class ManageProfileComponent implements OnInit {
     );
 
     // end  the updated value in manageProfileStorage storage //
-
     this.setLocationValue(this.selectedLocation);
     this.setCategoryName(this.selectedCategory, this.groupCategories);
-
     setTimeout(() => {
       $('#edit_overview_close').click();
     }, 500);
   }
 
   editTopics() {
-    //console.log(this.editTopicsForm);
     this.isTopic = this.editTopicsForm.value.isTopic;
     this.topics = this.editTopicsForm.value.topics;
-
     // set the updated value in manageProfileStorage storage //
-
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
-
     this.manageProfileStorage.groupDetails.is_topics = this.isTopic;
     this.manageProfileStorage.groupDetails.topic = this.topics;
-
     localStorage.setItem(
       'manageProfileStorage',
       JSON.stringify(this.manageProfileStorage)
     );
-
     //end set storage
-
     setTimeout(() => {
       $('#editTopics_cancel').click();
     }, 500);
   }
 
   editReviewSetting() {
-    console.log(this.editReviewSettingForm.value);
     this.isReview = this.editReviewSettingForm.value.isReview;
-
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
-
     this.manageProfileStorage.groupDetails.is_reviews = this.isReview;
-
     localStorage.setItem(
       'manageProfileStorage',
       JSON.stringify(this.manageProfileStorage)
@@ -475,7 +426,6 @@ export class ManageProfileComponent implements OnInit {
       this.editConversationsForm.value.isConversations;
     this.manageProfileStorage.groupDetails.group_conversation_images =
       this.uploadUrls;
-
     this.manageProfileStorage.groupDetails.conversationImagesCode =
       this.conversationImagesCode;
 
@@ -536,13 +486,16 @@ export class ManageProfileComponent implements OnInit {
         });
         let reader = new FileReader();
         reader.onload = (e: any) => {
-          this.urls.push(e.target.result);
           this.conversationImagesCode.push(e.target.result);
         };
         reader.readAsDataURL(this.files[i]);
         var selectedFile = event.target.files[i];
         this.fileList.push(selectedFile);
-        this.listOfFiles.push(selectedFile.name);
+      }
+
+      this.conversationNum = this.uploadUrls.length;
+      if (this.conversationNum >= 3) {
+        this.conversationNum = 3;
       }
 
       setTimeout(() => {
@@ -572,6 +525,11 @@ export class ManageProfileComponent implements OnInit {
     this.uploadUrls.splice(uploadUrlIndex, 1);
     if (fileListIndex >= 0) {
       this.fileList.splice(fileListIndex, 1);
+    }
+
+    this.conversationNum = this.uploadUrls.length;
+    if (this.conversationNum >= 3) {
+      this.conversationNum = 3;
     }
   }
 

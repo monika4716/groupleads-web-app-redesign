@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { countriesObject } from '../../assets/json/countries';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-admin-bio-preview',
@@ -50,7 +51,8 @@ export class AdminBioPreviewComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private clipboardService: ClipboardService
   ) {}
 
   ngOnInit(): void {
@@ -98,8 +100,8 @@ export class AdminBioPreviewComponent implements OnInit {
 
     if (this.adminBio != null && this.adminBio.about_me != null) {
       this.about = this.adminBio.about_me;
+      this.shareImage = 'assets/images/share_blue.png';
     }
-    console.log(this.adminBio.id);
     if (
       this.adminBio != null &&
       this.adminBio.id != null &&
@@ -179,9 +181,7 @@ export class AdminBioPreviewComponent implements OnInit {
       this.imageData = new File([blob], this.adminBio.adminImageName, {
         type: 'image/jpeg',
       });
-      console.log(this.imageData);
       let objectURL = URL.createObjectURL(this.imageData);
-      console.log(objectURL);
     }
 
     if (this.userDetails.name.indexOf(' ') > -1) {
@@ -201,12 +201,9 @@ export class AdminBioPreviewComponent implements OnInit {
   }
 
   b64toBlob(dataURI: any) {
-    // dataURI = dataURI.replace("''");
-    console.log(dataURI);
     var byteString = atob(dataURI.split(',')[1]);
     var ab = new ArrayBuffer(byteString.length);
     var ia = new Uint8Array(ab);
-
     for (var i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
@@ -234,14 +231,8 @@ export class AdminBioPreviewComponent implements OnInit {
   }
 
   closePreview() {
-    console.log('here');
-    // let body = window.parent.document.getElementsByTagName('body');
-    // if (body[0]) {
-    //   body[0].removeAttribute('class');
-    // }
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
-      //console.log(iframe.parentNode);
       iframe.parentNode.removeChild(iframe);
     }
   }
@@ -252,38 +243,23 @@ export class AdminBioPreviewComponent implements OnInit {
   copyAdminProfileModel(slug: any) {
     let currrentUrl = new URL(window.location.href);
     let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
     let dynamicUrl = '/' + pathnamArray[1] + '/';
     if (pathnamArray.length > 3) {
       dynamicUrl = '/' + pathnamArray[1] + '/' + pathnamArray[2] + '/';
     }
     let profileSlug = this.origin + dynamicUrl + slug;
     this.model_text = 'Copied';
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(profileSlug).then(
-        () => {
-          //alert("Copied to Clipboard");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      console.log('Browser do not support Clipboard API');
-    }
+    this.clipboardService.copyFromContent(profileSlug);
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);
   }
 
   setFacebookUrl() {
-    console.log(this.facebookUrl);
     if (this.facebookUrl.indexOf('profile.php') > 0) {
       this.adminFacebookId = this.facebookUrl.split('?id=')[1];
     } else {
       this.adminFacebookId = this.facebookUrl.split('/');
-      console.log(this.adminFacebookId);
       if (this.adminFacebookId[this.adminFacebookId.length - 1] != '') {
         this.adminFacebookId =
           this.adminFacebookId[this.adminFacebookId.length - 1];
@@ -294,12 +270,9 @@ export class AdminBioPreviewComponent implements OnInit {
     }
   }
   previewPublished() {
-    console.log('here');
     this.adminBioStorage = localStorage.getItem('adminBioStorage');
     this.adminBioStorage = JSON.parse(this.adminBioStorage);
-    console.log(this.adminBioStorage.user_details.id);
     let adminBio = this.adminBioStorage.admin_bio;
-    console.log(adminBio);
     let about = '';
     if (adminBio.about_me != undefined) {
       about = adminBio.about_me;
@@ -334,7 +307,6 @@ export class AdminBioPreviewComponent implements OnInit {
     parm.set('messageButton', is_message_button);
     parm.set('userName', adminBio.user_name);
     parm.set('image', this.imageData);
-
     this.saveAdminBioProfile(parm);
   }
 

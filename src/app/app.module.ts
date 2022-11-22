@@ -20,6 +20,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { TooltipModule } from 'primeng/tooltip';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -98,6 +99,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     MessagesModule,
     MessageModule,
     TooltipModule,
+    ClipboardModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

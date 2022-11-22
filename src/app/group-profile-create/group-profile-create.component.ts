@@ -20,6 +20,7 @@ import { MenuItem } from 'primeng/api';
 import { group } from '@angular/animations';
 import { ConditionalExpr, splitNsName } from '@angular/compiler';
 import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-group-profile-create',
@@ -62,7 +63,7 @@ export class GroupProfileCreateComponent implements OnInit {
   publishForm: FormGroup;
   topConversationForm: FormGroup;
   uploadedFiles: any[] = [];
-  urls = new Array<string>();
+  conversationImagesCode = new Array<string>();
 
   displayPublishModel: boolean = false;
   facebookShare: any = '';
@@ -71,7 +72,6 @@ export class GroupProfileCreateComponent implements OnInit {
   linkedInShare: any = '';
 
   fileList: File[] = [];
-  listOfFiles: any[] = [];
   imagePath: any = '';
   slug: any = '';
   origin: any = '';
@@ -103,20 +103,17 @@ export class GroupProfileCreateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private clipboardService: ClipboardService
   ) {
     var token = localStorage.getItem('token');
     this.origin = location.origin;
-
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
-
     this.activatedRoute.queryParams.subscribe((params) => {
-      // console.log(params);
       this.groupId = params['group_id'];
       if (params['id']) {
         this.groupProfileId = params['id'];
       }
-      // console.log(this.groupProfileId);
     });
     this.overViewForm = this.fb.group({
       description: [
@@ -158,7 +155,6 @@ export class GroupProfileCreateComponent implements OnInit {
   ngOnInit(): void {
     var token = localStorage.getItem('token');
     this.token = token;
-    this.urls = [];
     this.href = this.router.url;
     this.getGroupDetails();
     this.items = [
@@ -190,8 +186,6 @@ export class GroupProfileCreateComponent implements OnInit {
 
     let currrentUrl = new URL(window.location.href);
     let pathnamArray = currrentUrl.pathname.split('/');
-
-    console.log(pathnamArray);
     this.dynamicGroupUrl = '/group-profile/';
     if (pathnamArray.length > 2) {
       this.dynamicGroupUrl = '/' + pathnamArray[1] + '/group-profile/';
@@ -210,18 +204,14 @@ export class GroupProfileCreateComponent implements OnInit {
       .getGProfileImages(token, this.groupProfileId)
       .subscribe((response: any) => {
         if (response.status == 200) {
-          // console.log(response);
           this.previousImage = response.profileImages;
-          // console.log(this.previousImage);
         }
       });
   }
 
   getGroupDetails() {
-    console.log('getGroupDetails');
     this.spinner.show();
     var token = localStorage.getItem('token');
-
     this.apiService
       .getParticularGroupProfile(this.groupId, token, this.groupProfileId)
       .subscribe((response: any) => {
@@ -230,7 +220,6 @@ export class GroupProfileCreateComponent implements OnInit {
             'manageProfileStorage',
             JSON.stringify(response)
           );
-
           let groupDetails = response.groupDetails;
           this.conversationImageUrl = response.conversationImageURl;
           if (groupDetails.admin_bio != undefined) {
@@ -274,12 +263,10 @@ export class GroupProfileCreateComponent implements OnInit {
           if (groupDetails.topic) {
             this.topic = groupDetails.topic.split(',');
           }
-
           if (groupDetails.group_profile_id != null) {
             this.previewFlag = true;
             this.setProfileValues();
           }
-
           if (
             groupDetails.group_conversation_images != undefined &&
             groupDetails.group_conversation_images.length > 0
@@ -301,7 +288,6 @@ export class GroupProfileCreateComponent implements OnInit {
     }
   }
   setProfileValues() {
-    console.log('setProfileValues');
     this.description = this.groupDetails.description;
     this.uniqueName = this.groupDetails.unique_name;
     this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
@@ -320,7 +306,6 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   validateStep1() {
-    //logic perform
     if (this.overViewForm.value.location != undefined) {
       this.selectedLocation = this.overViewForm.value.location;
     }
@@ -332,16 +317,13 @@ export class GroupProfileCreateComponent implements OnInit {
     }
     if (this.overViewForm.value.uniqueName != undefined) {
       this.uniqueName = this.overViewForm.value.uniqueName;
-      // this.uniqueName = this.uniqueName.replace(/\s/g, '');
+      this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
+      this.setSocialLink();
     }
     this.activeStepIndex = 1;
-    //$('.p-steps-number').text(&#10003).addClass('active-group-menu');
-
     // set the updated value in manageProfileStorage storage //
-
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
-
     if (
       this.manageProfileStorage != null &&
       this.manageProfileStorage != undefined
@@ -352,29 +334,24 @@ export class GroupProfileCreateComponent implements OnInit {
       );
       this.manageProfileStorage.groupDetails.location_id =
         this.selectedLocation;
-
       if (this.groupProfileId == 0 || this.status == 0) {
         this.manageProfileStorage.groupDetails.unique_name = this.uniqueName;
         this.manageProfileStorage.isShareShow = false;
       }
-
       localStorage.setItem(
         'manageProfileStorage',
         JSON.stringify(this.manageProfileStorage)
       );
     }
-
     // end  the updated value in manageProfileStorage storage //
   }
   validateStep2() {
     this.activeStepIndex = 2;
-
     this.manageProfileStorage = localStorage.getItem('manageProfileStorage');
     this.manageProfileStorage = JSON.parse(this.manageProfileStorage);
     this.manageProfileStorage.groupDetails.is_topics = true;
     this.manageProfileStorage.groupDetails.topic =
       this.popularTopicForm.value.topic;
-
     localStorage.setItem(
       'manageProfileStorage',
       JSON.stringify(this.manageProfileStorage)
@@ -382,7 +359,6 @@ export class GroupProfileCreateComponent implements OnInit {
   }
 
   uploadImages(event: any) {
-    //console.log(event.target.files);
     this.files = event.target.files;
     for (var i = 0; i <= this.files.length - 1; i++) {
       let Imagesize = 5000000;
@@ -416,12 +392,11 @@ export class GroupProfileCreateComponent implements OnInit {
         });
         let reader = new FileReader();
         reader.onload = (e: any) => {
-          this.urls.push(e.target.result);
+          this.conversationImagesCode.push(e.target.result);
         };
         reader.readAsDataURL(this.files[i]);
         var selectedFile = event.target.files[i];
         this.fileList.push(selectedFile);
-        this.listOfFiles.push(selectedFile.name);
       }
       setTimeout(() => {
         this.msgs = [];
@@ -440,13 +415,11 @@ export class GroupProfileCreateComponent implements OnInit {
       let imageArray = this.uploadUrls[uploadUrlIndex].image.split(
         '/conversationImages/'
       );
-
       this.image.id = id;
       this.image.image = imageArray[1];
       this.removeImage.push(this.image);
     }
     this.uploadUrls.splice(uploadUrlIndex, 1);
-
     if (fileListIndex >= 0) {
       this.fileList.splice(fileListIndex, 1);
     }
@@ -459,8 +432,9 @@ export class GroupProfileCreateComponent implements OnInit {
     this.manageProfileStorage.groupDetails.is_conversations = true;
     this.manageProfileStorage.groupDetails.group_reviews = [];
     this.manageProfileStorage.groupDetails.image = '';
+    this.manageProfileStorage.groupDetails.conversationImagesCode =
+      this.conversationImagesCode;
     this.manageProfileStorage.groupDetails.created_at = new Date();
-
     localStorage.setItem(
       'manageProfileStorage',
       JSON.stringify(this.manageProfileStorage)
@@ -544,21 +518,8 @@ export class GroupProfileCreateComponent implements OnInit {
 
   copyGroupProfileModel(uniqueName: any) {
     this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
-    console.log(this.profileSlug);
-
     this.model_text = 'Copied';
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(this.profileSlug).then(
-        () => {
-          //alert("Copied to Clipboard");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      console.log('Browser do not support Clipboard API');
-    }
+    this.clipboardService.copyFromContent(this.profileSlug);
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);
@@ -567,14 +528,12 @@ export class GroupProfileCreateComponent implements OnInit {
   /* OPEN ADMIN BIO PREVIEW */
   openPreview() {
     this.setPublishGroupStorage();
-    //$('#profile-create').closest('body').addClass('hide-scroll');
     let url = new URL(window.location.href);
     let urlPreview =
       url.origin +
       this.dynamicGroupUrl +
       this.uniqueName +
       '?displayClose=true&preview=true&manage=false';
-
     this.displayForm = false;
     this.displaycloseButton = true;
     this.displayIframe = true;
@@ -599,10 +558,8 @@ export class GroupProfileCreateComponent implements OnInit {
   setPublishGroupStorage() {
     let status: any = 1;
     let imagesArray = this.fileList;
-
     for (let image of imagesArray) {
       this.publishimages.push(image);
-
       const reader = new FileReader();
       if (image) {
         reader.readAsDataURL(image);
@@ -611,7 +568,6 @@ export class GroupProfileCreateComponent implements OnInit {
         };
       }
     }
-    // console.log(JSON.stringify(this.publishimages));
     // create storage to publish form from preview publish button
     this.publishGroup.categoryId = this.selectedCategory;
     this.publishGroup.description = this.description;
@@ -625,8 +581,6 @@ export class GroupProfileCreateComponent implements OnInit {
     this.publishGroup.isReview = 0;
     this.publishGroup.isTopic = 0;
     this.publishGroup.isConversations = 0;
-
-    console.log(this.publishGroup);
     localStorage.setItem('publishGroup', JSON.stringify(this.publishGroup));
     //end
   }
