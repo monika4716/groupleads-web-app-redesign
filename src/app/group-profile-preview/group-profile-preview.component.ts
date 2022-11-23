@@ -73,6 +73,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   isShareShow: boolean = true;
   showPublishButton: boolean = true;
   id: any = '';
+  group_id: any = '';
   reviewImageUrl: any = '';
   reviewImagesUrl: any = '';
   reviewImage: any = '';
@@ -83,6 +84,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   conversationNum: any = 3;
   publishButtonText: any = 'Publish Profile';
   profileUrl: any = '';
+  reviewbutton: any = 'Leave Review';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -94,6 +96,7 @@ export class GroupProfilePreviewComponent implements OnInit {
   ) {
     this.editReviewsForm = this.fb.group({
       profileId: ['', Validators.required],
+      groupId: ['', Validators.required],
       name: ['', [Validators.required, Validators.pattern('(?! ).*[^ ]')]],
       rating: ['', Validators.required],
       review: ['', Validators.required],
@@ -185,10 +188,10 @@ export class GroupProfilePreviewComponent implements OnInit {
     if (groupDetails.user) {
       this.user = groupDetails.user[0];
     }
-
     let linkedDetails = groupDetails.linked_fb_group;
     this.conversations = groupDetails.group_conversation_images;
     this.id = groupDetails.id;
+    this.group_id = groupDetails.linked_group_id;
 
     if (linkedDetails != undefined) {
       this.groupName = linkedDetails.group_name;
@@ -301,17 +304,18 @@ export class GroupProfilePreviewComponent implements OnInit {
   }
   // EDIT REVIEWS
   editReviews() {
+    this.reviewbutton = 'Processing...';
     this.rating = this.editReviewsForm.value.rating;
     this.review = this.editReviewsForm.value.review;
 
     this.saveReviews(this.editReviewsForm);
-    setTimeout(() => {
-      $('#editReviews_close').click();
-      this.editReviewsForm.controls['name'].reset();
-      this.editReviewsForm.controls['review'].reset();
-      this.editReviewsForm.controls['rating'].reset();
-      $('#review-image-show').attr('src', '');
-    }, 2000);
+    // setTimeout(() => {
+    //   $('#editReviews_close').click();
+    //   this.editReviewsForm.controls['name'].reset();
+    //   this.editReviewsForm.controls['review'].reset();
+    //   this.editReviewsForm.controls['rating'].reset();
+    //   $('#review-image-show').attr('src', '');
+    // }, 4000);
   }
   //EDIT REVIEW SETTING
   saveReviews(reviewsForm: any) {
@@ -321,8 +325,17 @@ export class GroupProfilePreviewComponent implements OnInit {
     formData.append('rating', reviewsForm.value.rating);
     formData.append('review', reviewsForm.value.review);
     formData.append('groupProfileId', reviewsForm.value.profileId);
+    formData.append('groupId', reviewsForm.value.groupId);
     this.apiService.saveReview(formData).subscribe((response: any) => {
       this.showPreviewDetails(response);
+      this.reviewbutton = 'Leave Review';
+      setTimeout(() => {
+        $('#editReviews_close').click();
+        reviewsForm.controls['name'].reset();
+        reviewsForm.controls['review'].reset();
+        reviewsForm.controls['rating'].reset();
+        $('#review-image-show').attr('src', '');
+      }, 2000);
 
       if (response.status == 200) {
         this.msgs = [
@@ -469,7 +482,15 @@ export class GroupProfilePreviewComponent implements OnInit {
 
     let profileSlug = this.origin + dynamicUrl + this.uniqueName;
     this.model_text = 'Copied';
-    this.clipboardService.copyFromContent(profileSlug);
+    // this.clipboardService.copy(profileSlug);
+    var textField = document.createElement('textarea');
+    textField.innerText = profileSlug;
+    document.body.appendChild(textField);
+    textField.select();
+    textField.focus(); //SET FOCUS on the TEXTFIELD
+    document.execCommand('copy');
+    textField.remove();
+    console.log('should have copied ' + profileSlug);
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);

@@ -516,7 +516,7 @@ export class AdminBioComponent implements OnInit {
   copyAdminProfile(slug: any) {
     this.adminBioSlug = this.origin + this.dynamicBioUrl + slug;
     this.text = 'Copied';
-    this.clipboardService.copyFromContent(this.adminBioSlug);
+    this.clipboardService.copy(this.adminBioSlug);
     setTimeout(() => {
       this.text = 'Copy';
     }, 2000);
@@ -525,11 +525,27 @@ export class AdminBioComponent implements OnInit {
   /* TO COPY ADMIN BIO PROFILE LINK FROM PUBLISH MODEL
   @Parameter{slug}
 */
+  // copyAdminProfileModel(slug: any) {
+  //   this.adminBioSlug = this.origin + this.dynamicBioUrl + slug;
+  //   this.model_text = 'Copied';
+  //   this.clipboardService.copy(this.adminBioSlug);
+
+  //   setTimeout(() => {
+  //     this.model_text = 'Copy';
+  //   }, 2000);
+  // }
   copyAdminProfileModel(slug: any) {
     this.adminBioSlug = this.origin + this.dynamicBioUrl + slug;
     this.model_text = 'Copied';
-    this.clipboardService.copyFromContent(this.adminBioSlug);
 
+    var textField = document.createElement('textarea');
+    textField.innerText = this.adminBioSlug;
+    document.body.appendChild(textField);
+    textField.select();
+    textField.focus(); //SET FOCUS on the TEXTFIELD
+    document.execCommand('copy');
+    textField.remove();
+    console.log('should have copied ' + this.adminBioSlug);
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);

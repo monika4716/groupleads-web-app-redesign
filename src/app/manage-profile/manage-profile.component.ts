@@ -327,7 +327,16 @@ export class ManageProfileComponent implements OnInit {
   copyGroupProfileModel(slug: any) {
     this.profileSlug = this.origin + this.dynamicGroupUrl + this.uniqueName;
     this.model_text = 'Copied';
-    this.clipboardService.copyFromContent(this.profileSlug);
+
+    // this.clipboardService.copy(profileSlug1);
+    var textField = document.createElement('textarea');
+    textField.innerText = this.profileSlug;
+    document.body.appendChild(textField);
+    textField.select();
+    textField.focus(); //SET FOCUS on the TEXTFIELD
+    document.execCommand('copy');
+    textField.remove();
+    console.log('should have copied ' + this.profileSlug);
     setTimeout(() => {
       this.model_text = 'Copy';
     }, 2000);

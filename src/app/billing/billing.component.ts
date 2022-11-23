@@ -84,7 +84,7 @@ export class BillingComponent implements OnInit {
   /* Copy Billing Url */
   copyBillingUrl() {
     this.buttonText = 'Copied URL';
-    this.clipboardService.copyFromContent(this.upgradeURL);
+    this.clipboardService.copy(this.upgradeURL);
     setTimeout(() => {
       this.buttonText = 'Copy URL';
     }, 2000);
