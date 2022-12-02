@@ -548,3 +548,8 @@ select.select_groups option {
 .all-review-btn:hover {
   background-color: white !important;
 }
+
+.about_sec .about_row_sec {
+  margin-top: 40px;
+  margin-right: 35px;
+}
