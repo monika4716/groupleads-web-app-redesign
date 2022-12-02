@@ -116,6 +116,7 @@ export class ManageProfileComponent implements OnInit {
       category: ['', Validators.required],
       location: ['', Validators.required],
     });
+
     this.editTopicsForm = this.fb.group({
       isTopic: [''],
       topics: [''],
@@ -130,6 +131,7 @@ export class ManageProfileComponent implements OnInit {
       rating: [''],
       review: ['', Validators.required],
     });
+
     this.editReviewSettingForm = this.fb.group({
       isReview: [''],
     });
@@ -515,6 +517,7 @@ export class ManageProfileComponent implements OnInit {
 
   removePreviousFile(i: any, id: any) {
     let uploadUrlIndex = this.uploadUrls.findIndex((x: any) => x.id == id);
+    console.log(uploadUrlIndex);
     let fileListIndex = this.fileList.findIndex(
       (x: any) => x.name == this.uploadUrls[uploadUrlIndex].name
     );
@@ -540,6 +543,8 @@ export class ManageProfileComponent implements OnInit {
     if (this.conversationNum >= 3) {
       this.conversationNum = 3;
     }
+
+    console.log(this.conversationImagesCode);
   }
 
   // End Edit upload and remove Conversation Image//

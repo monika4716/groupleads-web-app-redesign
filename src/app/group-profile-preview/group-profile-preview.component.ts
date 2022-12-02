@@ -501,6 +501,7 @@ export class GroupProfilePreviewComponent implements OnInit {
     if (body[0]) {
       body[0].removeAttribute('class');
     }
+
     let iframe = window.parent.document.getElementById('openIframe');
     if (iframe != null && iframe.parentNode != null) {
       iframe.parentNode.removeChild(iframe);

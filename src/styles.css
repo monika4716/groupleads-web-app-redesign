@@ -553,3 +553,8 @@ select.select_groups option {
   margin-top: 40px;
   margin-right: 35px;
 }
+
+.gp-link,
+.gp-link:hover {
+  color: #3c61ad;
+}
