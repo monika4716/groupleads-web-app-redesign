@@ -311,7 +311,7 @@ input#lastName {
   background: gray !important;
 }
 #profile-image {
-  min-width: 68px;
+  /* min-width: 68px; */
   position: relative;
   top: 0;
   left: 0;

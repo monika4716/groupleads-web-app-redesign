@@ -57,9 +57,13 @@ p {
   padding: 22px 18px;
 }
 .open-sidebar .right_side {
-  width: 82%;
-  padding-left: 30px;
-  margin-left: 242px;
+  width: 84%;
+  padding-left: 87px;
+  margin-left: 185px;
+}
+
+ul.nav.nav-tabs.billing_tabs {
+  padding-left: 36px !important;
 }
 .left_side .nav-item {
   margin-bottom: 20px;
@@ -571,7 +575,9 @@ p {
   margin-top: 15px;
 }
 .input-group
-  > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(
+    .valid-feedback
+  ):not(.invalid-tooltip):not(.invalid-feedback) {
   border-top-left-radius: 8px !important;
   border-bottom-left-radius: 8px !important;
 }
@@ -2238,4 +2244,9 @@ span.p-inputtext {
 #publish_bioModal .modal-body.publish_modal h6 {
   margin-top: 11px !important;
   margin-bottom: 12px !important;
+}
+
+.billing_acc_plan .billing-cycle,
+.billing_acc_plan .schedule_call {
+  margin-top: 20px;
 }
