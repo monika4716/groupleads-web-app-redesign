@@ -48,6 +48,7 @@ import { GroupProfilePreviewComponent } from './group-profile-preview/group-prof
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     ManageProfileComponent,
     ForgetPasswordComponent,
     ErrorPageComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

@@ -713,7 +713,9 @@ ul.nav.nav-tabs.billing_tabs {
 .publish_bio {
   position: fixed !important;
   bottom: 0 !important;
-  width: 78% !important;
+  width: 62% !important;
+  margin: 0 auto;
+  margin-left: 86px;
   z-index: 99 !important;
 }
 .bio_left {
@@ -2249,4 +2251,8 @@ span.p-inputtext {
 .billing_acc_plan .billing-cycle,
 .billing_acc_plan .schedule_call {
   margin-top: 20px;
+}
+
+.popular_topic h3 {
+  font-size: 25px !important;
 }

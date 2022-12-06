@@ -316,4 +316,12 @@ export class ApiService {
       headers: headers,
     });
   }
+
+  resetpassword(data: any) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Accept', 'application/json');
+    return this.httpClient.post(this.API_URL + 'app-reset-password', data, {
+      headers: headers,
+    });
+  }
 }

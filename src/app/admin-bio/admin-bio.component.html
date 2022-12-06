@@ -152,7 +152,7 @@
                             </div>
                             <div class="card groups_section">
                                 <div class="card-body custom-scroll" style="height: 420px;">
-                                    <h3>Your Groups</h3>
+                                    <h3>Your Groups</h3><br>
                                     <!-- <p>Select the group(s) that you currently own or admin</p> -->
                                     <div *ngFor="let group of linkedGroups;"
                                         class="col-md-12 product d-flex align-items-center justify-content-center mb-2">
@@ -186,9 +186,9 @@
                                                 (click)="deleteSocialLink(social.name)" />
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-outline-primary mt-4 button-dark"
+                                    <button type="button" class="btn btn-outline-primary mt-4 button-light"
                                         data-bs-toggle="modal" data-bs-target="#add_social_profileModal"
-                                        data-bs-backdrop="static"><img src="assets/images/add_white.png" class="mr-2" />
+                                        data-bs-backdrop="static"><img src="assets/images/add.png" class="mr-2" />
                                         Add
                                         Social Profile</button>
                                 </div>
@@ -253,10 +253,11 @@
                         <div class="card ">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-10 bio_left d-flex align-items-center justify-content-center">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-8 bio_left d-flex align-items-center justify-content-center">
                                         <h4><img src="assets/images/1.png" /> Publish to make them live. </h4>
                                     </div>
-                                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                    <div class="col-md-3 d-flex align-items-center justify-content-center">
                                         <button type="submit" [disabled]="adminBioForm.invalid"
                                             class="btn btn-primary publish-bio-btn">Publish
                                             Bio</button>

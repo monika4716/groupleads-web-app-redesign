@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RoutingGuard } from './routing.guard';
 import { BillingComponent } from './billing/billing.component';
@@ -30,6 +31,11 @@ const routes: Routes = [
     path: 'forget-password',
     component: ForgetPasswordComponent,
     title: 'GroupLeads Forget Pasword',
+  },
+  {
+    path: 'resetPassword/:key',
+    component: ResetPasswordComponent,
+    title: 'GroupLeads Reset Pasword',
   },
   {
     path: 'dashboard',
