@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Meta } from '@angular/platform-browser';
+import { Title, Meta } from '@angular/platform-browser';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -11,6 +11,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  title = 'Web App Login - Group Leads';
   credentials: any = FormGroup;
   error = false;
   verifying: boolean = false;
@@ -24,8 +25,10 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
     private meta: Meta,
+    private titleService: Title,
     private apiService: ApiService
   ) {
+    this.titleService.setTitle(this.title);
     this.token = localStorage.getItem('token');
     this.credentials = this.formBuilder.group({
       KeepMeLoggedIn: '',
@@ -59,7 +62,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.meta.addTags([
-      { name: 'title', content: 'Group Leads Log In : Group Leads' },
+      { name: 'title', content: 'Web App Login - Group Leads' },
     ]);
 
     if (this.token) {

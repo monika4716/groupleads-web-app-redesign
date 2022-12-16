@@ -25,23 +25,23 @@ const routes: Routes = [
     path: 'login',
     redirectTo: '',
     pathMatch: 'full',
-    title: 'GroupLeads Login',
+    title: 'Web App Login - Group Leads ',
   },
   {
     path: 'forget-password',
     component: ForgetPasswordComponent,
-    title: 'GroupLeads Forget Pasword',
+    title: 'Forgot Password - Group Leads',
   },
   {
     path: 'resetPassword/:key',
     component: ResetPasswordComponent,
-    title: 'GroupLeads Reset Pasword',
+    title: 'Reset Pasword - Group Leads',
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [RoutingGuard],
-    title: 'Groupleads Web App',
+    title: 'Group Leads Dashboard - Group Leads ',
   },
   {
     path: 'billing',

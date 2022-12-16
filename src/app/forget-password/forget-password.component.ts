@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title, Meta } from '@angular/platform-browser';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./forget-password.component.css'],
 })
 export class ForgetPasswordComponent implements OnInit {
+  title = 'Forgot Password - Group Leads';
   credential: any = FormGroup;
   submitted: any = false;
   send_Email: any;
@@ -19,8 +21,10 @@ export class ForgetPasswordComponent implements OnInit {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private titleService: Title
   ) {
+    this.titleService.setTitle(this.title);
     this.credential = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
     });

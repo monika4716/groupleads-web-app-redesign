@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from '../api.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { CounterdisplayformatePipe } from '../pipe/counterdisplayformate.pipe';
 
 @Component({
@@ -11,6 +12,7 @@ import { CounterdisplayformatePipe } from '../pipe/counterdisplayformate.pipe';
   providers: [CounterdisplayformatePipe],
 })
 export class DashboardComponent implements OnInit {
+  title = 'Group Leads Dashboard - Group Leads';
   monthsArray;
   token: any;
   groups: any;
@@ -34,8 +36,10 @@ export class DashboardComponent implements OnInit {
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
     private activatedRoute: ActivatedRoute,
+    private titleService: Title,
     private router: Router
   ) {
+    this.titleService.setTitle(this.title);
     this.selectedGroupId =
       this.activatedRoute.snapshot.queryParamMap.get('group_id');
     if (this.selectedGroupId == null) {
