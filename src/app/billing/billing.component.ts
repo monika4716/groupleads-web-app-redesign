@@ -26,8 +26,8 @@ export class BillingComponent implements OnInit {
   planDetail: any = {};
   leftRowsCount: any;
   email: any;
+  payment_type: any;
   buttonText = 'Copy URL';
-
   billingCycleSection: boolean = true;
   constructor(
     private router: Router,
@@ -53,6 +53,8 @@ export class BillingComponent implements OnInit {
           this.type = response.type;
           this.planDetail = response;
           this.trial = this.planDetail.userDetails.trial;
+          this.payment_type = response.userDetails.payment_type;
+
           if (this.planDetail.userDetails.expired_on == null) {
             this.billingCycleSection = false;
           }
@@ -67,7 +69,11 @@ export class BillingComponent implements OnInit {
             var todaydate = moment(new Date()).format('MM/DD/YYYY');
             this.dayleft = moment(expireDate).diff(moment(todaydate), 'days');
           }
-          if (response.reseller_id > 0 || response.type == 'life_time') {
+          if (
+            response.reseller_id > 0 ||
+            response.type == 'life_time' ||
+            this.payment_type == 'symalite'
+          ) {
             this.showUpGradeBtn = false;
           } else {
             this.showUpGradeBtn = true;

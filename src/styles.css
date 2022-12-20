@@ -558,3 +558,9 @@ select.select_groups option {
 .gp-link:hover {
   color: #3c61ad;
 }
+
+.light-btn:hover {
+  background: #ffffff !important;
+  border: none !important;
+  color: #3c61ad !important;
+}

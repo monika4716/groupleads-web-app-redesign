@@ -50,10 +50,10 @@
                                                     <p>{{planDetail.plan_name}}</p>
                                                     <p>{{type.replace('_', '') | titlecase}}</p>
                                                     <div class="d-grid">
-                                                        <a *ngIf="showUpGradeBtn" [attr.href]="upgradeURL"
+                                                        <a *ngIf="showUpGradeBtn " [attr.href]="upgradeURL"
                                                             target="_blank">
                                                             <button type="button"
-                                                                class="btn btn-primary mt-4 btn-block">Change
+                                                                class="btn btn-primary mt-4 btn-block light-btn">Change
                                                                 plan</button>
                                                         </a>
                                                     </div>
@@ -108,8 +108,8 @@
                                                 </div>
                                                 <div class="col-md-6 d-flex justify-content-end align-items-center">
                                                     <div class="billing_cycle">
-                                                        <a [attr.href]="upgradeURL" target="_blank"><button
-                                                                type="button"
+                                                        <a *ngIf="showUpGradeBtn" [attr.href]="upgradeURL"
+                                                            target="_blank"><button type="button"
                                                                 class="btn btn-primary change_billing button-dark">Change
                                                                 billing
                                                                 cycle</button></a>
